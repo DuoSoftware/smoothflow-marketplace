@@ -1,0 +1,14 @@
+@import "../../public/core/styles/variables";
+
+.sf-sidenav {
+  display: inline-block;
+  float: left;
+  width: 279px;
+  height: 100%;
+  padding-bottom: $sf-padding-primary;
+  overflow-y: scroll;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  border-right: solid 1px $sf-shadow-color-primary;
+}

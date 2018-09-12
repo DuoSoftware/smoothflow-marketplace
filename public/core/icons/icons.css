@@ -1,0 +1,38 @@
+@import "sf_fontface.css";
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-sf_ico_check_circle:before {
+  content: "\e900";
+}
+.icon-sf_ico_check_circle_thin:before {
+  content: "\e901";
+}
+.icon-sf_ico_chevron_down:before {
+  content: "\e902";
+}
+.icon-sf_ico_chevron_left:before {
+  content: "\e903";
+}
+.icon-sf_ico_chevron_right:before {
+  content: "\e904";
+}
+.icon-sf_ico_chevron_up:before {
+  content: "\e905";
+}
+.icon-sf_ico_information:before {
+  content: "\e906";
+}

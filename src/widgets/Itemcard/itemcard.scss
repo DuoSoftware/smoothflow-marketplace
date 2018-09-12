@@ -1,0 +1,29 @@
+@import "../../../public/core/styles/variables";
+
+.sf-item-card-wrap {
+  display: inline-block;
+  padding: $sf-padding-primary;
+  width: 33.33%;
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  .sf-item-card {
+    border-radius: 5px;
+    border: solid 1px $sf-shadow-color-primary;
+    .sf-item-card-header {
+      padding: $sf-padding-primary;
+      border-bottom: solid 1px $sf-shadow-color-primary;
+      h3 {
+        margin: 0;
+        font-size: $sf-header-sub;
+      }
+    }
+    .sf-item-card-body {
+      padding: $sf-padding-primary;
+    }
+    .sf-item-card-footer {
+      padding: $sf-padding-primary;
+    }
+  }
+}

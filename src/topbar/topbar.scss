@@ -1,0 +1,22 @@
+@import "../../public/core/styles/variables";
+
+.sf-topbar {
+  height: 40px;
+  border-bottom: solid 1px #eee;
+  padding: 10px;
+  box-shadow: 0 0 5px $sf-shadow-color-secondary;
+  .sf-logo {
+    position: absolute;
+    display: inline-block;
+    img {
+      float: left;
+    }
+    .sf-logo-subtext {
+      float: left;
+      display: inline-block;
+      line-height: 49px;
+      margin-left: 10px;
+      color: #888;
+    }
+  }
+}
