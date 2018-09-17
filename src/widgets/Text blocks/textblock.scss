@@ -18,11 +18,13 @@
         color: $sf-color-green;
       }
     }
-    .sf-txtblock-text {
-      padding: $sf-padding-primary;
-      .sf-txtblock-txt-title {
-        font-weight: 600;
-      }
+  }
+  .sf-txtblock-text {
+    padding: $sf-padding-primary;
+
+    .sf-txtblock-txt-title {
+      font-weight: 600;
+      margin-bottom: $sf-padding-third;
     }
   }
 }

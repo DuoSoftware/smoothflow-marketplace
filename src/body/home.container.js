@@ -1,89 +1,113 @@
 import React, { Component } from 'react';
+import ActivitiesService from '../_base/services/activities.service';
 import ItemCard from '../widgets/Itemcard/itemcard.widget';
+import Wrap from '../_base/_wrap'
+import { BrowserRouter as Route, Link } from "react-router-dom";
+import Preloader from '../widgets/Preloader/preloader.widget';
 
 class Home extends Component {
-    items = [
-    {
-        name: "Item one",
-        image: './images/Test__Publish_and_Execute_automations.png',
-        description: 'This is the dummy desc for Item one. This is the dummy description for Item one. This is the dummy desc for Item one',
-        itemPackages: [{
-            name: 'Single user',
-            price: 2.50,
-            billCycle: 'month'
-        },{
-            name: '20 Person Pack',
-            price: 2.50,
-            billCycle: 'month'
-        },{
-            name: '50 Person Pack',
-            price: 2.50,
-            billCycle: 'month'
-        }],
-        itemTags: [{
-            name: '#Ticket'
-        },{
-            name: '#Helpdesk'
-        },{
-            name: '#Support'
-        }]
-    },{
-        name: 'Item two',
-        image: './images/Test__Publish_and_Execute_automations.png',
-        description: 'This is the dummy desc for Item one. This is the dummy description for Item one. This is the dummy desc for Item one',
-        itemPackages: [{
-            name: 'Single user',
-            price: 2.50,
-            billCycle: 'month'
-        },{
-            name: '20 Person Pack',
-            price: 2.50,
-            billCycle: 'month'
-        },{
-            name: '50 Person Pack',
-            price: 2.50,
-            billCycle: 'month'
-        }],
-        itemTags: [{
-            name: '#Ticket'
-        },{
-            name: '#Helpdesk'
-        },{
-            name: '#Support'
-        }]
-    },{
-        name: 'Item three',
-        image: './images/Test__Publish_and_Execute_automations.png',
-        description: 'This is the dummy description for Item three',
-        itemPackages: [{
-            name: 'Single user',
-            price: 2.50,
-            billCycle: 'month'
-        },{
-            name: '20 Person Pack',
-            price: 2.50,
-            billCycle: 'month'
-        },{
-            name: '50 Person Pack',
-            price: 2.50,
-            billCycle: 'month'
-        }],
-        itemTags: [{
-            name: '#Ticket'
-        },{
-            name: '#Helpdesk'
-        },{
-            name: '#Support'
-        }]
-    }];
+    constructor(props) {
+        super(props);
+        this.state = {
+            allActivities: [],
+            loadingPage: false
+        };
+    }
+    getAllItems = () => {
+        debugger;
+        this.setState(prevState => ({
+            ...prevState,
+            loadingPage : true
+        }));
+        ActivitiesService.getAllActivities()
+            .then((res) => {
+                const loadedActivities = res.data.Result.activities.map((activity, index) => {
+                    if (index > 0) {
+                        return {
+                            name: activity.activity_name,
+                            image: activity.image,
+                            description: activity.description,
+                            features:
+                                activity.features.map((ft) => {
+                                    return {
+                                        title: ft.title,
+                                        icon: 'check_circle',
+                                        description: ft.description
+                                    }
+                                }),
+                            itemTags:
+                                activity.tags.map((tag) => {
+                                    return {
+                                        name: tag.name
+                                    }
+                                }),
+                            whatYouGet:
+                                activity.whatYouGet.map((wyg) => {
+                                    return {
+                                        type: 'image',
+                                        content: wyg.content
+                                    }
+                                }),
+                            pricing:
+                                activity.pricing.map((price) => {
+                                    return {
+                                        name: price.name,
+                                        list: () => {
+                                            return price.list.map((ft) => {
+                                                return {
+                                                    icon: 'check_circle_thin',
+                                                    text: ft.text
+                                                }
+                                            });
+                                        },
+                                        price: price.price,
+                                        billCycle: price.billCycle
+                                    }
+                                }),
+                            faq:
+                                activity.faq.map((fq) => {
+                                    return  {
+                                        title: fq.question,
+                                        answer: fq.answer
+                                    }
+                                })
+                        }
+                    }
+                });
+                this.setState({
+                    allActivities: loadedActivities,
+                    loadingPage: false
+                });
+            })
+            .catch((errorRes) => {
+                console.log(errorRes);
+            });
+    }
 
+    componentDidMount() {
+        this.getAllItems();
+    }
     render() {
-        const listItems = this.items.map((item) =>
-            <ItemCard item={ item } />
-        );
-
         return (
-            <div>{ listItems }</div>
+            <div>
+                <div className="sf-controls-bar">
+                    <div className="sf-control-search">
+                        <input className="sf-input-shadow" type="text" id="mainSearch" placeholder="Search.."/>
+                    </div>
+                    <div className="sf-control-buttons">
+                        <Link to={'/create'} className="sf-btn sf-btn-primary">Create</Link>
+                    </div>
+                </div>
+                <div>
+                    {
+                        this.state.loadingPage ?
+                            this.state.allActivities.map((activity) => {
+                                return <ItemCard item={activity} />
+                            })
+                        : <Preloader />
+                    }
+                </div>
+            </div>
         );
     }
 }

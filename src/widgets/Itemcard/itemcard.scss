@@ -9,6 +9,9 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   .sf-item-card {
+    display: inline-block;
+    color: inherit;
+    text-decoration: inherit;
     border-radius: 5px;
     border: solid 1px $sf-shadow-color-primary;
     .sf-item-card-header {
@@ -24,6 +27,11 @@
     }
     .sf-item-card-footer {
       padding: $sf-padding-primary;
+    }
+
+    &:hover {
+      //border-color: #fff;
+      box-shadow: 0 1px $sf-shadow-size-primary $sf-shadow-color-primary;
     }
   }
 }

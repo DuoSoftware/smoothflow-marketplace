@@ -194,7 +194,7 @@ class ItemView extends Component {
 
     render() {
         return(
-            <div>
+            <div className="sf-p-p">
                 <div className="sf-flexbox-row">
                     <div className="sf-flex-1">
                         <div className="sf-header-bordered">
