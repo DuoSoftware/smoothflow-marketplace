@@ -13,7 +13,7 @@ class ItemCard extends Component {
     render() {
         return (
                 <div className="sf-item-card-wrap">
-                    <Link to={'/activity/' + this.props.item.name} className="sf-item-card">
+                    <Link to={{ pathname: '/activity/' + this.props.item.name , activity: {...this.props.item} }} className="sf-item-card">
                         <div className="sf-item-card-header">
                             <h3>{ this.props.item.name }</h3>
                         </div>

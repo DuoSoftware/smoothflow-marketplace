@@ -115,6 +115,7 @@ h3 {
   height: 100%;
   width: calc(100% - 280px);
   overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .sf-img {
@@ -202,7 +203,7 @@ h3 {
   display: inline-block;
   background: #fff;
   border: none;
-  padding: $sf-padding-secondary $sf-padding-primary;
+  padding: $sf-padding-primary $sf-padding-primary;
   border-radius: $sf-border-radius-primary;
   font-weight: bold;
   cursor: pointer;
@@ -213,6 +214,9 @@ h3 {
   -ms-transition: background $sf-animation-time;
   -o-transition: background $sf-animation-time;
   transition: background $sf-animation-time;
+  &.sf-btn-thin {
+    padding: $sf-padding-secondary $sf-padding-primary;
+  }
   &.sf-btn-primary {
     background: $sf-color-primary;
     color: #ffffff;

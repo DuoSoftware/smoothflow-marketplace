@@ -39,7 +39,7 @@ class Home extends Component {
                                     name: tag.tag
                                 }
                             }),
-                        whatYouGet:
+                        what_you_get:
                             activity.what_you_get.map((wyg) => {
                                 return {
                                     type: 'image',
@@ -50,16 +50,15 @@ class Home extends Component {
                             activity.pricings.map((price) => {
                                 return {
                                     name: price.name,
-                                    list: () => {
-                                        return price.pricing_fts.map((ft) => {
+                                    pricing_fts: 
+                                        price.pricing_fts.map((ft) => {
                                             return {
                                                 icon: 'check_circle_thin',
-                                                text: ft.text
+                                                text: ft
                                             }
-                                        });
-                                    },
+                                        }),
                                     price: price.price,
-                                    billCycle: price.bill_cycle
+                                    bill_cycle: price.bill_cycle
                                 }
                             }),
                         faq:
@@ -92,7 +91,7 @@ class Home extends Component {
                         <input className="sf-input-shadow" type="text" id="mainSearch" placeholder="Search.."/>
                     </div>
                     <div className="sf-control-buttons">
-                        <Link to={'/create'} className="sf-btn sf-btn-primary">Create</Link>
+                        <Link to={'/create'} className="sf-btn sf-btn-primary sf-btn-thin">Create</Link>
                     </div>
                 </div>
                 <div>

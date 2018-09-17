@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import './list_iconed.scss';
 
 class ListI extends Component {
+    constructor(props) {
+        super(props);
+    }
     getList(list) {
         const _list = list.map((i) =>
             <li>

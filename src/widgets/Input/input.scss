@@ -28,6 +28,8 @@ label {
 .sf-checkbox {
   position: absolute;
   opacity: 0;
+  display: inline-block !important;
+  width: auto !important;
 
   &+label {
     position: relative;
