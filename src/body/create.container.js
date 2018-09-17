@@ -15,6 +15,7 @@ class CreateNew extends Component {
         this.state = {
             newActivity : {
                 "activity_name": "right",
+                "tenant_name": "tistuslabs",
                 "type": "chat",
                 "reviewed": false,
                 "state": "FB",
@@ -23,22 +24,21 @@ class CreateNew extends Component {
                 "npm_version": "20.0.0",
                 "image": null,
                 "description": '',
+                "languages":[],
                 "features": [],
                 "tags": [],
-                "whatYouGet": [],
-                "pricing": [],
+                "what_you_get": [],
+                "pricings": [],
                 "faq": [],
                 "variables": []
             },
             temp_prcing_fts : [],
+            temp_tags : [],
             loadingPage : false,
             success : false
         };
     }
     activityCategories = ["#CatOne", "#CatTwo"]
-    selectCategories = tags => {
-        this.setState({ tags });
-    };
 
     // Features
     feature = {
@@ -77,6 +77,30 @@ class CreateNew extends Component {
                     }
                 }));
                 break;
+                
+            case "languageNode":
+            case "languageGo":
+                const _lang = [...this.state.newActivity.languages];
+                if (e.target.checked) {
+                    _lang.push({"language" : e.target.value});
+                    this.setState(prevState => ({
+                        newActivity: {
+                            ...prevState.newActivity,
+                            languages: _lang
+                        }
+                    }));
+                } else {
+                    const i = _lang.indexOf(e.target.value);
+                    _lang.splice(i, 1);
+                    this.setState(prevState => ({
+                        newActivity: {
+                            ...prevState.newActivity,
+                            languages: _lang
+                        }
+                    }));
+                }
+                
+                break;
 
             default:
                 break;
@@ -84,11 +108,18 @@ class CreateNew extends Component {
         }
     }
     addTags = tags => {
+        let _tags = [];
+        let _temptags = [];
+        tags.map((tag)=>{
+            _tags.push({'tag':tag})
+            _temptags.push(tag)
+        });
         this.setState(prevState => ({
             newActivity: {
                 ...prevState.newActivity,
-                tags: tags
-            }
+                tags: _tags
+            },
+            temp_tags: _temptags
         }));
     }
     addFeature = () => {
@@ -149,40 +180,40 @@ class CreateNew extends Component {
         let file = e.target.files[0];
         const reader = new FileReader();
         let _wyg = [];
-        _wyg = [...this.state.newActivity.whatYouGet];
+        _wyg = [...this.state.newActivity.what_you_get];
         reader.readAsDataURL(e.target.files[0]);
-       reader.onload = function(_e) {
-           if (type === 'main') {
-               _self.setState(prevState => ({
-                   newActivity: {
-                       ...prevState.newActivity,
-                       image: file
-                   }
-               }));
-               document.getElementById('newActivityImage').setAttribute('src', _e.target.result);
-           } else if (type === 'wyg') {
-               _wyg.push({
-                   'type': 'image',
-                   'src': _e.target.result,
-                   'file': file
-               });
-               _self.setState(prevState => ({
-                   newActivity: {
-                       ...prevState.newActivity,
-                       whatYouGet: _wyg
-                   }
-               }));
+        reader.onload = function(_e) {
+            if (type === 'main') {
+                _self.setState(prevState => ({
+                    newActivity: {
+                        ...prevState.newActivity,
+                        image: file
+                    }
+                }));
+                document.getElementById('newActivityImage').setAttribute('src', _e.target.result);
+            } else if (type === 'wyg') {
+                _wyg.push({
+                    'type': 'image',
+                    'content': _e.target.result,
+                    'file': file
+                });
+                _self.setState(prevState => ({
+                    newActivity: {
+                        ...prevState.newActivity,
+                        what_you_get: _wyg
+                    }
+                }));
            }
         };
     };
     removeMedia = (e, type, i) => {
         if (type === 'wyg') {
-            let _wyg = [...this.state.newActivity.whatYouGet];
+            let _wyg = [...this.state.newActivity.what_you_get];
             _wyg.splice(i, 1);
             this.setState(prevState => ({
                 newActivity: {
                     ...prevState.newActivity,
-                    whatYouGet: _wyg
+                    what_you_get: _wyg
                 }
             }));
         }
@@ -221,7 +252,7 @@ class CreateNew extends Component {
 
     };
     addPricing = () => {
-       let pricing = [...this.state.newActivity.pricing];
+       let pricing = [...this.state.newActivity.pricings];
        const _pack = {
            ...this.package
        };
@@ -229,7 +260,7 @@ class CreateNew extends Component {
        this.setState(prevState => ({
            newActivity: {
                ...prevState.newActivity,
-               pricing: pricing
+               pricings: pricing
            },
            temp_prcing_fts: []
        }));
@@ -245,12 +276,12 @@ class CreateNew extends Component {
        document.getElementById('packageName').focus();
     };
     removePricing = (e, i) => {
-        let pricing = [...this.state.newActivity.pricing];
+        let pricing = [...this.state.newActivity.pricings];
         pricing.splice(i, 1);
         this.setState(prevState => ({
             newActivity: {
                 ...prevState.newActivity,
-                pricing: pricing
+                pricings: pricing
             }
         }));
     };
@@ -285,6 +316,7 @@ class CreateNew extends Component {
             loadingPage: true
         }));
         let _payload = {
+                "tenant_name": "tistuslabs",
                 "description": "",
                 "enable": "yes",
                 "scope": "567890",
@@ -318,8 +350,8 @@ class CreateNew extends Component {
             "description": '',
             "features": [],
             "tags": [],
-            "whatYouGet": [],
-            "pricing": [],
+            "what_you_get": [],
+            "pricings": [],
             "faq": [],
             "variables": []
         };
@@ -360,18 +392,18 @@ class CreateNew extends Component {
                             <div className="sf-flex-1">
                                 <h3 className="sf-heading-sub sf-heading-form">General</h3>
                                 <div className="sf-input-block">
-                                    <Input type="text" name="activity_name" id="activityName" label="Name" onChange={ (event) => this.addInfo(event) }/>
+                                    <Input type="text" name="activity_name" id="activityName" placeholder="Name" onChange={ (event) => this.addInfo(event) }/>
                                 </div>
                                 <div className="sf-input-block">
-                                    <Input type="textarea" name="activity_desc" id="activityDescription" cols="30" rows="3" label="Description" onChange={ (event) => this.addInfo(event) } />
+                                    <Input type="textarea" name="activity_desc" id="activityDescription" cols="30" rows="3" placeholder="Description" onChange={ (event) => this.addInfo(event) } />
                                 </div>
                                 <div className="sf-input-block sf-chips">
-                                    <label>Tags</label>
+                                    {/* <label>Tags</label> */}
                                     <Chips
-                                        value={this.state.newActivity.tags}
+                                        value={this.state.temp_tags}
                                         onChange={this.addTags}
                                         suggestions={ this.activityCategories }
-                                        placeholder={'Type to select..'}
+                                        placeholder={'Categories'}
                                     />
                                 </div>
                             </div>
@@ -443,11 +475,11 @@ class CreateNew extends Component {
                                     <label>What you get</label>
                                     <div className="sf-clearfix">
                                         {
-                                            this.state.newActivity.whatYouGet.map((wyg, index) =>
+                                            this.state.newActivity.what_you_get.map((wyg, index) =>
                                                 <div className="sf-card" style={ {'width' : '50%'} }>
                                                     <div className="sf-card-content sf-card-bordered sf-card-centered-row">
                                                         <div className="sf-flex-1">
-                                                            <img src={wyg.src} alt="" id="newActivityImage" style={{height: '100px', width: 'auto'}}/>
+                                                            <img src={wyg.content} alt="" id="newActivityImage" style={{height: '100px', width: 'auto'}}/>
                                                         </div>
                                                         <div className="sf-card-row-end">
                                                             <button type="button" className="sf-btn sf-btn-primary-light sf-btn-primary sf-btn-circle" onClick={(event)=>this.removeMedia(event, 'wyg', index)}>x</button>
@@ -472,7 +504,7 @@ class CreateNew extends Component {
                                 <h3 className="sf-heading-sub sf-heading-form">Pricing</h3>
                                 <div className="sf-clearfix">
                                     {
-                                        this.state.newActivity.pricing.map((pack, index) =>
+                                        this.state.newActivity.pricings.map((pack, index) =>
                                             <div className="sf-card" style={{ 'max-width': '200px' }}>
                                                 <div className="sf-card-content sf-card-bordered sf-card-centered-row">
                                                     <div className="sf-flex-1">
@@ -580,6 +612,18 @@ class CreateNew extends Component {
                                 </div>
                             </div>
                             <div className="sf-p-p" style={ {width:'300px'}}></div>
+                        </div>
+                        <div className="sf-input-group">
+                            <h3 className = "sf-heading-sub sf-heading-form"> Code </h3>
+                            <label> Select what language the activity is written in </label>
+                            <div className="sf-p-p-h">
+                                <div className="sf-input-block">
+                                    <Input type="checkbox" class="sf-checkbox" id="languageNode" label="Node JS" value="nodeJs" onChange={(event) => this.addInfo(event)} />
+                                </div>
+                                <div className="sf-input-block">
+                                    <Input type="checkbox" class="sf-checkbox" id="languageGo" label="GO" value="GO" onChange={(event) => this.addInfo(event)} />
+                                </div>
+                            </div>
                         </div>
 
                         <div className="sf-p-p-h sf-text-right">

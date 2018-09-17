@@ -7,6 +7,9 @@ import TagBlock from '../Tag/tagblock.widget';
 import { BrowserRouter as Router, Link } from "react-router-dom";
 
 class ItemCard extends Component {
+    constructor(props) {
+        super(props);
+    };
     render() {
         return (
                 <div className="sf-item-card-wrap">
@@ -24,11 +27,11 @@ class ItemCard extends Component {
                                 </div>
                             </div>
 
-                            <TableTwoCol tabledata={this.props.item.pricing} />
+                            <TableTwoCol tabledata={this.props.item.pricings} />
                             <UMInfo text="Free for customers viewing and creating tickets" />
 
                             <div>
-                                <TagBlock tags={ this.props.item.itemTags } />
+                                <TagBlock tags={ this.props.item.tags } />
                             </div>
                         </div>
                         <div className="sf-item-card-footer">

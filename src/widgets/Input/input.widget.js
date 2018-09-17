@@ -11,6 +11,12 @@ const Input = (props) => {
         case ('textarea'):
             elem = <textarea {...props} />;
             break;
+        case ('checkbox'):
+            elem =  <div style={{display:'inline-block'}}>
+                        <input {...props} />
+                        <label for={props.id}>{props.label}</label>
+                    </div>
+            break;
         default:
             elem = <input {...props} />;
             break;
@@ -18,7 +24,7 @@ const Input = (props) => {
 
     return (
         <div className="sf-input-block">
-            <label>{props.label}</label>
+            { props.type !== 'checkbox' ? <label>{props.label}</label> : null }
             { elem }
         </div>
     )

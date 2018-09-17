@@ -25,3 +25,69 @@ label {
   display: block;
   margin-bottom: $sf-padding-third;
 }
+.sf-checkbox {
+  position: absolute;
+  opacity: 0;
+
+  &+label {
+    position: relative;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  // Box.
+  &+label:before {
+    content: '';
+    margin-right: $sf-padding-secondary;
+    display: inline-block;
+    vertical-align: text-top;
+    width: 25px;
+    height: 25px;
+    background: white;
+    border-radius: $sf-border-radius-primary;
+    border: solid 1px $sf-shadow-color-primary;
+  }
+
+  // Box hover
+  &:hover+label:before {
+    background: $sf-color-primary;
+  }
+
+  // Box checked
+  &:checked+label:before {
+    background: $sf-color-primary;
+  }
+
+  // Disabled state label.
+  &:disabled+label {
+    color: #b8b8b8;
+    cursor: auto;
+  }
+
+  // Disabled box.
+  &:disabled+label:before {
+    box-shadow: none;
+    background: #ddd;
+  }
+
+  // Checkmark. Could be replaced with an image
+  &:checked+label:after {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 12px;
+    background: white;
+    width: 3px;
+    height: 3px;
+    box-shadow:
+      2px 0 0 white,
+      4px 0 0 white,
+      4px -2px 0 white,
+      4px -4px 0 white,
+      4px -6px 0 white,
+      4px -8px 0 white;
+    transform: rotate(45deg);
+  }
+}

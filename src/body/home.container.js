@@ -14,7 +14,6 @@ class Home extends Component {
         };
     }
     getAllItems = () => {
-        debugger;
         this.setState(prevState => ({
             ...prevState,
             loadingPage : true
@@ -22,56 +21,54 @@ class Home extends Component {
         ActivitiesService.getAllActivities()
             .then((res) => {
                 const loadedActivities = res.data.Result.activities.map((activity, index) => {
-                    if (index > 0) {
-                        return {
-                            name: activity.activity_name,
-                            image: activity.image,
-                            description: activity.description,
-                            features:
-                                activity.features.map((ft) => {
-                                    return {
-                                        title: ft.title,
-                                        icon: 'check_circle',
-                                        description: ft.description
-                                    }
-                                }),
-                            itemTags:
-                                activity.tags.map((tag) => {
-                                    return {
-                                        name: tag.name
-                                    }
-                                }),
-                            whatYouGet:
-                                activity.whatYouGet.map((wyg) => {
-                                    return {
-                                        type: 'image',
-                                        content: wyg.content
-                                    }
-                                }),
-                            pricing:
-                                activity.pricing.map((price) => {
-                                    return {
-                                        name: price.name,
-                                        list: () => {
-                                            return price.list.map((ft) => {
-                                                return {
-                                                    icon: 'check_circle_thin',
-                                                    text: ft.text
-                                                }
-                                            });
-                                        },
-                                        price: price.price,
-                                        billCycle: price.billCycle
-                                    }
-                                }),
-                            faq:
-                                activity.faq.map((fq) => {
-                                    return  {
-                                        title: fq.question,
-                                        answer: fq.answer
-                                    }
-                                })
-                        }
+                    return {
+                        name: activity.activity_name,
+                        image: activity.image,
+                        description: activity.description,
+                        features:
+                            activity.features.map((ft) => {
+                                return {
+                                    title: ft.title,
+                                    icon: 'check_circle',
+                                    description: ft.description
+                                }
+                            }),
+                        tags:
+                            activity.tags.map((tag) => {
+                                return {
+                                    name: tag.tag
+                                }
+                            }),
+                        whatYouGet:
+                            activity.what_you_get.map((wyg) => {
+                                return {
+                                    type: 'image',
+                                    content: wyg.content
+                                }
+                            }),
+                        pricings:
+                            activity.pricings.map((price) => {
+                                return {
+                                    name: price.name,
+                                    list: () => {
+                                        return price.pricing_fts.map((ft) => {
+                                            return {
+                                                icon: 'check_circle_thin',
+                                                text: ft.text
+                                            }
+                                        });
+                                    },
+                                    price: price.price,
+                                    billCycle: price.bill_cycle
+                                }
+                            }),
+                        faq:
+                            activity.faq.map((fq) => {
+                                return  {
+                                    title: fq.question,
+                                    answer: fq.answer
+                                }
+                            })
                     }
                 });
                 this.setState({
@@ -100,9 +97,9 @@ class Home extends Component {
                 </div>
                 <div>
                     {
-                        this.state.loadingPage ?
+                        !this.state.loadingPage ?
                             this.state.allActivities.map((activity) => {
-                                return <ItemCard item={activity} />
+                                if(activity) return <ItemCard item={activity} />
                             })
                         : <Preloader />
                     }
