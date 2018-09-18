@@ -8,6 +8,8 @@ textarea {
   border: solid 1px $sf-shadow-color-primary;
   outline: none;
   box-sizing: border-box;
+  display: block;
+  width: 100%;
   &.sf-input-shadow {
     border: none;
     box-shadow: 0 1px $sf-shadow-size-primary $sf-shadow-color-primary;
@@ -15,10 +17,6 @@ textarea {
 }
 .sf-input-block {
   margin-bottom: $sf-padding-primary;
-  input, textarea {
-    display: block;
-    width: 100%;
-  }
 }
 label {
   font-weight: 600;
@@ -54,12 +52,12 @@ label {
 
   // Box hover
   &:hover+label:before {
-    background: $sf-color-primary;
+    border-color: $sf-color-primary;
   }
 
   // Box checked
   &:checked+label:before {
-    background: $sf-color-primary;
+    border-color: $sf-color-primary;
   }
 
   // Disabled state label.
@@ -80,16 +78,16 @@ label {
     position: absolute;
     left: 7px;
     top: 12px;
-    background: white;
+    background: $sf-color-primary;
     width: 3px;
     height: 3px;
     box-shadow:
-      2px 0 0 white,
-      4px 0 0 white,
-      4px -2px 0 white,
-      4px -4px 0 white,
-      4px -6px 0 white,
-      4px -8px 0 white;
+      2px 0 0 $sf-color-primary,
+      4px 0 0 $sf-color-primary,
+      4px -2px 0 $sf-color-primary,
+      4px -4px 0 $sf-color-primary,
+      4px -6px 0 $sf-color-primary,
+      4px -8px 0 $sf-color-primary;
     transform: rotate(45deg);
   }
 }

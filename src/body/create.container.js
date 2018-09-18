@@ -6,6 +6,8 @@ import Input from '../widgets/Input/input.widget';
 import ActivitiesService from '../_base/services/activities.service';
 import { Redirect } from "react-router-dom";
 import Preloader from '../widgets/Preloader/preloader.widget';
+import Preview from '../widgets/Input Preview/create_activity.preview';
+import ListI from '../widgets/List/list_iconed.widget';
 
 
 class CreateNew extends Component {
@@ -35,12 +37,23 @@ class CreateNew extends Component {
             temp_prcing_fts : [],
             temp_tags : [],
             loadingPage : false,
+            temp_selected_langs : {
+                "node" : false,
+                "go" : false
+            },
+            publish_content: {
+                "go" : null,
+                "node": {
+                    "file": null,
+                    "info": []
+                }
+            },
             success : false
         };
     }
     activityCategories = ["#CatOne", "#CatTwo"]
 
-    // Features
+    // Helper data
     feature = {
         title: '',
         description: ''
@@ -56,6 +69,8 @@ class CreateNew extends Component {
         bill_cycle: ''
     };
     packageFeature = '';
+
+
     addInfo = (e) => {
         switch (e.target.id) {
             case "activityName":
@@ -67,7 +82,7 @@ class CreateNew extends Component {
                     }
                 }));
                 break;
-                
+
             case "activityDescription":
                 const _desc = e.target.value;
                 this.setState(prevState => ({
@@ -81,22 +96,29 @@ class CreateNew extends Component {
             case "languageNode":
             case "languageGo":
                 const _lang = [...this.state.newActivity.languages];
+                let _selected_lang = {...this.state.temp_selected_langs};
                 if (e.target.checked) {
                     _lang.push({"language" : e.target.value});
+                    if(e.target.value === "nodeJs") _selected_lang.node = true; 
+                    else _selected_lang.go = true;
                     this.setState(prevState => ({
                         newActivity: {
                             ...prevState.newActivity,
                             languages: _lang
-                        }
+                        },
+                        temp_selected_langs : _selected_lang
                     }));
                 } else {
                     const i = _lang.indexOf(e.target.value);
                     _lang.splice(i, 1);
+                    if (e.target.value === "nodeJs") _selected_lang.node = false;
+                    else _selected_lang.go = false;
                     this.setState(prevState => ({
                         newActivity: {
                             ...prevState.newActivity,
                             languages: _lang
-                        }
+                        },
+                        temp_selected_langs: _selected_lang
                     }));
                 }
                 
@@ -175,7 +197,7 @@ class CreateNew extends Component {
             }
         }));
     };
-    addWhatYouGet = (e, type) => {
+    addMedia = (e, type) => {
         let _self = this.self;
         let file = e.target.files[0];
         const reader = new FileReader();
@@ -201,6 +223,27 @@ class CreateNew extends Component {
                     newActivity: {
                         ...prevState.newActivity,
                         what_you_get: _wyg
+                    }
+                }));
+           } else if (type === 'publishNode') {
+               const _info = [{
+                   "text" : file.name,
+                   "icon" : "check_circle_thin"
+               }, {
+                   "text": file.type,
+                   "icon": "check_circle_thin"
+               }, {
+                   "text": file.size,
+                   "icon": "check_circle_thin"
+               }]
+                _self.setState(prevState => ({
+                    ...prevState,
+                    publish_content: {
+                        ...prevState.publish_content,
+                        node: {
+                            "file" : file,
+                            "info" : _info
+                        }
                     }
                 }));
            }
@@ -311,6 +354,7 @@ class CreateNew extends Component {
     // Submit New Activity
     submitNewActivity = (e) => {
         e.preventDefault();
+        const _self = this.self;
         this.setState(prevState => ({
             ...prevState,
             loadingPage: true
@@ -322,18 +366,30 @@ class CreateNew extends Component {
                 "scope": "567890",
                 "activities": []
         };
+        const _publishFile = this.state.publish_content.node.file;
         _payload.description = this.state.newActivity.activity_name;
         _payload.activities.push(this.state.newActivity);
         ActivitiesService.saveNewActivity(_payload)
             .then((res) => {
                 if(res.data.IsSuccess) {
-                    alert('Saving successful');
-                    this.setState({success : true});
+                    ActivitiesService.publishActivity(_publishFile, function(res) {
+                        alert('Saving successful');
+                        _self.setState({
+                            success: true
+                        });
+                    });
                 }
             })
             .catch((errorRes) => {
                 console.log(errorRes);
             });
+    };
+
+    // Publish activity
+    updatePublishContent = (e) => {
+        if (e.target.id === 'publishNode') {
+            this.addMedia(e, e.target.id);
+        }
     }
 
     clearForm = (e) => {
@@ -375,7 +431,7 @@ class CreateNew extends Component {
         }));
         document.getElementsByClassName('sf-body').scrollTop = 0;
 
-    }
+    };
 
     render() {
         if (this.state.success) {
@@ -407,7 +463,9 @@ class CreateNew extends Component {
                                     />
                                 </div>
                             </div>
-                            <div className="sf-p-p" style={ {width:'300px'}}></div>
+                            <div className="sf-p-p" style={ {width:'300px'}}>
+                                {/* <Preview view="create_general" /> */}
+                            </div>
                         </div>
                         <div className="sf-input-group sf-flexbox-row">
                             <div className="sf-flex-1">
@@ -467,7 +525,7 @@ class CreateNew extends Component {
                                     </div>
                                     <div className="sf-feature-block">
                                         <div className="sf-feature-entry">
-                                            <input type="file" onChange={(event) => this.addWhatYouGet(event, 'main')}/>
+                                            <input type="file" onChange={(event) => this.addMedia(event, 'main')}/>
                                         </div>
                                     </div>
                                 </div>
@@ -492,7 +550,7 @@ class CreateNew extends Component {
 
                                     <div className="sf-feature-block">
                                         <div className="sf-feature-entry">
-                                            <input type="file" onChange={(event) => this.addWhatYouGet(event, 'wyg')}/>
+                                            <input type="file" onChange={(event) => this.addMedia(event, 'wyg')}/>
                                         </div>
                                     </div>
                                 </div>
@@ -615,14 +673,54 @@ class CreateNew extends Component {
                         </div>
                         <div className="sf-input-group">
                             <h3 className = "sf-heading-sub sf-heading-form"> Code </h3>
-                            <label> Select what language the activity is written in </label>
-                            <div className="sf-p-p-h">
-                                <div className="sf-input-block">
-                                    <Input type="checkbox" class="sf-checkbox" id="languageNode" label="Node JS" value="nodeJs" onChange={(event) => this.addInfo(event)} />
+                            
+                            <div className="sf-flexbox-row">
+                                <div className="sf-p-p-h" style={{'width':'150px'}}>
+                                    <label> Language </label>
+                                    <div className="sf-p-p-h">
+                                        <div className="sf-input-block">
+                                            <Input type="checkbox" class="sf-checkbox" id="languageNode" label="Node JS" value="nodeJs" onChange={(event) => this.addInfo(event)} />
+                                        </div>
+                                        <div className="sf-input-block">
+                                            <Input type="checkbox" class="sf-checkbox" id="languageGo" label="GO" value="GO" onChange={(event) => this.addInfo(event)} />
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="sf-input-block">
-                                    <Input type="checkbox" class="sf-checkbox" id="languageGo" label="GO" value="GO" onChange={(event) => this.addInfo(event)} />
-                                </div>
+                                {
+                                    this.state.temp_selected_langs.go ?
+                                    <div className="sf-flex-1 sf-p-p">
+                                        <label> Code </label>
+                                        <div className="sf-p-p-h">
+                                            <Input type="textarea" rows="10" id="publishGO" onChange={ (event) => this.updatePublishContent(event)}/>
+                                        </div>
+                                    </div>
+                                    : null
+                                }
+                                {
+                                    this.state.temp_selected_langs.node ? 
+                                    <div className = "sf-flex-1 sf-p-p sf-flexbox-column">
+                                        <label> File </label>
+                                        <div className="sf-card sf-card-block sf-flexbox-column sf-flex-1" style={{padding: '15px 0px'}}>
+                                            <div className="sf-card-content sf-card-bordered sf-flex-1 sf-flexbox-column">
+                                                <div className="sf-flex-1">
+                                                    {
+                                                        this.state.publish_content.node.file ? 
+                                                        <div className="sf-card">
+                                                            <div className="sf-card-content sf-card-bordered sf-card-centered-row">
+                                                                <div className="sf-flex-1">
+                                                                    <ListI list={ this.state.publish_content.node.info }/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        : null
+                                                    }
+                                                </div>
+                                                <input type="file" id="publishNode" onChange={ (event) => this.updatePublishContent(event)}/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    : null
+                                }
                             </div>
                         </div>
 
@@ -633,6 +731,61 @@ class CreateNew extends Component {
                     </form>
             
                 }
+                {/* <form action="https://smoothbotactivitydev.plus.smoothflow.io/activity/publish" method="POST" enctype="multipart/form-data"> 
+                    <div className="sf-input-group">
+                        <h3 className = "sf-heading-sub sf-heading-form"> Code </h3>
+                        
+                        <div className="sf-flexbox-row">
+                            <div className="sf-p-p-h" style={{'width':'150px'}}>
+                                <label> Language </label>
+                                <div className="sf-p-p-h">
+                                    <div className="sf-input-block">
+                                        <Input type="checkbox" class="sf-checkbox" id="languageNode" label="Node JS" value="nodeJs" onChange={(event) => this.addInfo(event)} />
+                                    </div>
+                                    <div className="sf-input-block">
+                                        <Input type="checkbox" class="sf-checkbox" id="languageGo" label="GO" value="GO" onChange={(event) => this.addInfo(event)} />
+                                    </div>
+                                </div>
+                            </div>
+                            {
+                                this.state.temp_selected_langs.go ?
+                                <div className="sf-flex-1 sf-p-p">
+                                    <label> Code </label>
+                                    <div className="sf-p-p-h">
+                                        <Input type="textarea" rows="10" id="publishGO" onChange={ (event) => this.updatePublishContent(event)}/>
+                                    </div>
+                                </div>
+                                : null
+                            }
+                            {
+                                this.state.temp_selected_langs.node ? 
+                                <div className = "sf-flex-1 sf-p-p sf-flexbox-column">
+                                    <label> File </label>
+                                    <div className="sf-card sf-card-block sf-flexbox-column sf-flex-1" style={{padding: '15px 0px'}}>
+                                        <div className="sf-card-content sf-card-bordered sf-flex-1 sf-flexbox-column">
+                                            <div className="sf-flex-1">
+                                                {
+                                                    this.state.publish_content.node.file ? 
+                                                    <div className="sf-card">
+                                                        <div className="sf-card-content sf-card-bordered sf-card-centered-row">
+                                                            <div className="sf-flex-1">
+                                                                <ListI list={ this.state.publish_content.node.info }/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    : null
+                                                }
+                                            </div>
+                                            <input type="file" name="uploadedFiles" id="uploadedFiles" onChange={ (event) => this.updatePublishContent(event)}/>
+                                        </div>
+                                    </div>
+                                </div>
+                                : null
+                            }
+                        </div>
+                    </div>
+                    <button type="submit">Send</button>
+                </form> */}
                 </div>
         )
     }

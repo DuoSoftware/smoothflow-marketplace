@@ -163,6 +163,9 @@ h3 {
       }
     }
   }
+  &.sf-card-block {
+    width: 100%;
+  }
 }
 
 //Container
@@ -263,6 +266,7 @@ h3 {
     }
   }
   &.sf-btn-circle {
+    line-height: 10px;
     font-size: 16px;
     width: 40px;
     height: 40px;
@@ -331,6 +335,10 @@ h3 {
   display: -moz-flex;
   display: -ms-flex;
   display: -webkit-flex;
+}
+.sf-flexbox-column {
+  display: flex;
+  flex-direction: column;
 }
 .sf-flex-1 {
   flex: 1;
