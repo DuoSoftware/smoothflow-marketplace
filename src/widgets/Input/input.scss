@@ -10,6 +10,7 @@ textarea {
   box-sizing: border-box;
   display: block;
   width: 100%;
+  resize: vertical;
   &.sf-input-shadow {
     border: none;
     box-shadow: 0 1px $sf-shadow-size-primary $sf-shadow-color-primary;

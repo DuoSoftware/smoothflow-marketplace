@@ -61,7 +61,7 @@ class ItemView extends Component {
                             </dif>
                         </div>
                     </div>
-                    <div className="sf-flex-1 sf-flex-center sf-m-p sf-shadow-box">
+                    <div className="sf-flex-1 sf-flex-center sf-m-p sf-shadow-box sf-border-radius" style={{display: 'flex'}}>
                         <img src={this.props.location.activity.image} alt=""/>
                     </div>
                 </div>

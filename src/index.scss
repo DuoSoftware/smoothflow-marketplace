@@ -34,6 +34,12 @@ h3 {
     clear: both;
   }
 }
+.sf-fill-width {
+  width: 100%;
+}
+.sf-fill-height {
+  height: 100%;
+}
 .text-left {
   text-align: left;
 }
@@ -66,11 +72,14 @@ h3 {
   padding: $sf-padding-secondary 0;
 }
 .sf-p-ex {
-  padding: 50px;
+  padding: 50px!important;
 }
 //Margin
 .sf-m-p {
   margin: $sf-padding-primary;
+}
+.sf-m-p-t {
+  margin-top: $sf-padding-primary;
 }
 .sf-m-p-b {
   margin-bottom: $sf-padding-primary;
@@ -86,6 +95,12 @@ h3 {
 }
 .sf-txt-c-s {
   color: $sf-color-secondary;
+}
+.sf-bg-p {
+  background: $sf-color-bg-primary;
+}
+.sf-bg-s {
+  background: $sf-color-bg-secondary;
 }
 .sf-hr {
   border-bottom: solid 1px $sf-shadow-color-primary;
@@ -116,6 +131,10 @@ h3 {
   width: calc(100% - 280px);
   overflow-y: scroll;
   overflow-x: hidden;
+
+  &> div {
+    height: 100%;
+  }
 }
 
 .sf-img {
@@ -133,13 +152,14 @@ h3 {
 
 //Card
 .sf-card {
-  padding: $sf-padding-secondary;
   box-sizing: border-box;
   float: left;
+  .sf-card-header {
+    padding: $sf-padding-primary;
+  }
   .sf-card-content {
     padding: $sf-padding-secondary;
     border-radius: $sf-border-radius-primary;
-    .sf-card-header {}
     &.sf-card-bordered {
       border: solid 1px $sf-shadow-color-primary;
     }
@@ -166,22 +186,30 @@ h3 {
   &.sf-card-block {
     width: 100%;
   }
+  &.sf-card-small {
+    width: 33.33%
+  }
+  &.sf-card-medium {
+    width: 50%
+  }
 }
 
 //Container
 .sf-image-text-container {
   overflow: auto;
+  display: flex;
+  align-items: center;
   .sf-img {
     display: inline-block;
-    float: left;
+    //float: left;
     width: 80px;
   }
   .sf-text {
     display: inline-block;
-    float: left;
+    //float: left;
     color: $sf-text-color-secondary;
     font-size: $sf-text-secondary;
-    width: calc(100% - 80px);
+    //width: calc(100% - 80px);
     padding: 0 0 0 $sf-padding-primary;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -191,8 +219,13 @@ h3 {
     }
   }
 }
-.sf-shadow-box {
+.sf-border-radius {
   border-radius: $sf-border-radius-primary;
+}
+.sf-border-box {
+  border: solid 1px $sf-shadow-color-primary;
+}
+.sf-shadow-box {
   -webkit-box-shadow: 00 0 $sf-shadow-size-secondary $sf-shadow-color-primary;
   -moz-box-shadow: 0 0 $sf-shadow-size-secondary $sf-shadow-color-primary;
   box-shadow: 0 0 $sf-shadow-size-secondary $sf-shadow-color-primary;
@@ -206,7 +239,7 @@ h3 {
   display: inline-block;
   background: #fff;
   border: none;
-  padding: $sf-padding-primary $sf-padding-primary;
+  padding: $sf-padding-secondary $sf-padding-primary;
   border-radius: $sf-border-radius-primary;
   font-weight: bold;
   cursor: pointer;
@@ -217,12 +250,13 @@ h3 {
   -ms-transition: background $sf-animation-time;
   -o-transition: background $sf-animation-time;
   transition: background $sf-animation-time;
-  &.sf-btn-thin {
-    padding: $sf-padding-secondary $sf-padding-primary;
-  }
   &.sf-btn-primary {
+    padding: $sf-padding-primary $sf-padding-primary;
     background: $sf-color-primary;
     color: #ffffff;
+    &.sf-btn-thin {
+      padding: $sf-padding-secondary $sf-padding-primary;
+    }
     &.sf-btn-primary-light {
       background: $sf-color-primary-light;
       color: $sf-color-primary;
@@ -230,6 +264,19 @@ h3 {
     &:hover, &.sf-btn-primary-light:hover {
       background: $sf-color-primary-dark;
       color: #fff;
+      -webkit-transition: background $sf-animation-time;
+      -moz-transition: background $sf-animation-time;
+      -ms-transition: background $sf-animation-time;
+      -o-transition: background $sf-animation-time;
+      transition: background $sf-animation-time;
+    }
+  }
+  &.sf-btn-secondary {
+    background: #fff;
+    color: $sf-color-secondary;
+    border: solid 2px $sf-color-secondary;
+    &:hover {
+      background: $sf-color-secondary-light;
       -webkit-transition: background $sf-animation-time;
       -moz-transition: background $sf-animation-time;
       -ms-transition: background $sf-animation-time;
@@ -346,8 +393,8 @@ h3 {
   -ms-flex: 1;
 }
 .sf-flex-center {
-  display: grid;
-  align-content: center;
+  //display: grid;
+  align-items: center;
   -webkit-align-content: center;
   justify-content: center;
   -webkit-justify-content: center;
@@ -416,11 +463,11 @@ form {
 
 
 //Animations
-.fade-enter {
+.sf-fade-enter {
   opacity: 0;
   z-index: 1;
 }
-.fade-enter.fade-enter-active {
+.sf-fade-enter.sf-fade-enter-active {
   opacity: 1;
   transition: opacity 250ms ease-in;
 }

@@ -86,23 +86,29 @@ class Home extends Component {
     render() {
         return (
             <div>
-                <div className="sf-controls-bar">
-                    <div className="sf-control-search">
-                        <input className="sf-input-shadow" type="text" id="mainSearch" placeholder="Search.."/>
-                    </div>
-                    <div className="sf-control-buttons">
-                        <Link to={'/create'} className="sf-btn sf-btn-primary sf-btn-thin">Create</Link>
-                    </div>
-                </div>
-                <div>
-                    {
-                        !this.state.loadingPage ?
-                            this.state.allActivities.map((activity) => {
-                                if(activity) return <ItemCard item={activity} />
-                            })
-                        : <Preloader />
-                    }
-                </div>
+                {
+                    this.state.loadingPage
+                        ?   <Preloader />
+                        :   <div>
+                            <div className="sf-controls-bar">
+                                <div className="sf-control-search">
+                                    <input className="sf-input-shadow" type="text" id="mainSearch" placeholder="Search.."/>
+                                </div>
+                                <div className="sf-control-buttons">
+                                    <Link to={'/create'} className="sf-btn sf-btn-primary sf-btn-thin">Create</Link>
+                                </div>
+                            </div>
+                            <div>
+                                {
+                                    !this.state.loadingPage
+                                        ?   this.state.allActivities.map((activity) => {
+                                            if(activity) return <ItemCard item={activity} />
+                                        })
+                                        :   null
+                                }
+                            </div>
+                        </div>
+                }
             </div>
         );
     }
