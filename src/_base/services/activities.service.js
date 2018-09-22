@@ -35,6 +35,9 @@ const ActivitiesService = {
                 callback(errorRes)
             });
         }
+    },
+    getTagsList: () => {
+        return axios.get(URLs.activity.getTagsList)
     }
 };
 

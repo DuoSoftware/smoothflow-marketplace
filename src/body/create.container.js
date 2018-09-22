@@ -23,8 +23,8 @@ class CreateNew extends Component {
                 "reviewed": false,
                 "state": "FB",
                 "path": "1000",
-                "npm_module": "1.0.0",
-                "npm_version": "20.0.0",
+                "npm_module": "@smoothflow/zappier-integration",
+                "npm_version": "17.0.0",
                 "image": null,
                 "description": '',
                 "languages":[],
@@ -36,6 +36,10 @@ class CreateNew extends Component {
                 "variables": []
             },
             temp_prcing_fts : [],
+            temp_variable : {
+                temp_variable_vals: [],
+                is_val_added : false
+            },
             temp_tags : [],
             loadingPage : false,
             temp_selected_langs : {
@@ -61,6 +65,10 @@ class CreateNew extends Component {
             success : false
         };
     }
+    componentDidMount() {
+        this.getTagsList();
+    };
+    // ------------------------------------------------------------
     activityCategories = ["#CatOne", "#CatTwo"];
 
     // Helper data
@@ -79,6 +87,28 @@ class CreateNew extends Component {
         bill_cycle: ''
     };
     packageFeature = '';
+    var_key_val = {
+        key: "",
+        value: ""
+    };
+    variable = {
+        "Key": "",
+        "DisplayName": "",
+        "Value": "",
+        "ValueList": [{
+            "key": "Equal",
+            "value": "=="
+        }],
+        "APIMethod": "",
+        "Type": "",
+        "Category": "",
+        "DataType": "",
+        "Group": "Default",
+        "Priority": "",
+        "advance": false,
+        "control": "",
+        "placeholder": ""
+    };
 
     addInfo = (e) => {
         switch (e.target.id) {
@@ -104,12 +134,17 @@ class CreateNew extends Component {
 
             case "languageNode":
             case "languageGo":
-                const _lang = [...this.state.newActivity.languages];
+                const _lang = [];
                 let _selected_lang = {...this.state.temp_selected_langs};
                 if (e.target.checked) {
                     _lang.push({"language" : e.target.value});
-                    if(e.target.value === "nodeJs") _selected_lang.node = true;
-                    else _selected_lang.golang = true;
+                    if(e.target.value === "nodeJs") {
+                        _selected_lang.node = true;
+                        _selected_lang.golang = false;
+                    } else {
+                        _selected_lang.golang = true;
+                        _selected_lang.node = false;
+                    };
                     this.setState(prevState => ({
                         newActivity: {
                             ...prevState.newActivity,
@@ -117,20 +152,7 @@ class CreateNew extends Component {
                         },
                         temp_selected_langs : _selected_lang
                     }));
-                } else {
-                    const i = _lang.indexOf(e.target.value);
-                    _lang.splice(i, 1);
-                    if (e.target.value === "nodeJs") _selected_lang.node = false;
-                    else _selected_lang.golang = false;
-                    this.setState(prevState => ({
-                        newActivity: {
-                            ...prevState.newActivity,
-                            languages: _lang
-                        },
-                        temp_selected_langs: _selected_lang
-                    }));
                 }
-
                 break;
 
             default:
@@ -210,54 +232,56 @@ class CreateNew extends Component {
     addMedia = (e, type) => {
         let _self = this.self;
         let file = e.target.files[0];
-        const reader = new FileReader();
-        let _wyg = [];
-        _wyg = [...this.state.newActivity.what_you_get];
-        reader.readAsDataURL(e.target.files[0]);
-        reader.onload = function(_e) {
-            if (type === 'main') {
-                _self.setState(prevState => ({
-                    newActivity: {
-                        ...prevState.newActivity,
-                        image: file
-                    }
-                }));
-                document.getElementById('newActivityImage').setAttribute('src', _e.target.result);
-            } else if (type === 'wyg') {
-                _wyg.push({
-                    'type': 'image',
-                    'content': _e.target.result,
-                    'file': file
-                });
-                _self.setState(prevState => ({
-                    newActivity: {
-                        ...prevState.newActivity,
-                        what_you_get: _wyg
-                    }
-                }));
-            } else if (type === 'publishNode') {
-                const _info = [{
-                    "text" : file.name,
-                    "icon" : "check_circle_thin"
-                }, {
-                    "text": file.type,
-                    "icon": "check_circle_thin"
-                }, {
-                    "text": file.size,
-                    "icon": "check_circle_thin"
-                }]
-                _self.setState(prevState => ({
-                    ...prevState,
-                    publish_content: {
-                        ...prevState.publish_content,
-                        node: {
-                            "file" : file,
-                            "info" : _info
+        if (file) {
+            const reader = new FileReader();
+            let _wyg = [];
+            _wyg = [...this.state.newActivity.what_you_get];
+            reader.readAsDataURL(e.target.files[0]);
+            reader.onload = function(_e) {
+                if (type === 'main') {
+                    _self.setState(prevState => ({
+                        newActivity: {
+                            ...prevState.newActivity,
+                            image: file
                         }
-                    }
-                }));
-            }
-        };
+                    }));
+                    document.getElementById('newActivityImage').setAttribute('src', _e.target.result);
+                } else if (type === 'wyg') {
+                    _wyg.push({
+                        'type': 'image',
+                        'content': _e.target.result,
+                        'file': file
+                    });
+                    _self.setState(prevState => ({
+                        newActivity: {
+                            ...prevState.newActivity,
+                            what_you_get: _wyg
+                        }
+                    }));
+                } else if (type === 'publishNode') {
+                    const _info = [{
+                        "text" : file.name,
+                        "icon" : "check_circle_thin"
+                    }, {
+                        "text": file.type,
+                        "icon": "check_circle_thin"
+                    }, {
+                        "text": file.size,
+                        "icon": "check_circle_thin"
+                    }]
+                    _self.setState(prevState => ({
+                        ...prevState,
+                        publish_content: {
+                            ...prevState.publish_content,
+                            node: {
+                                "file" : file,
+                                "info" : _info
+                            }
+                        }
+                    }));
+                }
+            };
+        }
     };
     removeMedia = (e, type, i) => {
         if (type === 'wyg') {
@@ -360,6 +384,193 @@ class CreateNew extends Component {
             }
         }));
     };
+    uploadBulkMedia = (callback) => {
+        let _media = [{
+            id: 'main',
+            file: this.state.newActivity.image
+        }];
+        for (const [i, am] of this.state.newActivity.what_you_get.entries()) {
+            _media.push({
+                id: am.file.name.split('.')[0] + i,
+                file: am.file
+            });
+        }
+        let _m_counter = 0;
+        let _m_res = [];
+        for(const m of _media) {
+            MediaService.uploadMedia(m.file,
+                function(mres) {
+                    _m_counter ++;
+                    let __mid = m.id;
+                    // m.id !== 'main' ? __mid = m.id + _m_counter : null;
+                    _m_res.push({
+                        id: __mid,
+                        src: mres.url
+                    });
+                    if (_m_counter === _media.length) {
+                        callback(_m_res);
+                    }
+                });
+        }
+    };
+    getTagsList = () => {
+        this.setState(prevState => ({
+            ...prevState,
+            loadingPage : true
+        }));
+        ActivitiesService.getTagsList()
+            .then((res) => {
+                this.activityCategories = res.data.Result;
+                this.setState(prevState => ({
+                    ...prevState,
+                    loadingPage : false
+                }));
+            })
+            .catch((errorRes) => {
+                console.log(errorRes);
+                this.setState(prevState => ({
+                    ...prevState,
+                    loadingPage : false
+                }));
+            });
+    };
+    createVariable = (e, i) => {
+        let _keyvals = [...this.state.temp_variable.temp_variable_vals];
+        const _keyval = {...this.var_key_val};
+        switch(e.target.id) {
+            case "varKey":
+                this.variable.Key = e.target.value;
+                break;
+
+            case "varDisplayName":
+                this.variable.DisplayName = e.target.value;
+                break;
+
+            case "varValue":
+                if(e.target.value === '') {
+                    this.setState(prevState => ({
+                        ...prevState,
+                        temp_variable: {
+                            ...prevState.temp_variable,
+                            is_val_added: false
+                        }
+                    }))
+                } else {
+                    this.setState(prevState => ({
+                        ...prevState,
+                        temp_variable: {
+                            ...prevState.temp_variable,
+                            is_val_added: true
+                        }
+                    }))
+                }
+                this.variable.Value = e.target.value;
+                break;
+
+            case "varGroup":
+                this.variable.Value = e.target.value;
+                break;
+
+            case "varType":
+                this.variable.Type = e.target.value;
+                break;
+
+            case "varCategory":
+                this.variable.Category = e.target.value;
+                break;
+
+            case "varDataType":
+                this.variable.DataType = e.target.value;
+                break;
+
+            case "varPriority":
+                this.variable.Priority = e.target.value;
+                break;
+
+            case "addVarKeyVal":
+                _keyvals.push(_keyval);
+                this.setState(prevState => ({
+                    ...prevState,
+                    temp_variable: {
+                        ...prevState.temp_variable,
+                        temp_variable_vals: _keyvals
+                    }
+                }));
+                this.var_key_val = {
+                    key: "",
+                    value: ""
+                };
+                document.getElementById('varValListKey').value = "";
+                document.getElementById('varValListValue').value = "";
+                document.getElementById('varValListKey').focus();
+                break;
+
+            case "removeVarKeyVal":
+                _keyvals.splice(i, 1);
+                this.setState(prevState => ({
+                    ...prevState,
+                    temp_variable: {
+                        ...prevState.temp_variable,
+                        temp_variable_vals: _keyvals
+                    }
+                }));
+                break;
+
+            case "varControls":
+                this.variable.control = e.target.value;
+                break;
+
+            case "varIsAdvanced":
+                e.target.value === "on" ? this.variable.advance = true : this.variable.advance = false;
+                break;
+
+            default:
+                break;
+
+        }
+    }
+    addVariable = () => {
+        let _vars = [...this.state.newActivity.variables];
+        const _var = {
+            ...this.variable
+        };
+        _vars.push(_var);
+        this.setState(prevState => ({
+            ...prevState,
+            newActivity:{
+                ...prevState.newActivity,
+                variables: _vars
+            }
+        }));
+        this.variable = {
+            "Key": "",
+            "DisplayName": "",
+            "Value": "",
+            "ValueList": [{
+                "key": "Equal",
+                "value": "=="
+            }],
+            "APIMethod": "",
+            "Type": "",
+            "Category": "",
+            "DataType": "",
+            "Group": "Default",
+            "Priority": "",
+            "advance": false,
+            "control": "",
+            "placeholder": ""
+        };
+        document.getElementById('varKey').value = "";
+        document.getElementById('varDisplayName').value = "";
+        document.getElementById('varValue').value = "";
+        document.getElementById('varGroup').value = "";
+        document.getElementById('varType').value = "";
+        document.getElementById('varCategory').value = "";
+        document.getElementById('varDataType').value = "";
+        document.getElementById('varPriority').value = "";
+        document.getElementById('varIsAdvanced').value = "";
+        document.getElementById('varKey').focus();
+    };
 
     // Submit New Activity
     submitNewActivity = (e) => {
@@ -402,12 +613,19 @@ class CreateNew extends Component {
             ActivitiesService.saveNewActivity(_payload)
                 .then((res) => {
                     if(res.data.IsSuccess) {
-                        ActivitiesService.publishActivity(_publishFile, _self.state.temp_selected_langs,  function(res) {
-                            alert('Saving successful');
+                        if (_self.state.temp_selected_langs.node || _self.state.temp_selected_langs.golang) {
+                            ActivitiesService.publishActivity(_publishFile, _self.state.temp_selected_langs,  function(res) {
+                                alert('Activity created successfully');
+                                _self.setState({
+                                    success: true
+                                });
+                            });
+                        } else {
+                            alert('Activity created successfully');
                             _self.setState({
                                 success: true
                             });
-                        });
+                        }
                     }
                 })
                 .catch((errorRes) => {
@@ -416,36 +634,6 @@ class CreateNew extends Component {
         });
 
     };
-
-    uploadBulkMedia = (callback) => {
-        let _media = [{
-            id: 'main',
-            file: this.state.newActivity.image
-        }];
-        for (const [i, am] of this.state.newActivity.what_you_get.entries()) {
-            _media.push({
-                id: am.file.name.split('.')[0] + i,
-                file: am.file
-            });
-        }
-        let _m_counter = 0;
-        let _m_res = [];
-        for(const m of _media) {
-            MediaService.uploadMedia(m.file,
-                function(mres) {
-                    _m_counter ++;
-                    let __mid = m.id;
-                    // m.id !== 'main' ? __mid = m.id + _m_counter : null;
-                    _m_res.push({
-                        id: __mid,
-                        src: mres.url
-                    });
-                    if (_m_counter === _media.length) {
-                        callback(_m_res);
-                    }
-                });
-        }
-    }
 
     // Publish activity
     updatePublishContent = (e) => {
@@ -595,7 +783,7 @@ class CreateNew extends Component {
                                             value={this.state.temp_tags}
                                             onChange={this.addTags}
                                             suggestions={ this.activityCategories }
-                                            placeholder={'Categories'}
+                                            placeholder={'Tags'}
                                         />
                                     </div>
                                 </div>
@@ -724,9 +912,7 @@ class CreateNew extends Component {
                                         <div className="sf-feature-entry">
                                             <div className="sf-input-block sf-flexbox-row">
                                                 <input type="text" placeholder="Package name" id="packageName" onChange={(event) => this.createPricing(event)} />
-                                                <div className="sf-spacer-p"></div>
                                                 <input type="number" placeholder="Price" id="packagePrice" onChange={(event) => this.createPricing(event)} />
-                                                <div className="sf-spacer-p"></div>
                                                 <input type="text" placeholder="Bill Cycle" id="packageBillCycle" onChange={(event) => this.createPricing(event)} />
                                             </div>
                                             <div className="sf-input-block">
@@ -807,6 +993,235 @@ class CreateNew extends Component {
                                 <div className="sf-p-p" style={ {width:'300px'}}></div>
                             </div>
                             <div className="sf-hr"></div>
+                            <div className="sf-input-group sf-flexbox-row">
+                                <div className="sf-flex-1">
+                                    <h3 className="sf-heading-sub sf-heading-form">Variables</h3>
+                                    <div className="sf-clearfix">
+                                        {
+                                            this.state.newActivity.variables.map((variable, index) =>
+                                                <div className="sf-card">
+                                                    <div className="sf-card-content sf-card-bordered sf-card-centered-row">
+                                                        <div className="sf-flex-1">
+                                                            <div className="sf-txtblock-text">
+                                                                <span className="sf-text-semibold">Key : </span>
+                                                                <span>{variable.Key}</span>
+                                                            </div>
+                                                            <div className="sf-txtblock-text">
+                                                                <span className="sf-text-semibold">DisplayName : </span>
+                                                                <span>{variable.Key}</span>
+                                                            </div>
+                                                            {
+                                                                variable.ValueList.length == 0
+                                                                ?   <div className="sf-txtblock-text">
+                                                                        <span className="sf-text-semibold">Value : </span>
+                                                                        <span>{variable.Key}</span>
+                                                                    </div>
+                                                                :   null
+                                                            }
+                                                            {
+                                                                variable.ValueList.length > 0
+                                                                    ?   <div className="sf-txtblock-text sf-flexbox-row">
+                                                                            <span
+                                                                                className="sf-text-semibold">ValueList : </span>
+                                                                            <div>
+                                                                                {
+                                                                                    variable.ValueList.map((val) =>
+                                                                                        <div>
+                                                                                            <div
+                                                                                                className="sf-txtblock-text sf-flexbox-row">
+                                                                                                <span
+                                                                                                    className="sf-text-semibold">Key : </span>
+                                                                                                <span>{val.Key}</span>
+                                                                                            </div>
+                                                                                            <div
+                                                                                                className="sf-txtblock-text sf-flexbox-row">
+                                                                                                <span
+                                                                                                    className="sf-text-semibold">Value : </span>
+                                                                                                <span>{val.Value}</span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    )
+                                                                                }
+                                                                            </div>
+                                                                        </div>
+                                                                    :   null
+                                                            }
+                                                            <div className="sf-txtblock-text">
+                                                                <span className="sf-text-semibold">Type : </span>
+                                                                <span>{variable.Type}</span>
+                                                            </div>
+                                                            <div className="sf-txtblock-text">
+                                                                <span className="sf-text-semibold">Category : </span>
+                                                                <span>{variable.Category}</span>
+                                                            </div>
+                                                            <div className="sf-txtblock-text">
+                                                                <span className="sf-text-semibold">DataType : </span>
+                                                                <span>{variable.DataType}</span>
+                                                            </div>
+                                                            <div className="sf-txtblock-text">
+                                                                <span className="sf-text-semibold">Group : </span>
+                                                                <span>{variable.Group}</span>
+                                                            </div>
+                                                            <div className="sf-txtblock-text">
+                                                                <span className="sf-text-semibold">Priority : </span>
+                                                                <span>{variable.Priority}</span>
+                                                            </div>
+                                                            <div className="sf-txtblock-text">
+                                                                <span className="sf-text-semibold">Advance : </span>
+                                                                <span>{variable.advance}</span>
+                                                            </div>
+                                                            <div className="sf-txtblock-text">
+                                                                <span className="sf-text-semibold">Control : </span>
+                                                                <span>{variable.control}</span>
+                                                            </div>
+                                                            <div className="sf-txtblock-text">
+                                                                <span className="sf-text-semibold">placeholder : </span>
+                                                                <span>{variable.placeholder}</span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="sf-card-row-end">
+                                                            <button type="button" className="sf-btn sf-btn-primary-light sf-btn-primary sf-btn-circle" onClick={(event)=>this.removeFAQ(event, index)}>x</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )
+                                        }
+                                    </div>
+                                    <div className="sf-feature-block">
+                                        <div className="sf-feature-entry">
+                                            <div className="sf-flexbox-row">
+                                                <div className="sf-input-block sf-flexbox-row sf-flex-center">
+                                                    <Input class="sf-checkbox" type="checkbox" id="varIsAdvanced" onChange={(event) => this.createVariable(event)}/>
+                                                    <span>Advance</span>
+                                                </div>
+                                            </div>
+                                            <div className="sf-input-block sf-flexbox-row">
+                                                <input className="sf-flex-1" type="text" placeholder="Key" id="varKey" onChange={ (event) => this.createVariable(event) } />
+                                                <input className="sf-flex-1" type="text" placeholder="Display Name" id="varDisplayName" onChange={ (event) => this.createVariable(event) } />
+                                                <input className="sf-flex-1" type="text" placeholder="Value" id="varValue" disabled={ this.state.temp_variable.temp_variable_vals.length > 0 } onChange={ (event) => this.createVariable(event) } />
+                                                <input className="sf-flex-1" type="text" placeholder="Group" value="Default" id="varGroup" onChange={ (event) => this.createVariable(event) } />
+                                            </div>
+                                            <div className="sf-flexbox-row">
+                                                <div className="sf-input-block sf-flex-1">
+                                                    <div className="sf-feature-block">
+                                                        <div className="sf-feature-entry">
+                                                            <div className="sf-input-block">
+                                                                <select name="varType" id="varType" onChange={(event) => this.createVariable(event)}>
+                                                                    <option value="" disabled selected>Type</option>
+                                                                    <option value="dynamic">Dynamic</option>
+                                                                    <option value="hardcoded" selected={this.state.temp_variable.is_val_added}>Hardcoded</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="sf-spacer-p"></div>
+                                                <div className="sf-input-block sf-flex-1">
+                                                    <div className="sf-feature-block">
+                                                        <div className="sf-feature-entry">
+                                                            <div className="sf-input-block">
+                                                                <select name="varCategory" id="varCategory" onChange={(event) => this.createVariable(event)}>
+                                                                    <option value="" disabled selected>Category</option>
+                                                                    <option value="InArgument">In Argument</option>
+                                                                    <option value="OutArgument">Out Argument</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="sf-spacer-p"></div>
+                                                <div className="sf-input-block sf-flex-1">
+                                                    <div className="sf-feature-block">
+                                                        <div className="sf-feature-entry">
+                                                            <div className="sf-input-block">
+                                                                <select name="varDataTYpe" id="varDataType" onChange={(event) => this.createVariable(event)}>
+                                                                    <option value="" disabled selected>Data Type</option>
+                                                                    <option value="string">String</option>
+                                                                    <option value="int">Int</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="sf-spacer-p"></div>
+                                                <div className="sf-input-block sf-flex-1">
+                                                    <div className="sf-feature-block">
+                                                        <div className="sf-feature-entry">
+                                                            <div className="sf-input-block">
+                                                                <select name="varPriority" id="varPriority" onChange={(event) => this.createVariable(event)}>
+                                                                    <option value="" disabled selected>Priority</option>
+                                                                    <option value="Mandatory">Mandatory</option>
+                                                                    <option value="NotMandatory">Not Mandatory</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="sf-spacer-p"></div>
+                                                <div className="sf-input-block sf-flex-1">
+                                                    <div className="sf-feature-block">
+                                                        <div className="sf-feature-entry">
+                                                            <div className="sf-input-block">
+                                                                <select name="varPriority" id="varControls" onChange={(event) => this.createVariable(event)}>
+                                                                    <option value="" disabled selected>Control</option>
+                                                                    <option value="Textbox">Textbox</option>
+                                                                    <option value="Dropdown">Dropdown</option>
+                                                                    <option value="APIControl">API Control</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {
+                                                !this.state.temp_variable.is_val_added
+                                                ?   <div className="sf-input-block sf-flexbox-row" style={{alignItems: 'flex-end'}}>
+                                                        <div className="sf-flex-1">
+                                                            <div className="sf-fill-width">
+                                                                <label>Value List</label>
+                                                                <div className="sf-clearfix">
+                                                                    {
+                                                                        this.state.temp_variable.temp_variable_vals.map((keyval, index) =>
+                                                                            <div className="sf-card">
+                                                                                <div className="sf-card-content sf-card-bordered sf-card-centered-row">
+                                                                                    <div className="sf-flex-1" style={{'paddingRight': '15px'}}>
+                                                                                        <div className="sf-txtblock-text">
+                                                                                            <div className="sf-txtblock-txt-title"><span className="sf-text-semibold">Key : </span>{keyval.key}</div>
+                                                                                            <div className="sf-txtblock-txt-title"><span className="sf-text-semibold">Value : </span>{keyval.value}</div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div className="sf-card-row-end">
+                                                                                        <button type="button" className="sf-btn sf-btn-primary-light sf-btn-primary sf-btn-circle" id="removeVarKeyVal" onClick={(event) => this.createVariable(event, index)}>x</button>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        )
+                                                                    }
+                                                                </div>
+                                                                <div className="sf-feature-block">
+                                                                    <div className="sf-feature-entry">
+                                                                        <div className="sf-input-block sf-flexbox-row">
+                                                                            <input type="text" placeholder="Key" id="varValListKey" onChange={(event) => this.var_key_val.key = event.target.value} />
+                                                                            <input type="text" placeholder="Value" id="varValListValue" onChange={(event) => this.var_key_val.value = event.target.value} />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="sf-feature-add">
+                                                                        <button type="button" id="addVarKeyVal" className="sf-btn sf-btn-primary sf-btn-primary-light" onClick={(event) => this.createVariable(event)}>+</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                :   null
+                                            }
+                                        </div>
+                                        <div className="sf-feature-add">
+                                            <button type="button" className="sf-btn sf-btn-primary sf-btn-primary-light" onClick={ this.addVariable }>+</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="sf-hr"></div>
                             <div className="sf-input-group">
                                 <h3 className = "sf-heading-sub sf-heading-form"> Publish </h3>
 
@@ -815,10 +1230,10 @@ class CreateNew extends Component {
                                         <label> Language </label>
                                         <div className="sf-p-p-h">
                                             <div className="sf-input-block">
-                                                <Input type="checkbox" class="sf-checkbox" id="languageNode" label="Node JS" value="nodeJs" onChange={(event) => this.addInfo(event)} />
+                                                <Input type="radio" name="publishLang" class="sf-radiobox" id="languageNode" label="Node JS" value="nodeJs" onChange={(event) => this.addInfo(event)} />
                                             </div>
                                             <div className="sf-input-block">
-                                                <Input type="checkbox" class="sf-checkbox" id="languageGo" label="GO" value="GO" onChange={(event) => this.addInfo(event)} />
+                                                <Input type="radio" name="publishLang" class="sf-radiobox" id="languageGo" label="GO" value="GO" onChange={(event) => this.addInfo(event)} />
                                             </div>
                                         </div>
                                     </div>

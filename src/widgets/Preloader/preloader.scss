@@ -1,3 +1,5 @@
+@import "../../../public/core/styles/variables";
+
 .sf-preloader {
     position: absolute;
     width: 100%;
@@ -9,8 +11,36 @@
     align-items: center;
     justify-content: center;
     z-index: 10000;
-    img {
-        width: 50px;
-        opacity: 0.5;
+    background: #fff;
+    transition: all $sf-animation-time;
+  .sf-preloader-outer {
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    background: linear-gradient($sf-color-primary 60%, $sf-color-secondary);
+    position: relative;
+    .sf-preloader-inner {
+      position: absolute;
+      left: 0;right: 0;top: 0;bottom: 0;
+      margin: auto;
+      border-radius: 100%;
+      width: 30px;
+      height: 30px;
+      background: #fff;
     }
+
+    animation: rotateLoop 2s infinite;
+  }
+}
+
+@keyframes rotateLoop {
+  0% {
+    transform: rotate(0);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

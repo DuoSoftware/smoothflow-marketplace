@@ -18,7 +18,7 @@ class ItemCard extends Component {
                             <h3>{ this.props.item.name }</h3>
                         </div>
                         <div className="sf-item-card-body">
-                            <div className="sf-image-text-container">
+                            <div className="sf-image-text-container" style={{overflow:'hidden'}}>
                                 <div className="sf-img sf-img-m sf-img-circular">
                                     <img src={ this.props.item.image } alt=""/>
                                 </div>

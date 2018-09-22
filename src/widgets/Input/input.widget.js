@@ -17,6 +17,12 @@ const Input = (props) => {
                         <label for={props.id}>{props.label}</label>
                     </div>
             break;
+        case ('radio'):
+            elem =  <div style={{display:'inline-block'}}>
+                        <input {...props} />
+                        <label for={props.id}>{props.label}</label>
+                    </div>
+            break;
         default:
             elem = <input {...props} />;
             break;
@@ -24,7 +30,7 @@ const Input = (props) => {
 
     return (
         <div className={props.inputBlock ? 'sf-input-block' : null}>
-            { props.type !== 'checkbox' && props.label ? <label>{props.label}</label> : null }
+            { props.type !== 'checkbox' && props.type !== 'radio' && props.label ? <label>{props.label}</label> : null }
             { elem }
         </div>
     )

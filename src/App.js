@@ -30,8 +30,8 @@ class App extends Component {
                                             <Route exact path="/login" component={Auth} />
                                             <Route exact path="/" component={Home} />
                                             <Route path="/activity/:id" component={ItemView} />
-                                            <Route path="/create" component={CreateNew} />
-                                            {/*<PrivateRoute path="/create" validUser="false" component={CreateNew} />*/}
+                                            {/*<Route path="/create" component={CreateNew} />*/}
+                                            <PrivateRoute path="/create" validUser="false" component={CreateNew} />
                                         </Switch>
                                     </CSSTransition>
                                 </TransitionGroup>

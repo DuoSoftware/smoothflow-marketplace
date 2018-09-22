@@ -5,7 +5,9 @@ class Preloader extends Component {
     render() {
         return (
             <div className="sf-preloader">
-                <img src="images/6.gif" />
+                <span className="sf-preloader-outer">
+                    <span className="sf-preloader-inner"></span>
+                </span>
             </div>
         )
     }

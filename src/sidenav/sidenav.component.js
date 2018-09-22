@@ -82,20 +82,35 @@ class Sidenav extends Component {
         }
     };
 
-    getSidenav() {
-        for(const i of this.state._sidenav ) {
-            if (i.category === 'tap') {
-                this.state._structuredList.taps.list.push(i);
-            }else if (i.category === 'activity') {
-                this.state._structuredList.activities.list.push(i);
-            }else if (i.category === 'app') {
-                this.state._structuredList.apps.list.push(i);
-            }
-        }
-        this.setState();
-    }
     componentDidMount() {
         this.getSidenav();
+    }
+
+    getSidenav() {
+        let _nav_obj = {
+            taps: {
+                list: []
+            },
+            activities: {
+                list: []
+            },
+            apps: {
+                list: []
+            }
+        };
+        for(const i of this.state._sidenav ) {
+            if (i.category === 'tap') {
+                _nav_obj.taps.list.push(i);
+            }else if (i.category === 'activity') {
+                _nav_obj.activities.list.push(i);
+            }else if (i.category === 'app') {
+                _nav_obj.apps.list.push(i);
+            }
+        }
+        this.setState(prevState => ({
+            ...prevState,
+            _structuredList: _nav_obj
+        }));
     }
 
     render() {
