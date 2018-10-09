@@ -1,18 +1,16 @@
 import React from 'react';
-import {
-    Route,
-    Redirect
-} from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import Auth from './_auth.redirect.js';
 import URLs from './_urls';
 
-const PrivateRoute = ({ component: Component, ...rest }) => (
-  <Route
-      {...rest}
-      render = {
-              (props) => props.validUser === true
-        ? <Component {...props} />
-        : <Auth url={URLs.auth} _rollback_point={window.location.pathname} />}
+const PrivateRoute = ({ component: Component, is_logged_in, ...rest }) => (
+    <Route
+        { ...rest }
+        render = {
+            (props) => is_logged_in === true
+                ?   <Component {...props} />
+                :   <Auth url={URLs.auth.signup} _rollback_point={window.location.href} />
+        }
     />
 );
 

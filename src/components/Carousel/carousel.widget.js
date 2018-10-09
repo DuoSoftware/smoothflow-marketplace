@@ -15,7 +15,7 @@ class Carousel extends Component {
     getSlides(slides) {
         const _slides = slides.map((slide) => {
             if(slide.type === 'image') {
-                return <div><img src={ slide.content } alt=""/></div>
+                return <div><img src={ slide.file } alt=""/></div>
             }
         });
         return _slides;

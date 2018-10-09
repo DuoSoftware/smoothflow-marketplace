@@ -13,4 +13,4 @@ class Preloader extends Component {
     }
 }
 
-export default Preloader;
+export { Preloader }

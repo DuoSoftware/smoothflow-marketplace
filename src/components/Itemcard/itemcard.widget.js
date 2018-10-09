@@ -5,6 +5,7 @@ import Tag from '../Tag/tag.widget'
 import TableTwoCol from '../Table - Two Col/table_two_col.widget';
 import TagBlock from '../Tag/tagblock.widget';
 import { BrowserRouter as Router, Link } from "react-router-dom";
+import {Button} from "../common";
 
 class ItemCard extends Component {
     constructor(props) {
@@ -19,10 +20,10 @@ class ItemCard extends Component {
                         </div>
                         <div className="sf-item-card-body">
                             <div className="sf-image-text-container" style={{overflow:'hidden'}}>
-                                <div className="sf-img sf-img-m sf-img-circular">
+                                <div className="sf-img sf-img-m">
                                     <img src={ this.props.item.image } alt=""/>
                                 </div>
-                                <div className="sf-text">
+                                <div className="sf-text sf-flex-1">
                                     <p>{ this.props.item.description }</p>
                                 </div>
                             </div>
@@ -35,7 +36,7 @@ class ItemCard extends Component {
                             </div>
                         </div>
                         <div className="sf-item-card-footer">
-                            <button className="sf-btn sf-btn-primary sf-btn-block">Buy</button>
+                            <Button className="sf-button sf-button-primary sf-button-primary-p sf-button-block">Buy</Button>
                         </div>
                     </Link>
                 </div>

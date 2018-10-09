@@ -1,4 +1,4 @@
-@import "../../../public/core/styles/variables";
+@import "../../../../public/core/styles/variables";
 
 .sf-preloader {
     position: absolute;
@@ -17,7 +17,7 @@
     width: 40px;
     height: 40px;
     border-radius: 100%;
-    background: linear-gradient($sf-color-primary 60%, $sf-color-secondary);
+    background: linear-gradient($sf-color-primary 30%, $sf-color-primary, #fff 50%, $sf-color-secondary, $sf-color-secondary 30%);
     position: relative;
     .sf-preloader-inner {
       position: absolute;

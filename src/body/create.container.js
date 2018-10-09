@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import Chips, { Chip } from 'react-chips';
-import Input from '../widgets/Input/input.widget';
-import ActivitiesService from '../_base/services/activities.service';
-import MediaService from '../_base/services/media.service';
+import Input from '../components/Input/input.widget';
+import { ActivitiesService, MediaService, UUID }  from '../_base/services';
 import { Redirect } from "react-router-dom";
-import Preloader from '../widgets/Preloader/preloader.widget';
-import FeatureBlock from '../widgets/Input Blocks/Feature block/feature_block.widget';
-import Preview from '../widgets/Input Preview/create_activity.preview';
-import ListI from '../widgets/List/list_iconed.widget';
-import Error from '../widgets/Error/error.widget';
-import UUID from '../_base/services/uuid.service';
+import { Preloader } from '../components/common';
+import FeatureBlock from '../components/Input Blocks/Feature block/feature_block.widget';
+import Preview from '../components/Input Preview/create_activity.preview';
+import ListI from '../components/List/list_iconed.widget';
+import Error from '../components/Error/error.widget';
 
 class CreateNew extends Component {
     constructor(props) {
@@ -17,6 +15,8 @@ class CreateNew extends Component {
         this.self = this;
         this.state = {
             newActivity : {
+                "insertOrUpdate": "update",
+                "date": new Date(),
                 "activity_name": "right",
                 "tenant_name": "tistuslabs",
                 "type": "chat",
@@ -24,7 +24,7 @@ class CreateNew extends Component {
                 "state": "FB",
                 "path": "1000",
                 "npm_module": "@smoothflow/zappier-integration",
-                "npm_version": "17.0.0",
+                "npm_version": "18.0.0",
                 "image": null,
                 "description": '',
                 "languages":[],
@@ -405,7 +405,7 @@ class CreateNew extends Component {
                     // m.id !== 'main' ? __mid = m.id + _m_counter : null;
                     _m_res.push({
                         id: __mid,
-                        src: mres.url
+                        src: mres.data.url
                     });
                     if (_m_counter === _media.length) {
                         callback(_m_res);
@@ -607,9 +607,11 @@ class CreateNew extends Component {
                     _payload.activities[0].image = _msrc.src;
                 } else {
                     const __id = parseInt(_msrc.id.split('').pop());
+                    delete _payload.activities[0].what_you_get[__id].content;
                     _payload.activities[0].what_you_get[__id].file = _msrc.src;
                 }
             }
+            debugger;
             ActivitiesService.saveNewActivity(_payload)
                 .then((res) => {
                     if(res.data.IsSuccess) {

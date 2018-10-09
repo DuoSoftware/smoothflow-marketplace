@@ -11,4 +11,13 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   border-right: solid 1px $sf-shadow-color-primary;
+
+  .sf-user-nav {
+    .sf-textbox-icon {
+      color: $sf-color-primary;
+    }
+    .sf-textbox-text {
+      font-weight: 500;
+    }
+  }
 }

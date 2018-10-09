@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import TableTwoCol from '../widgets/Table - Two Col/table_two_col.widget';
-import UMInfo from '../widgets/User Messages/UM - Info/info.user.message';
-import TagBlock from '../widgets/Tag/tagblock.widget';
-import Tab from '../widgets/Tab/tab.widget';
-import Tabs from '../widgets/Tab/tabs.widget';
-import TextBlockI from '../widgets/Text blocks/textblock_iconed.widget';
-import Carousel from '../widgets/Carousel/carousel.widget';
-import PriceBlock from "../widgets/Price block/priceblock.widget";
-import Accordion from '../widgets/Accordion/accordion.widget';
-import AccordionItem from '../widgets/Accordion/accordion_item.widget';
+import TableTwoCol from '../components/Table - Two Col/table_two_col.widget';
+import UMInfo from '../components/User Messages/UM - Info/info.user.message';
+import TagBlock from '../components/Tag/tagblock.widget';
+import Tab from '../components/Tab/tab.widget';
+import Tabs from '../components/Tab/tabs.widget';
+import TextBlockI from '../components/Text blocks/textblock_iconed.widget';
+import Carousel from '../components/Carousel/carousel.widget';
+import PriceBlock from "../components/Price block/priceblock.widget";
+import Accordion from '../components/Accordion/accordion.widget';
+import AccordionItem from '../components/Accordion/accordion_item.widget';
 
 class ItemView extends Component {
     constructor(props) {
@@ -62,7 +62,7 @@ class ItemView extends Component {
                         </div>
                     </div>
                     <div className="sf-flex-1 sf-flex-center sf-m-p sf-shadow-box sf-border-radius" style={{display: 'flex'}}>
-                        <img src={this.props.location.activity.image} alt=""/>
+                        <img src={this.props.location.activity.image} alt="" style={{maxWidth: '500px'}}/>
                     </div>
                 </div>
 

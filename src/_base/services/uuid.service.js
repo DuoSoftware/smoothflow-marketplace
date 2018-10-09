@@ -5,4 +5,4 @@ const UUID = () => {
     code = code.replace(/=/g, '');
     return code;
 };
-export default UUID;
+export { UUID }

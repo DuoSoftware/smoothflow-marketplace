@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import ActivitiesService from '../_base/services/activities.service';
-import ItemCard from '../widgets/Itemcard/itemcard.widget';
+import { connect } from 'react-redux';
+import { Activities, ActivitiesLoader } from '../_base/actions'
+import { ActivitiesService } from '../_base/services';
+import ItemCard from '../components/Itemcard/itemcard.widget';
 import Wrap from '../_base/_wrap'
 import { BrowserRouter as Route, Link } from "react-router-dom";
-import Preloader from '../widgets/Preloader/preloader.widget';
+import { Preloader } from '../components/common';
 
 class Home extends Component {
     constructor(props) {
@@ -34,78 +36,6 @@ class Home extends Component {
     temp_all_activities = [];
 
     getAllItems = () => {
-        this.setState(prevState => ({
-            ...prevState,
-            loadingPage : true
-        }));
-        ActivitiesService.getAllActivities()
-            .then((res) => {
-                if(res.data.Result.activities.length > 0) {
-                    const loadedActivities = res.data.Result.activities.map((activity, index) => {
-                        return {
-                            name: activity.activity_name,
-                            image: activity.image,
-                            description: activity.description,
-                            features:
-                                activity.features.map((ft) => {
-                                    return {
-                                        title: ft.title,
-                                        icon: 'check_circle',
-                                        description: ft.description
-                                    }
-                                }),
-                            tags:
-                                activity.tags.map((tag) => {
-                                    return {
-                                        name: tag.tag
-                                    }
-                                }),
-                            what_you_get:
-                                activity.what_you_get.map((wyg) => {
-                                    return {
-                                        type: 'image',
-                                        content: wyg.content
-                                    }
-                                }),
-                            pricings:
-                                activity.pricings.map((price) => {
-                                    return {
-                                        name: price.name,
-                                        pricing_fts:
-                                            price.pricing_fts.map((ft) => {
-                                                return {
-                                                    icon: 'check_circle_thin',
-                                                    text: ft
-                                                }
-                                            }),
-                                        price: price.price,
-                                        bill_cycle: price.bill_cycle
-                                    }
-                                }),
-                            faq:
-                                activity.faq.map((fq) => {
-                                    return  {
-                                        title: fq.question,
-                                        answer: fq.answer
-                                    }
-                                })
-                        }
-                    });
-                    this.temp_all_activities = loadedActivities;
-                    this.setState({
-                        allActivities: loadedActivities,
-                        loadingPage: false
-                    });
-                } else {
-                    this.setState(prevState => ({
-                        ...prevState,
-                        loadingPage: false
-                    }));
-                }
-            })
-            .catch((errorRes) => {
-                console.log(errorRes);
-            });
     };
 
     // Search
@@ -151,53 +81,70 @@ class Home extends Component {
         return (
             <div>
                 {
-                    this.state.loadingPage
+                    this.props.activities.loading
                         ?   <Preloader />
                         :   <div>
-                            <div className="sf-controls-bar">
-                                <div className="sf-control-search">
-                                    <div className="sf-input-inputcontrol">
-                                        <div className="sf-inputcontrol-select" onClick={ (event) => this.openSearchDropdown(event) }>
-                                            {
-                                                this.state.filter.categories.map((c) => {
-                                                    if(c.selected) return c.text
-                                                })
-                                            }
-                                            <span className="sf-icon icon-sf_ico_chevron_down"></span>
+                                <div>
+                                    <div className="sf-banner sf-flexbox-column">
+                                        <div className="sf-controls-bar sf-flex-1">
+                                            <div className="sf-flex-1">
+                                                <div className="sf-input-inputcontrol">
+                                                    <div className="sf-inputcontrol-select" onClick={ (event) => this.openSearchDropdown(event) }>
+                                                        {
+                                                            this.state.filter.categories.map((c) => {
+                                                                if(c.selected) return c.text
+                                                            })
+                                                        }
+                                                        <span className="sf-icon icon-sf_ico_chevron_down"></span>
+                                                    </div>
+                                                    <div className={`input-dropdown ${this.state.filter.toggleDropdown ? ' input-dropdown-opened' : ''}`}>
+                                                        {
+                                                            this.state.filter.categories.map((c) => {
+                                                                return  <li onClick={ (e)=>this.updatedFilter(e, c.text)}>
+                                                                            <span className="sf-list-icon">
+                                                                                { c.selected ? <span className="sf-icon icon-sf_ico_check_circle"></span> : null }
+                                                                            </span>
+                                                                    <span>{ c.text }</span>
+                                                                </li>
+                                                            })
+                                                        }
+                                                    </div>
+                                                    <input type="text" id="mainSearch" placeholder="Search.." onChange={ (e) => this.search(e) }/>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className={`input-dropdown ${this.state.filter.toggleDropdown ? ' input-dropdown-opened' : ''}`}>
-                                            {
-                                                this.state.filter.categories.map((c) => {
-                                                    return  <li onClick={ (e)=>this.updatedFilter(e, c.text)}>
-                                                                <span className="sf-list-icon">
-                                                                    { c.selected ? <span className="sf-icon icon-sf_ico_check_circle"></span> : null }
-                                                                </span>
-                                                                <span>{ c.text }</span>
-                                                            </li>
-                                                })
-                                            }
+                                        <div className="sf-flexbox-row" style={{alignItems: 'flex-end', zIndex: 1, color: '#fff'}}>
+                                            <div className="sf-flex-1">
+                                                <h2>Smoothflow Marketplace</h2>
+                                                <p>From app integrations to machine learning. <br/>
+                                                    Everything you need to automate your workflow.</p>
+                                            </div>
+                                            <div>
+                                                <Link to={'/create'} className="sf-btn sf-btn-primary sf-btn-thin">Get Started</Link>
+                                            </div>
                                         </div>
-                                        <input type="text" id="mainSearch" placeholder="Search.." onChange={ (e) => this.search(e) }/>
+                                        <img src="images/smoothflow_illustration_automation_01.svg" />
                                     </div>
                                 </div>
-                                <div className="sf-control-buttons">
-                                    <Link to={'/create'} className="sf-btn sf-btn-primary sf-btn-thin">Create</Link>
+                                <div>
+                                    {
+                                        !this.props.activities.loading
+                                            ?   this.props.activities.activities.map((activity) => {
+                                                    if(activity) return <ItemCard item={activity} />
+                                                })
+                                            :   null
+                                    }
                                 </div>
                             </div>
-                            <div>
-                                {
-                                    !this.state.loadingPage
-                                        ?   this.state.allActivities.map((activity) => {
-                                            if(activity) return <ItemCard item={activity} />
-                                        })
-                                        :   null
-                                }
-                            </div>
-                        </div>
                 }
             </div>
         );
     }
 }
 
-export default Home;
+const mapStateToProps = state => ({
+    user: state.user,
+    activities: state.public_
+});
+
+export default connect(mapStateToProps)(Home);
