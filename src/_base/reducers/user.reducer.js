@@ -35,16 +35,22 @@ const UserReducer = (state = initState, action) => {
                 is_logged_in: false
             };
 
-        case 'GET_MY_PODS' :
+        case 'GET_MY_ACTIVITIES' :
             return {
                 ...state,
-                mypods: action.mypods
+                mypods: action.activities
             };
 
         case 'USER_LOADER' :
             return {
                 ...state,
                 loading: action.loader
+            };
+
+        case 'GET_MY_INTEGRATIONS' :
+            return {
+                ...state,
+                loading: action.integrations
             };
 
         default:

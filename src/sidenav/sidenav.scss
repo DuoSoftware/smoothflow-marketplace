@@ -13,11 +13,28 @@
   border-right: solid 1px $sf-shadow-color-primary;
 
   .sf-user-nav {
+    .sf-list {
+      li {
+        &.sf-list-active {
+          padding: $sf-padding-third $sf-padding-primary;
+          background: $sf-color-primary-light;
+          margin: 0 (-$sf-padding-primary) $sf-padding-primary (-$sf-padding-primary);
+          // border-left: solid 5px $sf-color-primary;
+          .sf-textbox-icon {
+            color: $sf-color-primary-dark;
+          }
+          .sf-textbox-text {
+            font-weight: 500;
+            color: $sf-color-primary-dark;
+          }
+        }
+      }
+    }
     .sf-textbox-icon {
       color: $sf-color-primary;
     }
     .sf-textbox-text {
-      font-weight: 500;
+      // font-weight: 500;
     }
   }
 }

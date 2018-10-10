@@ -5,7 +5,7 @@
   display: inline-block;
   background: #fff;
   border: none;
-  padding: $sf-padding-secondary $sf-padding-primary;
+  padding: $sf-padding-secondary $sf-padding-primary+10;
   border-radius: 100px;
   font-weight: bold;
   cursor: pointer;
@@ -16,6 +16,7 @@
   -ms-transition: background $sf-animation-time;
   -o-transition: background $sf-animation-time;
   transition: background $sf-animation-time;
+  box-shadow: inset 0 0 0 2px #fff;
   &.sf-button-primary {
     color: #ffffff;
     &.sf-button-primary-p {
@@ -46,11 +47,11 @@
       background: $sf-color-primary-light;
       color: $sf-color-primary;
     }
-  }
+  }_
   &.sf-button-secondary {
     background: #fff;
     color: $sf-color-secondary;
-    border: solid 2px $sf-color-secondary;
+    box-shadow: inset 0 0 0 2px $sf-color-secondary;
     &:hover {
       background: $sf-color-secondary-light;
       -webkit-transition: background $sf-animation-time;
@@ -70,10 +71,8 @@
   &.sf-button-clear {
     background: transparent;
     color: $sf-color-secondary;
-    border-color: transparent;
     &:hover {
-      background: $sf-color-secondary;
-      color: #ffffff;
+      background: $sf-color-secondary-light;
       -webkit-transition: background $sf-animation-time;
       -moz-transition: background $sf-animation-time;
       -ms-transition: background $sf-animation-time;
@@ -98,5 +97,6 @@
   }
   &.sf-button-caps {
     text-transform: uppercase;
+    word-spacing: $sf-wordspacing-secondary;
   }
 }
