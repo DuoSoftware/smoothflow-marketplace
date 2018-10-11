@@ -5,11 +5,14 @@ const URLs = {
     auth : {
         signup : 'https://dev.smoothflow.io/account/#/signup',
         signin : 'https://dev.smoothflow.io/account/#/signin',
-        getUserProfile: 'https://userserviceproduction.plus.smoothflow.io/DVP/API/1.0.0.0/Myprofile'
+        getUserProfile : 'https://userserviceproduction.plus.smoothflow.io/DVP/API/1.0.0.0/Myprofile',
+        getUserSettings: (host, company) => {
+            return 'http://' + host + '/data/' + company + '.' + host + '/dashboardData/' + company;
+        }
     },
     media : {
         base : 'https://smoothmediaservicedev.plus.smoothflow.io/media/1/41',
-        profile: 'http://dev.smoothflow.io/apis/media/tenant/dev.smoothflow.io/',
+        profile : '/apis/media/tenant/',
         upload : '/upload'
     },
     activity : {
@@ -17,7 +20,11 @@ const URLs = {
         saveNewActivity : 'TenantActivitiesService',
         publishNewActivity : 'activity/publish',
         uploadGoCode : 'processengine/PublishActivity',
-        getTagsList : 'TenantActivitiesService/tag/list',
+        getTagsList : 'TenantActivitiesService/tag/list'
+    },
+    integration: {
+        getAllIntegrations: 'https://smoothbotservicesdev.plus.smoothflow.io/DBF/API/1.0.0.0/userIntegrations',
+        setupIntegration: 'https://smoothbotservicesdev.plus.smoothflow.io/DBF/API/1.0.0.0/userIntegration',
     }
 };
 

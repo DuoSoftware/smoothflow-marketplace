@@ -17,8 +17,8 @@
 .env.production.local
 .idea
 .vscode
-include
-data
+/data
+/include
 
 npm-debug.log*
 yarn-debug.log*

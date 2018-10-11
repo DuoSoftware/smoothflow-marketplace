@@ -192,7 +192,6 @@ module.exports = {
             // Sass loaders
             {
               test: /\.scss$/,
-              include: path.appSrc,
               loaders: [
                   require.resolve('style-loader'),
                   require.resolve('css-loader'),

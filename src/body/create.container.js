@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import Chips, { Chip } from 'react-chips';
 import Input from '../components/Input/input.widget';
-import { ActivitiesService, MediaService, UUID }  from '../_base/services';
+import { ActivitiesService, MediaService, UIHelper }  from '../_base/services';
 import { Redirect } from "react-router-dom";
-import { Preloader } from '../components/common';
+import { Preloader, Button } from '../components/common';
 import FeatureBlock from '../components/Input Blocks/Feature block/feature_block.widget';
 import Preview from '../components/Input Preview/create_activity.preview';
 import ListI from '../components/List/list_iconed.widget';
@@ -593,7 +593,7 @@ class CreateNew extends Component {
         }
         else if(this.state.temp_selected_langs.golang) {
             _publishFile = this.state.publish_content.golang.payload;
-            _publishFile.ID = UUID();
+            _publishFile.ID = UIHelper.UUID();
             _publishFile.ActivityName += this.state.newActivity.activity_name;
             _publishFile.Description = this.state.newActivity.description;
         }
@@ -1298,8 +1298,8 @@ class CreateNew extends Component {
                                 </div>
                             </div>
                             <div className="sf-p-p-h sf-text-right">
-                                <button type="submit" className="sf-btn sf-btn-primary">Submit</button>
-                                <button type="button" className="sf-btn sf-btn-flat" onClick={ (event) => {this.clearForm(event)}}>Clear</button>
+                                <Button type="submit" className="sf-button sf-button-primary sf-button-primary-p">Submit</Button>
+                                <Button type="button" className="sf-button sf-button-clear" onClick={ (event) => {this.clearForm(event)}}>Clear</Button>
                             </div>
                         </form>
                 }

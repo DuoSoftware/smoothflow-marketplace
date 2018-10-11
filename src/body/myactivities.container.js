@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { GetMyPods, MyPodsLoader } from '../_base/actions'
+import { GetMyActivities, MyActivitiesLoader } from '../_base/actions'
 import { ActivitiesService } from '../_base/services';
 import ItemCard from '../components/Itemcard/itemcard.widget';
 import { BrowserRouter as Route, Link } from "react-router-dom";
 import {Preloader, PageHeader } from "../components/common";
 
-class MyPods extends Component {
+class MyActivities extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -26,12 +26,12 @@ class MyPods extends Component {
         };
     }
     componentDidMount() {
-        this.getMyPods();
+        this.getMyActivities();
     }
 
     // -------------------------------------------------------------------------------
-    getMyPods = () => {
-        this.props.dispatch(MyPodsLoader(true));
+    getMyActivities = () => {
+        this.props.dispatch(MyActivitiesLoader(true));
         ActivitiesService.getAllActivities()
             .then((res) => {
                 if(typeof(res.data.Result) === "object" && res.data.Result.activities.length > 0) {
@@ -85,16 +85,16 @@ class MyPods extends Component {
                                 })
                         }
                     });
-                    this.props.dispatch(GetMyPods(loadedActivities));
-                    this.props.dispatch(MyPodsLoader(false));
+                    this.props.dispatch(GetMyActivities(loadedActivities));
+                    this.props.dispatch(MyActivitiesLoader(false));
                 } else {
-                    this.props.dispatch(GetMyPods([]));
-                    this.props.dispatch(MyPodsLoader(false));
+                    this.props.dispatch(GetMyActivities([]));
+                    this.props.dispatch(MyActivitiesLoader(false));
                 }
             })
             .catch((errorRes) => {
                 console.log(errorRes);
-                this.props.dispatch(MyPodsLoader(false));
+                this.props.dispatch(MyActivitiesLoader(false));
             });
     };
 
@@ -164,4 +164,4 @@ const mapStateToProps = state => ({
     user: state.user
 });
 
-export default connect(mapStateToProps)(MyPods);
+export default connect(mapStateToProps)(MyActivities);
