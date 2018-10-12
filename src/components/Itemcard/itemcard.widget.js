@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './itemcard.scss';
+import { connect } from 'react-redux';
 import UMInfo from '../User Messages/UM - Info/info.user.message'
 import Tag from '../Tag/tag.widget'
 import TableTwoCol from '../Table - Two Col/table_two_col.widget';
@@ -17,6 +18,7 @@ class ItemCard extends Component {
                     <Link to={{ pathname: '/activity/' + this.props.item.name , activity: {...this.props.item} }} className="sf-item-card sf-border-box sf-item-card-clickable sf-item-card-fixed">
                         <div className="sf-item-card-header bordered">
                             <h3>{ this.props.item.name }</h3>
+                            <Button className="sf-button sf-button-icon"></Button>
                         </div>
                         <div className="sf-item-card-body">
                             <div className="sf-image-text-container" style={{overflow:'hidden'}}>
@@ -35,13 +37,21 @@ class ItemCard extends Component {
                                 <TagBlock tags={ this.props.item.tags } />
                             </div>
                         </div>
-                        <div className="sf-item-card-footer">
-                            <Button className="sf-button sf-button-primary sf-button-primary-p sf-button-block">Buy</Button>
-                        </div>
+                        {
+                            !this.props.user.is_logged_in
+                            ?   <div className="sf-item-card-footer">
+                                    <Button className="sf-button sf-button-primary sf-button-primary-p sf-button-block">Buy</Button>
+                                </div>
+                            :   null
+                        }
                     </Link>
                 </div>
         )
     }
 }
 
-export default ItemCard;
+const mapStateToProps = state => ({
+    user: state.user
+});
+
+export default connect(mapStateToProps) (ItemCard);
