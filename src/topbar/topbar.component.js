@@ -21,10 +21,12 @@ class Topbar extends Component {
     };
 
     signUp = () => {
-        return <Auth url={URLs.auth.signup} _rollback_point={window.location.href} />
+        const _redirect = window.location.href.replace('/', '_');
+        window.location.replace(URLs.auth.signup + '?r=' + _redirect);
     }
     signIn = () => {
-        return <Auth url={URLs.auth.signin} _rollback_point={window.location.href} />
+        const _redirect = window.location.href.replace('/', '_');
+        window.location.replace(URLs.auth.signin + '?r=' + _redirect);
     }
 
     // if ($rootScope.isNullOrEmptyOrUndefined($scope.dashboardData.settings.defaultImage)) {
