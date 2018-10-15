@@ -25,6 +25,7 @@ class App extends Component {
     };
 
     componentDidMount() {
+        debugger;
         const _token = localStorage.getItem('satellizer_token');
         if(_token) {
             this.props.dispatch(PreloadShell(true));
