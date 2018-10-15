@@ -1,6 +1,7 @@
 @import "../../../core/styles/variables";
 
 .sf-page-header {
+  display: flex;
   padding-bottom: $sf-padding-primary;
   margin-bottom: $sf-padding-primary;
   border-bottom: solid 1px $sf-shadow-color-primary;

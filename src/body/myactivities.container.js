@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { GetMyActivities, MyActivitiesLoader } from '../_base/actions'
+import { GetMyActivities, MyActivitiesLoader, PreloadBody } from '../_base/actions'
 import { ActivitiesService } from '../_base/services';
 import ItemCard from '../components/Itemcard/itemcard.widget';
 import { BrowserRouter as Route, Link } from "react-router-dom";
@@ -31,12 +31,13 @@ class MyActivities extends Component {
 
     // -------------------------------------------------------------------------------
     getMyActivities = () => {
-        this.props.dispatch(MyActivitiesLoader(true));
+        this.props.dispatch(PreloadBody(true));
         ActivitiesService.getAllActivities()
             .then((res) => {
                 if(typeof(res.data.Result) === "object" && res.data.Result.activities.length > 0) {
                     const loadedActivities = res.data.Result.activities.map((activity, index) => {
                         return {
+                            type: 'activity',
                             name: activity.activity_name,
                             image: activity.image,
                             description: activity.description,
@@ -86,15 +87,15 @@ class MyActivities extends Component {
                         }
                     });
                     this.props.dispatch(GetMyActivities(loadedActivities));
-                    this.props.dispatch(MyActivitiesLoader(false));
+                    this.props.dispatch(PreloadBody(false));
                 } else {
                     this.props.dispatch(GetMyActivities([]));
-                    this.props.dispatch(MyActivitiesLoader(false));
+                    this.props.dispatch(PreloadBody(false));
                 }
             })
             .catch((errorRes) => {
                 console.log(errorRes);
-                this.props.dispatch(MyActivitiesLoader(false));
+                this.props.dispatch(PreloadBody(false));
             });
     };
 
@@ -140,20 +141,20 @@ class MyActivities extends Component {
         return (
             <div>
                 {
-                    this.props.user.loading
-                        ?   <Preloader />
-                        :   <div>
-                                <PageHeader title={'My Pods'}></PageHeader>
-                                <div>
-                                    {
-                                        !this.props.user.loading
-                                            ?   this.props.user.mypods.map((pod) => {
-                                                    if(pod) return <ItemCard item={pod} />
-                                                })
-                                            :   null
-                                    }
-                                </div>
+                    this.props.uihelper._preload_body_
+                    ?   <Preloader type={'BODY'} />
+                    :   <div>
+                            <PageHeader title={'My Activities'}></PageHeader>
+                            <div>
+                                {
+                                    !this.props.uihelper._preload_body_
+                                        ?   this.props.user.myactivities.map((activity) => {
+                                                if(activity) return <ItemCard item={activity} advanced={true} />
+                                            })
+                                        :   null
+                                }
                             </div>
+                        </div>
                 }
             </div>
         );
@@ -161,7 +162,8 @@ class MyActivities extends Component {
 }
 
 const mapStateToProps = state => ({
-    user: state.user
+    user: state.user,
+    uihelper: state.uihelper
 });
 
 export default connect(mapStateToProps)(MyActivities);

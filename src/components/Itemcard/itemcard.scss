@@ -19,10 +19,12 @@
     margin-right: 15px;
     .sf-item-card-header {
       padding: $sf-padding-primary;
+      display: flex;
       &.bordered {
         border-bottom: solid 1px $sf-shadow-color-primary;
       }
       h3 {
+        flex: 1;
         margin: 0;
         font-size: $sf-header-sub;
       }
@@ -30,6 +32,22 @@
     .sf-item-card-body {
       padding: $sf-padding-primary;
       flex: 1;
+      .sf-image-text-container {
+        height: 70px;
+        .sf-img {
+          width: 70px;
+          height: 70px;
+          border-radius: 10px;
+          position: relative;
+          overflow: hidden;
+          align-items: center;
+          justify-content: center;
+          display: flex;
+          img {
+            width: 110%;
+          }
+        }
+      }
     }
     .sf-item-card-footer {
       padding: $sf-padding-primary;
@@ -42,22 +60,6 @@
     }
     &.sf-item-card-fixed {
       height: 445px;
-      .sf-image-text-container {
-        height: 70px;
-        .sf-img {
-          width: 80px;
-          height: 80px;
-          border-radius: 10px;
-          position: relative;
-          overflow: hidden;
-          align-items: center;
-          justify-content: center;
-          display: flex;
-          img {
-            width: 110%;
-          }
-        }
-      }
     }
   }
 }

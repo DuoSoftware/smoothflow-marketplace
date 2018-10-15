@@ -29,7 +29,7 @@ const Input = (props) => {
     }
 
     return (
-        <div className={props.inputBlock ? 'sf-input-block' : null}>
+        <div className={props.className ? props.className : null}>
             { props.type !== 'checkbox' && props.type !== 'radio' && props.label ? <label>{props.label}</label> : null }
             { elem }
         </div>

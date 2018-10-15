@@ -22,10 +22,10 @@ export const MyActivitiesLoader = loader => ({
     loader
 });
 
-export const GetMyIntgrations = integraions => ({
+export const GetMyIntgrations = integrations => ({
     category: 'INTEGRATIONS',
-    type: 'GET_ALL_INTEGRATIONS',
-    integraions
+    type: 'GET_MY_INTEGRATIONS',
+    integrations
 });
 
 export const MyIntegrationsLoader = loader => ({

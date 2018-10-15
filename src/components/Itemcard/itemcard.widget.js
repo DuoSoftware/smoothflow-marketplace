@@ -6,7 +6,7 @@ import Tag from '../Tag/tag.widget'
 import TableTwoCol from '../Table - Two Col/table_two_col.widget';
 import TagBlock from '../Tag/tagblock.widget';
 import { BrowserRouter as Router, Link } from "react-router-dom";
-import {Button} from "../common";
+import {Button, Block} from "../common";
 
 class ItemCard extends Component {
     constructor(props) {
@@ -15,10 +15,9 @@ class ItemCard extends Component {
     render() {
         return (
                 <div className="sf-item-card-wrap">
-                    <Link to={{ pathname: '/activity/' + this.props.item.name , activity: {...this.props.item} }} className="sf-item-card sf-border-box sf-item-card-clickable sf-item-card-fixed">
+                    <Link to={{ pathname: (this.props.item.type === 'activity' ? '/activities/' : '/integrations/') + this.props.item.name , activity: {...this.props.item}, advanced: this.props.advanced }} className={`sf-item-card sf-border-box sf-item-card-clickable${ this.props.className ? ' ' + this.props.className : null}`}>
                         <div className="sf-item-card-header bordered">
                             <h3>{ this.props.item.name }</h3>
-                            <Button className="sf-button sf-button-icon"></Button>
                         </div>
                         <div className="sf-item-card-body">
                             <div className="sf-image-text-container" style={{overflow:'hidden'}}>
@@ -31,8 +30,8 @@ class ItemCard extends Component {
                             </div>
 
                             <TableTwoCol tabledata={this.props.item.pricings} />
-                            <UMInfo text="Free for customers viewing and creating tickets" />
-
+                            {/* <UMInfo text="Free for customers viewing and creating tickets" /> */}
+                            <Block />
                             <div>
                                 <TagBlock tags={ this.props.item.tags } />
                             </div>

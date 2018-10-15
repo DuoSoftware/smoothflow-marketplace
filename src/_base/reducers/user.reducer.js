@@ -14,7 +14,8 @@ const initState = {
     username: "kasun.w@duosoftware.com",
     _id: "5b62abaeb0eca10001a26ee9",
     is_logged_in: false,
-    mypods: []
+    myactivities: [],
+    integrations: []
 };
 const UserReducer = (state = initState, action) => {
     switch (action.type) {
@@ -38,7 +39,7 @@ const UserReducer = (state = initState, action) => {
         case 'GET_MY_ACTIVITIES' :
             return {
                 ...state,
-                mypods: action.activities
+                myactivities: action.activities
             };
 
         case 'USER_LOADER' :
@@ -50,7 +51,7 @@ const UserReducer = (state = initState, action) => {
         case 'GET_MY_INTEGRATIONS' :
             return {
                 ...state,
-                loading: action.integrations
+                integrations: action.integrations
             };
 
         default:

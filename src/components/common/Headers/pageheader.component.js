@@ -12,8 +12,8 @@ const PageHeader = (props) => {
                 </div>
                 <div className="sf-page-header-subtitle">{ props.subtitle }</div>
             </div>
-            <div className="sf-flex-1">
-                { props.childern }
+            <div>
+                { props.children }
             </div>
         </div>
     )
