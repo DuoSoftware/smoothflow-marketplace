@@ -21,11 +21,9 @@ class Topbar extends Component {
     };
 
     signUp = () => {
-        // const _redirect = window.location.href.replace('/', '_');
         window.location.replace(URLs.auth.signup + '?r=' + window.location.href);
     }
     signIn = () => {
-        // const _redirect = window.location.href.replace('/', '_');
         window.location.replace(URLs.auth.signin + '?r=' + window.location.href);
     }
 
