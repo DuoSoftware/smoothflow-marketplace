@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import Wrap from '../_base/_wrap'
 import { PageHeader, Preloader, Button } from "../components/common";
 import { IntegrationsService } from '../_base/services/integrations.service';
 import { GetMyIntgrations, PreloadBody } from '../_base/actions';
@@ -19,7 +20,7 @@ class Integrations extends Component {
                     const integs_ = integs.data.Result.map((integ, index) => {
                         return {
                             name: integ.integrationName,
-                            image: 'images/'+ integ.integrationType.toLowerCase() + '.svg',
+                            image: '/images/'+ integ.integrationType.toLowerCase() + '.svg',
                             description: integ.description,
                             features:[],
                             tags: [{
@@ -54,13 +55,13 @@ class Integrations extends Component {
                 {
                     this.props.uihelper._preload_body_
                     ?   <Preloader type={'BODY'} />
-                    :   <div>
+                    :   <Wrap>
                             {
                                 this.props.user.integrations.map(integ => {
                                     return <ItemCard item={integ} />
                                 })
                             }
-                        </div>
+                        </Wrap>
                 }
             </div>
         )
