@@ -7,7 +7,15 @@ const UserService = {
         return axios.get(URLs.auth.getUserProfile)
     },
     getUserSettings: (url) => {
-        return axios.get(url)
+        const _token = localStorage.getItem('satellizer_token');
+        return axios({
+            method: 'GET',
+            url: url,
+            config: { 
+                headers: {
+                    'securityToken': _token 
+                }
+            }});
     }
 };
 
