@@ -10,7 +10,10 @@ const IntegrationsService = {
         return axios.post(URLs.integration.setupIntegration+'s', integration)
     },
     updateIntegration: (integration) => {
-        return axios.post(URLs.integration.setupIntegration+'s', integration)
+        return axios.put(URLs.integration.setupIntegration+'s/' + integration._id, integration)
+    },
+    deleteIntegration: (id) => {
+        return axios.delete(URLs.integration.setupIntegration+'s/' + id)
     }
 };
 

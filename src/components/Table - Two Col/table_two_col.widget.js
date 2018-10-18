@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {KEY} from "../../_base/services";
 
 class TableTwoCol extends Component {
     constructor(props) {
@@ -8,7 +9,7 @@ class TableTwoCol extends Component {
     getItemPricing(rows) {
         let price_rows;
         price_rows = rows.map((td) =>
-            <tr>
+            <tr key={KEY()}>
                 <td className="sf-text-semibold">{ td.name }</td>
                 <td className="text-right">{ '$' + td.price + ' per ' + td.bill_cycle }</td>
             </tr>
@@ -19,7 +20,7 @@ class TableTwoCol extends Component {
     render() {
         return(
             <table className="sf-table sf-table-bordered sf-table-fixed">
-                { this.getItemPricing(this.props.tabledata) }
+                <tbody>{ this.getItemPricing(this.props.tabledata) }</tbody>
             </table>
         )
     }

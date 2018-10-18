@@ -3,12 +3,30 @@ import './sidenav.scss';
 import { connect } from 'react-redux'
 import {Block, Textbox, List, Button, Preloader} from "../components/common";
 import { Link } from 'react-router-dom'
+import Wrap from "../_base/_wrap";
+import {KEY} from "../_base/services";
 
 class Sidenav extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            _sidenav : [],
+            _sidenav : [{
+                name: 'dashboard',
+                icon: 'home',
+                active: false
+            },{
+                name: 'activities',
+                icon: 'items',
+                active: false
+            },{
+                name: 'blueprints',
+                icon: 'code',
+                active: false
+            },{
+                name: 'integrations',
+                icon: 'code',
+                active: false
+            }],
             _structuredList : {
                 "taps": {
                     list: []
@@ -19,14 +37,15 @@ class Sidenav extends Component {
                 "apps": {
                     list: []
                 }
-            }
-        }
+            },
+            _create_dd: false
+        };
     };
 
     componentDidMount() {
-        this.getSidenav();
+        this.initSidenav();
     };
-    getSidenav() {
+    initSidenav() {
         let _nav_obj = {
             taps: {
                 list: []
@@ -53,6 +72,32 @@ class Sidenav extends Component {
         }));
     };
 
+    setActiveNav = (e, _name) => {
+        const _state_nav = [...this.state._sidenav];
+        for(const nav of _state_nav) {
+            if (nav.name === _name) nav.active = true;
+            else nav.active = false;
+        };
+        this.setState(state => ({
+            ...state,
+            _sidenav : _state_nav
+        }));
+    };
+
+    initCreatePanel = () => {
+        this.setState(state => ({
+            ...state,
+            _create_dd: true
+        }));
+    };
+    closeCreatePanel = () => {
+        this.setState(state => ({
+            ...state,
+            _create_dd: false
+        }));
+    };
+
+
     render() {
         return (
             <div className="sf-sidenav sf-custom-scroll">
@@ -62,48 +107,57 @@ class Sidenav extends Component {
                     :   <div>
                             {
                                 this.props.user.is_logged_in
-                                ?   <div className="sf-user-nav">
-                                        <Block>
-                                            <Link to={'/user/activities/create'}>
-                                                <Button className="sf-button sf-button-primary sf-button-primary-s sf-button-caps sf-button-block sf-button-iconed" icon={'home'} style={{marginBottom: '15px'}}>Create Activity</Button>
-                                            </Link>
-                                        
-                                                <Button disabled className="sf-button sf-button-clear sf-button-caps sf-button-block sf-button-iconed" icon={'code'}>Create Blueprint</Button>
-                                        </Block>
-                                        <Block>
+                                ?   <Wrap>
+                                        <div className={`sf-overhead-dropdown${ this.state._create_dd ? ' opened' : '' }`}>
+                                            <span className="sf-icon icon-sf_ico_close_circle" onClick={ this.closeCreatePanel.bind() }></span>
                                             <List>
                                                 <li>
-                                                    <Link to={'/user/dashboard'}>
-                                                        <Textbox icon="home" size="17">
-                                                            <span>Dashboard</span>
-                                                        </Textbox>
-                                                    </Link>
-                                                </li>
-                                                <li className="sf-list-active">
-                                                    <Link to={'/user/activities'}>
-                                                        <Textbox icon="items" size="17">
-                                                            <span>Activities</span>
+                                                    <Link to={'/user/activities/create'} onClick={ this.closeCreatePanel.bind() }>
+                                                        <Textbox icon={'plus_circle'} size="15">
+                                                            <span>New Activity</span>
                                                         </Textbox>
                                                     </Link>
                                                 </li>
                                                 <li>
-                                                    <Link to={'/user/blueprints'}>
-                                                        <Textbox icon="code" size="17">
-                                                            <span>Blueprints</span>
+                                                    <Link to={'/user/integrations/create'} onClick={ this.closeCreatePanel.bind() }>
+                                                        <Textbox icon={'plus_circle'} size="15">
+                                                            <span>New Integration</span>
                                                         </Textbox>
                                                     </Link>
                                                 </li>
                                                 <li>
-                                                    <Link to={'/user/integrations'}>
-                                                        <Textbox icon="code" size="17">
-                                                            <span>Integrations</span>
+                                                    <Link to={''}>
+                                                        <Textbox icon={'plus_circle'} size="15" onClick={ this.closeCreatePanel.bind() }>
+                                                            <span>New Blueprint</span>
                                                         </Textbox>
                                                     </Link>
                                                 </li>
                                             </List>
-                                        </Block>
-                                        <Block />
-                                    </div>
+                                        </div>
+                                        <div className="sf-user-nav">
+                                            <Block>
+                                                <Button className="sf-button sf-button-primary sf-button-primary-s sf-button-caps sf-button-block sf-button-iconed" icon={'plus_circle'} onClick={ this.initCreatePanel.bind() }>Create</Button>
+                                            </Block>
+                                            <Block>
+                                                <List>
+                                                    {
+                                                        this.state._sidenav.map(nav => {
+                                                            return <li key={KEY()} className={nav.active ? 'sf-list-active' : null}>
+                                                                <Link to={'/user/' + nav.name}
+                                                                      onClick={event => this.setActiveNav(event, nav.name)}
+                                                                      id={`NAV_${nav.name.toUpperCase()}`}>
+                                                                    <Textbox icon={nav.icon} size="17">
+                                                                        <span>{nav.name}</span>
+                                                                    </Textbox>
+                                                                </Link>
+                                                            </li>
+                                                        })
+                                                    }
+                                                </List>
+                                            </Block>
+                                            <Block />
+                                        </div>
+                                    </Wrap>
                                 :   null
                             }
                             <div className="sf-list">

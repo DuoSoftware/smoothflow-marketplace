@@ -19,6 +19,7 @@ class Integrations extends Component {
                 if (integs.data.IsSuccess) {
                     const integs_ = integs.data.Result.map((integ, index) => {
                         return {
+                            type: 'integration',
                             name: integ.integrationName,
                             image: '/images/'+ integ.integrationType.toLowerCase() + '.svg',
                             description: integ.description,
@@ -29,7 +30,8 @@ class Integrations extends Component {
                             what_you_get:[],
                             pricings: [],
                             faq:[],
-                            data: integ.integrationData
+                            data: integ.integrationData,
+                            _id: integ._id
                         }
                     })
                     this.props.dispatch(GetMyIntgrations(integs_));
@@ -58,7 +60,7 @@ class Integrations extends Component {
                     :   <Wrap>
                             {
                                 this.props.user.integrations.map(integ => {
-                                    return <ItemCard item={integ} />
+                                    return <ItemCard key={integ._id} item={integ} />
                                 })
                             }
                         </Wrap>

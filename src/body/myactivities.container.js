@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { GetMyActivities, MyActivitiesLoader, PreloadBody } from '../_base/actions'
-import { ActivitiesService } from '../_base/services';
+import {ActivitiesService, KEY} from '../_base/services';
 import ItemCard from '../components/Itemcard/itemcard.widget';
 import { BrowserRouter as Route, Link } from "react-router-dom";
-import {Preloader, PageHeader } from "../components/common";
+import {Preloader, PageHeader, Button} from "../components/common";
 
 class MyActivities extends Component {
     constructor(props) {
@@ -80,8 +80,31 @@ class MyActivities extends Component {
                             faq:
                                 activity.faq.map((fq) => {
                                     return  {
-                                        title: fq.question,
+                                        question: fq.question,
                                         answer: fq.answer
+                                    }
+                                }),
+                            variables:
+                                activity.variables.map((v) => {
+                                    return  {
+                                        "Key": v.Key,
+                                        "DisplayName": v.DisplayName,
+                                        "Value": v.Value,
+                                        "ValueList": v.ValueList.map(vl => {
+                                            return {
+                                                "key": vl.key,
+                                                "value": vl.value
+                                            }
+                                        }),
+                                        "APIMethod": v.APIMethod,
+                                        "Type": v.Type,
+                                        "Category": v.Category,
+                                        "DataType": v.DataType,
+                                        "Group": v.Group,
+                                        "Priority": v.Priority,
+                                        "advance": v.advance,
+                                        "control": v.control,
+                                        "placeholder": v.placeholder
                                     }
                                 })
                         }
@@ -144,14 +167,18 @@ class MyActivities extends Component {
                     this.props.uihelper._preload_body_
                     ?   <Preloader type={'BODY'} />
                     :   <div>
-                            <PageHeader title={'My Activities'}></PageHeader>
+                            <PageHeader title={'My Activities'}>
+                                <Link to={'/user/activities/create'}>
+                                    <Button className="sf-button sf-button-primary sf-button-primary-p sf-button-raised">Create</Button>
+                                </Link>
+                            </PageHeader>
                             <div>
                                 {
                                     !this.props.uihelper._preload_body_
-                                        ?   this.props.user.myactivities.map((activity) => {
-                                                if(activity) return <ItemCard item={activity} advanced={true} />
-                                            })
-                                        :   null
+                                    ?   this.props.user.myactivities.map((activity) => {
+                                            if(activity) return <ItemCard key={KEY()} item={activity} advanced={true} />
+                                        })
+                                    :   null
                                 }
                             </div>
                         </div>

@@ -11,6 +11,8 @@ import PriceBlock from "../components/Price block/priceblock.widget";
 import Accordion from '../components/Accordion/accordion.widget';
 import AccordionItem from '../components/Accordion/accordion_item.widget';
 import { PageHeader, Block, Button } from '../components/common';
+import {IntegrationsService, KEY} from "../_base/services";
+import {PreloadBody} from "../_base/actions";
 
 class ItemView extends Component {
     constructor(props) {
@@ -19,22 +21,43 @@ class ItemView extends Component {
 
     getFeatures(features) {
         const _features = features.map((feature) =>
-            <TextBlockI icon={feature.icon} title={feature.title} text={feature.description} />
+            <TextBlockI key={KEY()} icon={feature.icon} title={feature.title} text={feature.description} />
         );
         return _features;
     }
     getPricing(pricing) {
         const _pricing = pricing.map((price) =>
-            <PriceBlock name={ price.name } list={ price.pricing_fts } price={ price.price } billCycle={ price.bill_cycle } />
+            <PriceBlock key={KEY()} name={ price.name } list={ price.pricing_fts } price={ price.price } billCycle={ price.bill_cycle } />
         );
         return _pricing;
     }
     getFAQ(faq) {
         const _faq = faq.map((f, i) =>
-            <AccordionItem title={ f.title } index={ 'FAQ '+ (i+1) }><p>{ f.answer }</p></AccordionItem>
+            <AccordionItem key={KEY()} title={ f.title } index={ 'FAQ '+ (i+1) }><p>{ f.answer }</p></AccordionItem>
         );
         return _faq;
     }
+
+    deleteCandidate = () => {
+        this.props.dispatch(PreloadBody(true));
+
+        const id = this.props.location.activity._id;
+        if(this.props.location.activity.type === 'activity') {
+            // Activity delete service call goes here
+        } else if (this.props.location.activity.type === 'integration') {
+            IntegrationsService.deleteIntegration(id)
+                .then(res => {
+                    if(res.data.IsSuccess) {
+                        this.props.dispatch(PreloadBody(false));
+                        alert('Integration deleted successfully');
+                        this.props.history.push('/user/integrations');
+                    }
+                })
+                .catch(errorres => {
+                    console.log(errorres)
+                });
+        }
+    };
 
     render() {
         console.log(this.props);
@@ -42,9 +65,13 @@ class ItemView extends Component {
             <div>
                 <PageHeader title={this.props.location.activity.name}>
                     <Link 
-                        to={{ pathname: '/user/integrations/create' , candidate: {...this.props.location.activity} }}><Button className="sf-button sf-button-circle"><span className="sf-icon icon-sf_ico_edit"></span></Button>
+                        to={{
+                            pathname: this.props.location.activity.type === 'activity' ? '/user/activities/create' : '/user/integrations/create',
+                            candidate: {...this.props.location.activity}
+                        }}>
+                        <Button className="sf-button sf-button-circle"><span className="sf-icon icon-sf_ico_edit"></span></Button>
                     </Link>
-                    <Button className="sf-button sf-button-circle"><span className="sf-icon icon-sf_ico_delete"></span></Button>
+                    <Button className="sf-button sf-button-circle" onClick={ this.deleteCandidate.bind() }><span className="sf-icon icon-sf_ico_delete"></span></Button>
                 </PageHeader>
                 <div className="sf-flexbox-row">
                     <div className="sf-flex-1">
@@ -54,7 +81,7 @@ class ItemView extends Component {
                         <div className="sf-text-sub">
                             <p>{ this.props.location.activity.description }</p>
                         </div>
-                        <div style={ {'max-width':'400px'} }>
+                        <div style={ {'maxWidth':'400px'} }>
                             <TableTwoCol tabledata={ this.props.location.activity.pricings } />
                         </div>
                         <div className="sf-p-p-h">
@@ -68,9 +95,9 @@ class ItemView extends Component {
                                     </Block>
                                 :   null
                             }
-                            <dif>
+                            <div>
                                 <TagBlock tags={ this.props.location.activity.tags } />
-                            </dif>
+                            </div>
                         </div>
                     </div>
                     <div className="sf-flex-1 sf-flex-center sf-m-p sf-shadow-box sf-border-radius" style={{display: 'flex'}}>

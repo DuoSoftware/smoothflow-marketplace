@@ -494,6 +494,64 @@ form {
 }
 /* ===================================== */
 
+.sf-overhead-dropdown {
+  height: 0px;
+  overflow: hidden;
+  opacity: 0;
+  position: absolute;
+  z-index: -1;
+  background: $sf-color-secondary;
+  width: 88%;
+  border-radius: 20px;
+  top: 16px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  padding: $sf-padding-primary;
+  box-shadow: 0 5px 10px $sf-shadow-color-primary;
+  box-sizing: border-box;
+  transition: all 0.2s ease-in;
+  .sf-list {
+    .sf-textbox {
+      .sf-textbox-icon {
+        color: $sf-color-primary;
+      }
+      .sf-textbox-text {
+        color: #ffffff;
+      }
+
+      &:hover {
+        .sf-textbox-icon {
+          color: #ffffff;
+        }
+        .sf-textbox-text {
+          font-weight: 500;
+        }
+      }
+    }
+  }
+  &>.sf-icon {
+    position: absolute;
+    right: $sf-padding-secondary;
+    top: $sf-padding-secondary;
+    color: $sf-color-secondary-light;
+    font-size: 16px;
+    &:hover {
+      color: #fff;
+      cursor: pointer;
+    }
+  }
+
+  &.opened {
+    z-index: 1;
+    //overflow: auto;
+    height: 125px;
+    opacity: 1;
+    top: 16px;
+    transition: all 0.2s ease-in;
+  }
+}
+
 
 //Animations
 .sf-fade-enter {
