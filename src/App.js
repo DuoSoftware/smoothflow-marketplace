@@ -53,6 +53,8 @@ class App extends Component {
                 });
         }
     }
+
+
     render() {
         return (
             <Router>
@@ -62,11 +64,11 @@ class App extends Component {
                         <Sidenav/>
                         <Route render={({ location }) => (
                             <div className="sf-body sf-custom-scroll">
-                                {/* <TransitionGroup>
+                                <TransitionGroup>
                                     <CSSTransition
                                         key={location.key}
                                         timeout={300}
-                                        classNames='sf-fade'> */}
+                                        classNames='sf-fade'>
                                         <Switch location={location}>
                                             <Route exact path="/" component={Home} />
                                             <Route path="/activities/:id" component={ItemView} />
@@ -78,8 +80,8 @@ class App extends Component {
                                             <PrivateRoute path="/user/activities/create" is_logged_in={this.props.user.is_logged_in} component={CreateNewActivity} />
                                             <PrivateRoute path="/user/integrations/create" is_logged_in={this.props.user.is_logged_in} component={CreateNewIntegration} />
                                         </Switch>
-                                    {/* </CSSTransition>
-                                </TransitionGroup> */}
+                                    </CSSTransition>
+                                </TransitionGroup>
                             </div>
                         )}/>
                     </div>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { BrowserRouter as Route, Link } from "react-router-dom";
 import Wrap from '../_base/_wrap'
 import { PageHeader, Preloader, Button } from "../components/common";
 import { IntegrationsService } from '../_base/services/integrations.service';
@@ -8,9 +8,9 @@ import { GetMyIntgrations, PreloadBody } from '../_base/actions';
 import ItemCard from '../components/Itemcard/itemcard.widget'
 
 class Integrations extends Component {
-    componentDidMount = () => {
+    componentDidMount() {
         this.getAllIntegrations();
-    }
+    };
 
     getAllIntegrations = () => {
         this.props.dispatch(PreloadBody(true));
@@ -48,7 +48,7 @@ class Integrations extends Component {
 
     render() {
         return (
-            <div>
+            <div className="sf-route-content">
                 <PageHeader title={'Integrations'}>
                     <Link to={'/user/integrations/create'}>
                         <Button className="sf-button sf-button-primary sf-button-primary-p sf-button-raised">Create</Button>

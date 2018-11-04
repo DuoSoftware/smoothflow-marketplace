@@ -270,92 +270,92 @@ a {
 }
 
 //Buttons
-.sf-btn {
-  display: inline-block;
-  background: #fff;
-  border: none;
-  padding: $sf-padding-secondary $sf-padding-primary;
-  //border-radius: $sf-border-radius-primary;
-  border-radius: 100px;
-  font-weight: bold;
-  cursor: pointer;
-  outline: none;
-  text-decoration: inherit;
-  -webkit-transition: background $sf-animation-time;
-  -moz-transition: background $sf-animation-time;
-  -ms-transition: background $sf-animation-time;
-  -o-transition: background $sf-animation-time;
-  transition: background $sf-animation-time;
-  &.sf-btn-primary {
-    padding: $sf-padding-primary $sf-padding-primary;
-    background: $sf-color-primary;
-    color: #ffffff;
-    &.sf-btn-thin {
-      padding: $sf-padding-secondary $sf-padding-primary;
-    }
-    &.sf-btn-primary-light {
-      background: $sf-color-primary-light;
-      color: $sf-color-primary;
-    }
-    &:hover, &.sf-btn-primary-light:hover {
-      background: $sf-color-primary-dark;
-      color: #fff;
-      -webkit-transition: background $sf-animation-time;
-      -moz-transition: background $sf-animation-time;
-      -ms-transition: background $sf-animation-time;
-      -o-transition: background $sf-animation-time;
-      transition: background $sf-animation-time;
-    }
-  }
-  &.sf-btn-secondary {
-    background: #fff;
-    color: $sf-color-secondary;
-    border: solid 2px $sf-color-secondary;
-    &:hover {
-      background: $sf-color-secondary-light;
-      -webkit-transition: background $sf-animation-time;
-      -moz-transition: background $sf-animation-time;
-      -ms-transition: background $sf-animation-time;
-      -o-transition: background $sf-animation-time;
-      transition: background $sf-animation-time;
-    }
-  }
-  &.sf-btn-block {
-    width: 100%;
-  }
-  &.sf-btn-small {
-    padding: $sf-padding-third $sf-padding-secondary;
-    font-size: $sf-text-secondary;
-  }
-  &.sf-btn-clear {
-    background: transparent;
-    color: $sf-color-secondary;
-    &:hover {
-      background: $sf-color-secondary;
-      color: #ffffff;
-      -webkit-transition: background $sf-animation-time;
-      -moz-transition: background $sf-animation-time;
-      -ms-transition: background $sf-animation-time;
-      -o-transition: background $sf-animation-time;
-      transition: background $sf-animation-time;
-    }
-  }
-  &.sf-btn-lite {
-    padding: $sf-padding-secondary!important;
-  }
-  &.sf-btn-iconed {
-    .sf-icon {
-      font-size: 20px;
-    }
-  }
-  &.sf-btn-circle {
-    line-height: 10px;
-    font-size: 16px;
-    width: 40px;
-    height: 40px;
-    border-radius: 100%;
-  }
-}
+//.sf-btn {
+//  display: inline-block;
+//  background: #fff;
+//  border: none;
+//  padding: $sf-padding-secondary $sf-padding-primary;
+//  //border-radius: $sf-border-radius-primary;
+//  border-radius: 100px;
+//  font-weight: bold;
+//  cursor: pointer;
+//  outline: none;
+//  text-decoration: inherit;
+//  -webkit-transition: background $sf-animation-time;
+//  -moz-transition: background $sf-animation-time;
+//  -ms-transition: background $sf-animation-time;
+//  -o-transition: background $sf-animation-time;
+//  transition: background $sf-animation-time;
+//  &.sf-btn-primary {
+//    padding: $sf-padding-primary $sf-padding-primary;
+//    background: $sf-color-primary;
+//    color: #ffffff;
+//    &.sf-btn-thin {
+//      padding: $sf-padding-secondary $sf-padding-primary;
+//    }
+//    &.sf-btn-primary-light {
+//      background: $sf-color-primary-light;
+//      color: $sf-color-primary;
+//    }
+//    &:hover, &.sf-btn-primary-light:hover {
+//      background: $sf-color-primary-dark;
+//      color: #fff;
+//      -webkit-transition: background $sf-animation-time;
+//      -moz-transition: background $sf-animation-time;
+//      -ms-transition: background $sf-animation-time;
+//      -o-transition: background $sf-animation-time;
+//      transition: background $sf-animation-time;
+//    }
+//  }
+//  &.sf-btn-secondary {
+//    background: #fff;
+//    color: $sf-color-secondary;
+//    border: solid 2px $sf-color-secondary;
+//    &:hover {
+//      background: $sf-color-secondary-light;
+//      -webkit-transition: background $sf-animation-time;
+//      -moz-transition: background $sf-animation-time;
+//      -ms-transition: background $sf-animation-time;
+//      -o-transition: background $sf-animation-time;
+//      transition: background $sf-animation-time;
+//    }
+//  }
+//  &.sf-btn-block {
+//    width: 100%;
+//  }
+//  &.sf-btn-small {
+//    padding: $sf-padding-third $sf-padding-secondary;
+//    font-size: $sf-text-secondary;
+//  }
+//  &.sf-btn-clear {
+//    background: transparent;
+//    color: $sf-color-secondary;
+//    &:hover {
+//      background: $sf-color-secondary;
+//      color: #ffffff;
+//      -webkit-transition: background $sf-animation-time;
+//      -moz-transition: background $sf-animation-time;
+//      -ms-transition: background $sf-animation-time;
+//      -o-transition: background $sf-animation-time;
+//      transition: background $sf-animation-time;
+//    }
+//  }
+//  &.sf-btn-lite {
+//    padding: $sf-padding-secondary!important;
+//  }
+//  &.sf-btn-iconed {
+//    .sf-icon {
+//      font-size: 20px;
+//    }
+//  }
+//  &.sf-btn-circle {
+//    line-height: 10px;
+//    font-size: 16px;
+//    width: 40px;
+//    height: 40px;
+//    border-radius: 100%;
+//  }
+//}
 
 //Table
 .sf-table {
@@ -494,72 +494,22 @@ form {
 }
 /* ===================================== */
 
-.sf-overhead-dropdown {
-  height: 0px;
-  overflow: hidden;
-  opacity: 0;
-  position: absolute;
-  z-index: -1;
-  background: $sf-color-secondary;
-  width: 88%;
-  border-radius: 20px;
-  top: 16px;
-  left: 0;
-  right: 0;
-  margin: auto;
-  padding: $sf-padding-primary;
-  box-shadow: 0 5px 10px $sf-shadow-color-primary;
-  box-sizing: border-box;
-  transition: all 0.2s ease-in;
-  .sf-list {
-    .sf-textbox {
-      .sf-textbox-icon {
-        color: $sf-color-primary;
-      }
-      .sf-textbox-text {
-        color: #ffffff;
-      }
-
-      &:hover {
-        .sf-textbox-icon {
-          color: #ffffff;
-        }
-        .sf-textbox-text {
-          font-weight: 500;
-        }
-      }
-    }
-  }
-  &>.sf-icon {
-    position: absolute;
-    right: $sf-padding-secondary;
-    top: $sf-padding-secondary;
-    color: $sf-color-secondary-light;
-    font-size: 16px;
-    &:hover {
-      color: #fff;
-      cursor: pointer;
-    }
-  }
-
-  &.opened {
-    z-index: 1;
-    //overflow: auto;
-    height: 125px;
-    opacity: 1;
-    top: 16px;
-    transition: all 0.2s ease-in;
-  }
-}
-
 
 //Animations
+.sf-route-content {
+  padding: $sf-padding-primary;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
 .sf-fade-enter {
   opacity: 0;
   z-index: 1;
-  transition: opacity 300ms ease-in;
+  transition: opacity 250ms ease-in;
 }
 .sf-fade-enter.sf-fade-enter-active {
   opacity: 1;
-  transition: opacity 300ms ease-in;
+  transition: opacity 250ms ease-in;
 }

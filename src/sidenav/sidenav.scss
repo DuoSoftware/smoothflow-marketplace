@@ -38,4 +38,37 @@
       text-transform: capitalize;
     }
   }
+
+  .sf-overhead-dropdown {
+    .sf-list {
+      .sf-textbox {
+        .sf-textbox-icon {
+          color: $sf-color-primary;
+        }
+        .sf-textbox-text {
+          color: #ffffff;
+        }
+
+        &:hover {
+          .sf-textbox-icon {
+            color: #ffffff;
+          }
+          .sf-textbox-text {
+            font-weight: 500;
+          }
+        }
+      }
+    }
+    &>.sf-icon {
+      position: absolute;
+      right: $sf-padding-secondary;
+      top: $sf-padding-secondary;
+      color: $sf-text-color-secondary;
+      font-size: 16px;
+      &:hover {
+        color: #fff;
+        cursor: pointer;
+      }
+    }
+  }
 }

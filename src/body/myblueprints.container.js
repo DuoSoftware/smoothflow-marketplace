@@ -4,7 +4,7 @@ import { PageHeader } from "../components/common";
 class MyBlueprints extends Component {
     render() {
         return (
-            <div>
+            <div className="sf-route-content">
                 <PageHeader title={'Blueprints'}></PageHeader>
             </div>
         )

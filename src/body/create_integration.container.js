@@ -174,7 +174,7 @@ class CreateNewIntegration extends Component {
     
     render () {
         return (
-            <div>
+            <div className="sf-route-content">
                 {
                     this.props.uihelper._preload_body_
                     ?   <Preloader type={'BODY'} />
@@ -233,7 +233,7 @@ class CreateNewIntegration extends Component {
                                                             </div>
                                                         </div>
                                                         <div className="sf-card-row-end">
-                                                            <button type="button" id="removeIntegrationData" className="sf-btn sf-btn-primary-light sf-btn-primary sf-btn-circle" onClick={(event)=>this.newIntegration(event, index)}>x</button>
+                                                            <button type="button" id="removeIntegrationData" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" onClick={(event)=>this.newIntegration(event, index)}>x</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -251,7 +251,7 @@ class CreateNewIntegration extends Component {
                                             </div>
                                         </div>
                                         <div className="sf-feature-add">
-                                            <button type="button" id="addIntegrationData" className="sf-btn sf-btn-primary sf-btn-primary-light" onClick={(event) => this.newIntegration(event) }>+</button>
+                                            <button type="button" id="addIntegrationData" className="sf-button sf-button-primary sf-button-primary-light" onClick={(event) => this.newIntegration(event) }>+</button>
                                         </div>
                                     </div>
                                 </div>

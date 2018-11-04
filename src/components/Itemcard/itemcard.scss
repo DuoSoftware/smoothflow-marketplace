@@ -28,6 +28,13 @@
         margin: 0;
         font-size: $sf-header-sub;
       }
+      .sf-activity-status {
+        display: inline-block;
+        padding: $sf-padding-third - 3 $sf-padding-third;
+        border-radius: $sf-border-radius-primary;
+        background: $sf-private;
+        color: #ffffff;
+      }
     }
     .sf-item-card-body {
       padding: $sf-padding-primary;

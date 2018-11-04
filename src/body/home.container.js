@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { BrowserRouter as Route, Link, Redirect } from "react-router-dom";
 import { Activities, ActivitiesLoader } from '../_base/actions'
 import { ActivitiesService } from '../_base/services';
 import ItemCard from '../components/Itemcard/itemcard.widget';
 import Wrap from '../_base/_wrap'
-import { BrowserRouter as Route, Link } from "react-router-dom";
 import { Preloader } from '../components/common';
 
 class Home extends Component {
@@ -78,8 +78,9 @@ class Home extends Component {
     };
 
     render() {
+        if(this.props.user.is_logged_in) <Redirect to={'/user/dashboard'} />
         return (
-            <div>
+            <div className="sf-route-content">
                 {
                     this.props.activities.loading
                         ?   <Preloader />
@@ -104,8 +105,8 @@ class Home extends Component {
                                                                             <span className="sf-list-icon">
                                                                                 { c.selected ? <span className="sf-icon icon-sf_ico_check_circle"></span> : null }
                                                                             </span>
-                                                                    <span>{ c.text }</span>
-                                                                </li>
+                                                                            <span>{ c.text }</span>
+                                                                        </li>
                                                             })
                                                         }
                                                     </div>

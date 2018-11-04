@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import TableTwoCol from '../components/Table - Two Col/table_two_col.widget';
 import UMInfo from '../components/User Messages/UM - Info/info.user.message';
@@ -33,7 +34,7 @@ class ItemView extends Component {
     }
     getFAQ(faq) {
         const _faq = faq.map((f, i) =>
-            <AccordionItem key={KEY()} title={ f.title } index={ 'FAQ '+ (i+1) }><p>{ f.answer }</p></AccordionItem>
+            <AccordionItem key={KEY()} title={ f.question } index={ 'FAQ '+ (i+1) }><p>{ f.answer }</p></AccordionItem>
         );
         return _faq;
     }
@@ -62,7 +63,7 @@ class ItemView extends Component {
     render() {
         console.log(this.props);
         return(
-            <div>
+            <div className="sf-route-content">
                 <PageHeader title={this.props.location.activity.name}>
                     <Link 
                         to={{
@@ -91,7 +92,7 @@ class ItemView extends Component {
                             {
                                 this.props.location.advanced
                                 ?   <Block className="sf-flex-1">
-                                        <button className="sf-btn sf-btn-primary sf-btn-block">30 Days Trial</button>
+                                        <button className="sf-button sf-button-primary sf-button-block">30 Days Trial</button>
                                     </Block>
                                 :   null
                             }
@@ -101,7 +102,7 @@ class ItemView extends Component {
                         </div>
                     </div>
                     <div className="sf-flex-1 sf-flex-center sf-m-p sf-shadow-box sf-border-radius" style={{display: 'flex'}}>
-                        <img src={this.props.location.activity.image} alt="" style={{maxWidth: '500px'}}/>
+                        <img src={this.props.location.activity.image} alt="" style={{maxWidth: '300px'}}/>
                     </div>
                 </div>
 
@@ -144,4 +145,4 @@ class ItemView extends Component {
     }
 }
 
-export default ItemView;
+export default connect()(ItemView);

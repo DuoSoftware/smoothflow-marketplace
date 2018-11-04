@@ -21,11 +21,12 @@ class CreateNewActivity extends Component {
             newActivity : {
                 "insertOrUpdate": "insert",
                 "date": new Date(),
-                "activity_name": "right",
+                "activity_name": "",
                 "tenant_name": "tistuslabs",
                 "type": "chat",
                 "reviewed": false,
                 "state": "FB",
+                "status": "private",
                 "path": "1000",
                 "npm_module": "@smoothflow/zappier-integration",
                 "npm_version": "18.0.0",
@@ -425,15 +426,18 @@ class CreateNewActivity extends Component {
         }));
     };
     uploadBulkMedia = (callback) => {
+        debugger
         let _media = [{
             id: 'main',
             file: this.state.newActivity.image
         }];
         for (const [i, am] of this.state.newActivity.what_you_get.entries()) {
-            _media.push({
-                id: am.file.name.split('.')[0] + i,
-                file: am.file
-            });
+            if(typeof am.file != 'string') {
+                _media.push({
+                    id: am.file.name.split('.')[0] + i,
+                    file: am.file
+                });
+            }
         }
         let _m_counter = 0;
         let _m_res = [];
@@ -568,6 +572,7 @@ class CreateNewActivity extends Component {
         const _var = {
             ...this.variable
         };
+        _var.ValueList = this.state.temp_variable.temp_variable_vals;
         _vars.push(_var);
         this.setState(prevState => ({
             ...prevState,
@@ -604,6 +609,17 @@ class CreateNewActivity extends Component {
         document.getElementById('varPriority').value = "";
         document.getElementById('varIsAdvanced').value = "";
         document.getElementById('varKey').focus();
+    };
+
+    removeVariable = (e, i) => {
+        let _variables = [...this.state.newActivity.variables];
+        _variables.splice(i, 1);
+        this.setState(prevState => ({
+            newActivity: {
+                ...prevState.newActivity,
+                variables: _variables
+            }
+        }));
     };
 
     // Submit New Activity
@@ -795,7 +811,7 @@ class CreateNewActivity extends Component {
             return <Redirect to={'/'} /> ;
         }
         return (
-            <div>
+            <div className="sf-route-content">
                 {
                     this.props.uihelper._preload_body_ 
                     ?    <Preloader type={'BODY'} />
@@ -847,7 +863,7 @@ class CreateNewActivity extends Component {
                                                             </div>
                                                         </div>
                                                         <div className="sf-card-row-end">
-                                                            <button type="button" className="sf-btn sf-btn-primary-light sf-btn-primary sf-btn-circle" onClick={(event)=>this.removeFeature(event, index)}>x</button>
+                                                            <button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" onClick={(event)=>this.removeFeature(event, index)}>x</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -864,7 +880,7 @@ class CreateNewActivity extends Component {
                                             </div>
                                         </div>
                                         <div className="sf-feature-add">
-                                            <button type="button" className="sf-btn sf-btn-primary sf-btn-primary-light" onClick={ this.addFeature }>+</button>
+                                            <button type="button" className="sf-button sf-button-primary sf-button-primary-light" onClick={ this.addFeature }>+</button>
                                         </div>
                                     </div>
                                 </div>
@@ -902,10 +918,10 @@ class CreateNewActivity extends Component {
                                                     <div className="sf-card" style={ {'width' : '50%'} } key={KEY()}>
                                                         <div className="sf-card-content sf-card-bordered sf-card-centered-row">
                                                             <div className="sf-flex-1">
-                                                                <img src={wyg.file ? wyg.file : wyg.content} alt="" id="newActivityImage" style={{height: '100px', width: 'auto'}}/>
+                                                                <img src={wyg.content ? wyg.content : wyg.file} alt="" id="newActivityImage" style={{height: '100px', width: 'auto'}}/>
                                                             </div>
                                                             <div className="sf-card-row-end">
-                                                                <button type="button" className="sf-btn sf-btn-primary-light sf-btn-primary sf-btn-circle" onClick={(event)=>this.removeMedia(event, 'wyg', index)}>x</button>
+                                                                <button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" onClick={(event)=>this.removeMedia(event, 'wyg', index)}>x</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -935,14 +951,14 @@ class CreateNewActivity extends Component {
                                                                 <div className="sf-txtblock-txt-title sf-text-semibold">{pack.name}</div>
                                                                 {
                                                                     pack.pricing_fts.map((ft, index) =>
-                                                                        <div className="sf-txtblock-txt-text" key={KEY()}>{ft.text}</div>
+                                                                        <div className="sf-txtblock-txt-text" key={KEY()}>{ft.text ? ft.text : ft}</div>
                                                                     )
                                                                 }
                                                                 <div className="sf-txtblock-txt-title sf-text-semibold">{pack.price}</div>
                                                             </div>
                                                         </div>
                                                         <div className="sf-card-row-end">
-                                                            <button type="button" className="sf-btn sf-btn-primary-light sf-btn-primary sf-btn-circle" onClick={(event) => this.removePricing(event, index)}>x</button>
+                                                            <button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" onClick={(event) => this.removePricing(event, index)}>x</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -969,7 +985,7 @@ class CreateNewActivity extends Component {
                                                                         </div>
                                                                     </div>
                                                                     <div className="sf-card-row-end">
-                                                                        <button type="button" className="sf-btn sf-btn-primary-light sf-btn-primary sf-btn-circle" onClick={(event) => this.removePricingFeature(event, index)}>x</button>
+                                                                        <button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" onClick={(event) => this.removePricingFeature(event, index)}>x</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -983,13 +999,13 @@ class CreateNewActivity extends Component {
                                                         </div>
                                                     </div>
                                                     <div className="sf-feature-add">
-                                                        <button type="button" id="addPackageFeature" className="sf-btn sf-btn-primary sf-btn-primary-light" onClick={(event) => this.createPricing(event)}>+</button>
+                                                        <button type="button" id="addPackageFeature" className="sf-button sf-button-primary sf-button-primary-light" onClick={(event) => this.createPricing(event)}>+</button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="sf-feature-add">
-                                            <button type="button" className="sf-btn sf-btn-primary sf-btn-primary-light" onClick={this.addPricing}>+</button>
+                                            <button type="button" className="sf-button sf-button-primary sf-button-primary-light" onClick={this.addPricing}>+</button>
                                         </div>
                                     </div>
                                 </div>
@@ -1010,7 +1026,7 @@ class CreateNewActivity extends Component {
                                                             </div>
                                                         </div>
                                                         <div className="sf-card-row-end">
-                                                            <button type="button" className="sf-btn sf-btn-primary-light sf-btn-primary sf-btn-circle" onClick={(event)=>this.removeFAQ(event, index)}>x</button>
+                                                            <button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" onClick={(event)=>this.removeFAQ(event, index)}>x</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1027,7 +1043,7 @@ class CreateNewActivity extends Component {
                                             </div>
                                         </div>
                                         <div className="sf-feature-add">
-                                            <button type="button" className="sf-btn sf-btn-primary sf-btn-primary-light" onClick={ this.addFAQ }>+</button>
+                                            <button type="button" className="sf-button sf-button-primary sf-button-primary-light" onClick={ this.addFAQ }>+</button>
                                         </div>
                                     </div>
                                 </div>
@@ -1057,35 +1073,30 @@ class CreateNewActivity extends Component {
                                                                         <span className="sf-text-semibold">Value : </span>
                                                                         <span>{variable.Key}</span>
                                                                     </div>
-                                                                :   null
-                                                            }
-                                                            {
-                                                                variable.ValueList.length > 0
-                                                                    ?   <div className="sf-txtblock-text sf-flexbox-row">
+                                                                :   <div className="sf-txtblock-text sf-flexbox-row">
                                                                             <span
                                                                                 className="sf-text-semibold">ValueList : </span>
-                                                                            <div>
-                                                                                {
-                                                                                    variable.ValueList.map((val) =>
-                                                                                        <Wrap key={KEY()}>
-                                                                                            <div
-                                                                                                className="sf-txtblock-text sf-flexbox-row">
+                                                                        <div>
+                                                                            {
+                                                                                variable.ValueList.map((val) =>
+                                                                                    <Wrap key={KEY()}>
+                                                                                        <div
+                                                                                            className="sf-txtblock-text sf-flexbox-row">
                                                                                                 <span
                                                                                                     className="sf-text-semibold">Key : </span>
-                                                                                                <span>{val.Key}</span>
-                                                                                            </div>
-                                                                                            <div
-                                                                                                className="sf-txtblock-text sf-flexbox-row">
+                                                                                            <span>{val.Key}</span>
+                                                                                        </div>
+                                                                                        <div
+                                                                                            className="sf-txtblock-text sf-flexbox-row">
                                                                                                 <span
                                                                                                     className="sf-text-semibold">Value : </span>
-                                                                                                <span>{val.Value}</span>
-                                                                                            </div>
-                                                                                        </Wrap>
-                                                                                    )
-                                                                                }
-                                                                            </div>
+                                                                                            <span>{val.Value}</span>
+                                                                                        </div>
+                                                                                    </Wrap>
+                                                                                )
+                                                                            }
                                                                         </div>
-                                                                    :   null
+                                                                    </div>
                                                             }
                                                             <div className="sf-txtblock-text">
                                                                 <span className="sf-text-semibold">Type : </span>
@@ -1121,7 +1132,7 @@ class CreateNewActivity extends Component {
                                                             </div>
                                                         </div>
                                                         <div className="sf-card-row-end">
-                                                            <button type="button" className="sf-btn sf-btn-primary-light sf-btn-primary sf-btn-circle" onClick={(event)=>this.removeFAQ(event, index)}>x</button>
+                                                            <button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" onClick={(event)=>this.removeVariable(event, index)}>x</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1232,7 +1243,7 @@ class CreateNewActivity extends Component {
                                                                                         </div>
                                                                                     </div>
                                                                                     <div className="sf-card-row-end">
-                                                                                        <button type="button" className="sf-btn sf-btn-primary-light sf-btn-primary sf-btn-circle" id="removeVarKeyVal" onClick={(event) => this.createVariable(event, index)}>x</button>
+                                                                                        <button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" id="removeVarKeyVal" onClick={(event) => this.createVariable(event, index)}>x</button>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -1247,7 +1258,7 @@ class CreateNewActivity extends Component {
                                                                         </div>
                                                                     </div>
                                                                     <div className="sf-feature-add">
-                                                                        <button type="button" id="addVarKeyVal" className="sf-btn sf-btn-primary sf-btn-primary-light" onClick={(event) => this.createVariable(event)}>+</button>
+                                                                        <button type="button" id="addVarKeyVal" className="sf-button sf-button-primary sf-button-primary-light" onClick={(event) => this.createVariable(event)}>+</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1257,7 +1268,7 @@ class CreateNewActivity extends Component {
                                             }
                                         </div>
                                         <div className="sf-feature-add">
-                                            <button type="button" className="sf-btn sf-btn-primary sf-btn-primary-light" onClick={ this.addVariable }>+</button>
+                                            <button type="button" className="sf-button sf-button-primary sf-button-primary-light" onClick={ this.addVariable }>+</button>
                                         </div>
                                     </div>
                                 </div>
@@ -1302,7 +1313,7 @@ class CreateNewActivity extends Component {
                                                     </div>
                                                 </div>
                                                 <div className="sf-p-p-v">
-                                                    <button type="button" className="sf-btn sf-btn-secondary" onClick={ (event)=>this.testGoCode(event) }>Test</button>
+                                                    <button type="button" className="sf-button sf-button-secondary" onClick={ (event)=>this.testGoCode(event) }>Test</button>
                                                 </div>
                                             </div>
                                             : null

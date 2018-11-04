@@ -5,6 +5,7 @@ import {Block, Textbox, List, Button, Preloader} from "../components/common";
 import { Link } from 'react-router-dom'
 import Wrap from "../_base/_wrap";
 import {KEY} from "../_base/services";
+import {Dropdown} from "../components/common/Dropdown/dropdown.component";
 
 class Sidenav extends Component {
     constructor(props) {
@@ -108,7 +109,7 @@ class Sidenav extends Component {
                             {
                                 this.props.user.is_logged_in
                                 ?   <Wrap>
-                                        <div className={`sf-overhead-dropdown${ this.state._create_dd ? ' opened' : '' }`}>
+                                        <Dropdown toggle={this.state._create_dd} width={'88%'} height={'125px'} dark>
                                             <span className="sf-icon icon-sf_ico_close_circle" onClick={ this.closeCreatePanel.bind() }></span>
                                             <List>
                                                 <li>
@@ -133,7 +134,7 @@ class Sidenav extends Component {
                                                     </Link>
                                                 </li>
                                             </List>
-                                        </div>
+                                        </Dropdown>
                                         <div className="sf-user-nav">
                                             <Block>
                                                 <Button className="sf-button sf-button-primary sf-button-primary-s sf-button-caps sf-button-block sf-button-iconed" icon={'plus_circle'} onClick={ this.initCreatePanel.bind() }>Create</Button>

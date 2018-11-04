@@ -38,6 +38,7 @@ class MyActivities extends Component {
                     const loadedActivities = res.data.Result.activities.map((activity, index) => {
                         return {
                             type: 'activity',
+                            status: activity.status,
                             name: activity.activity_name,
                             image: activity.image,
                             description: activity.description,
@@ -162,7 +163,7 @@ class MyActivities extends Component {
 
     render() {
         return (
-            <div>
+            <div className="sf-route-content">
                 {
                     this.props.uihelper._preload_body_
                     ?   <Preloader type={'BODY'} />
