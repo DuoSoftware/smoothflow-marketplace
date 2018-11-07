@@ -427,34 +427,38 @@ class CreateNewActivity extends Component {
     };
     uploadBulkMedia = (callback) => {
         debugger
-        let _media = [{
-            id: 'main',
-            file: this.state.newActivity.image
-        }];
-        for (const [i, am] of this.state.newActivity.what_you_get.entries()) {
-            if(typeof am.file != 'string') {
-                _media.push({
-                    id: am.file.name.split('.')[0] + i,
-                    file: am.file
-                });
-            }
-        }
-        let _m_counter = 0;
-        let _m_res = [];
-        for(const m of _media) {
-            MediaService.uploadMedia(m.file,
-                function(mres) {
-                    _m_counter ++;
-                    let __mid = m.id;
-                    // m.id !== 'main' ? __mid = m.id + _m_counter : null;
-                    _m_res.push({
-                        id: __mid,
-                        src: mres.data.url
+        if(this.state.newActivity.image === null && this.state.newActivity.what_you_get.length === 0) {
+            return callback(false);
+        } else {
+            let _media = [{
+                id: 'main',
+                file: this.state.newActivity.image
+            }];
+            for (const [i, am] of this.state.newActivity.what_you_get.entries()) {
+                if(typeof am.file != 'string') {
+                    _media.push({
+                        id: am.file.name.split('.')[0] + i,
+                        file: am.file
                     });
-                    if (_m_counter === _media.length) {
-                        callback(_m_res);
-                    }
-                });
+                }
+            }
+            let _m_counter = 0;
+            let _m_res = [];
+            for(const m of _media) {
+                MediaService.uploadMedia(m.file,
+                    function(mres) {
+                        _m_counter ++;
+                        let __mid = m.id;
+                        // m.id !== 'main' ? __mid = m.id + _m_counter : null;
+                        _m_res.push({
+                            id: __mid,
+                            src: mres.data.url
+                        });
+                        if (_m_counter === _media.length) {
+                            callback(_m_res);
+                        }
+                    });
+            }
         }
     };
     getTagsList = () => {
@@ -649,16 +653,17 @@ class CreateNewActivity extends Component {
         _payload.activities.push(this.state.newActivity);
 
         this.uploadBulkMedia(function (_mediaSRCs) {
-            for(const _msrc of _mediaSRCs) {
-                if(_msrc.id === 'main') {
-                    _payload.activities[0].image = _msrc.src;
-                } else {
-                    const __id = parseInt(_msrc.id.split('').pop());
-                    delete _payload.activities[0].what_you_get[__id].content;
-                    _payload.activities[0].what_you_get[__id].file = _msrc.src;
+            if(_mediaSRCs) {
+                for(const _msrc of _mediaSRCs) {
+                    if(_msrc.id === 'main') {
+                        _payload.activities[0].image = _msrc.src;
+                    } else {
+                        const __id = parseInt(_msrc.id.split('').pop());
+                        delete _payload.activities[0].what_you_get[__id].content;
+                        _payload.activities[0].what_you_get[__id].file = _msrc.src;
+                    }
                 }
             }
-            debugger;
             ActivitiesService.saveNewActivity(_payload)
                 .then((res) => {
                     if(res.data.IsSuccess) {
