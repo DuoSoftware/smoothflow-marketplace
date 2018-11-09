@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Chips, { Chip } from 'react-chips';
+import { createHashHistory  } from 'history'
 import Input from '../components/Input/input.widget';
 import {ActivitiesService, KEY, MediaService, UIHelper} from '../_base/services';
-import { Redirect } from "react-router-dom";
 import { Preloader, Button, PageHeader } from '../components/common';
 import FeatureBlock from '../components/Input Blocks/Feature block/feature_block.widget';
 import Preview from '../components/Input Preview/create_activity.preview';
@@ -22,14 +22,13 @@ class CreateNewActivity extends Component {
                 "insertOrUpdate": "insert",
                 "date": new Date(),
                 "activity_name": "",
-                "tenant_name": "tistuslabs",
+                "tenant_name": this.props.user.username,
                 "type": "chat",
                 "reviewed": false,
-                "state": "FB",
-                "status": "private",
+                "state": "private",
                 "path": "1000",
-                "npm_module": "@smoothflow/zappier-integration",
-                "npm_version": "18.0.0",
+                "npm_module": "@smoothflow/activity",
+                "npm_version": "0.0.0",
                 "image": null,
                 "description": '',
                 "languages":[],
@@ -632,7 +631,7 @@ class CreateNewActivity extends Component {
         const _self = this.self;
         this.props.dispatch(PreloadBody(true));
         let _payload = {
-            "tenant_name": "tistuslabs",
+            "tenant_name": this.props.user.username,
             "description": "",
             "enable": "yes",
             "scope": "567890",
@@ -655,7 +654,7 @@ class CreateNewActivity extends Component {
         this.uploadBulkMedia(function (_mediaSRCs) {
             if(_mediaSRCs) {
                 for(const _msrc of _mediaSRCs) {
-                    if(_msrc.id === 'main') {
+                    if (_msrc.id === 'main') {
                         _payload.activities[0].image = _msrc.src;
                     } else {
                         const __id = parseInt(_msrc.id.split('').pop());
@@ -673,12 +672,14 @@ class CreateNewActivity extends Component {
                                 _self.setState({
                                     success: true
                                 });
+                                this.props.history.push('/user/activities');
                             });
                         } else {
                             alert('Activity created successfully');
                             _self.setState({
                                 success: true
                             });
+                            this.props.history.push('/user/activities');
                         }
                     }
                 })
@@ -812,14 +813,11 @@ class CreateNewActivity extends Component {
     };
 
     render() {
-        if (this.state.success) {
-            return <Redirect to={'/'} /> ;
-        }
         return (
             <div className="sf-route-content">
                 {
                     this.props.uihelper._preload_body_ 
-                    ?    <Preloader type={'BODY'} />
+                    ?   <Preloader type={'BODY'} />
                     :   <form name="createActivityForm" id="createActivityForm" onSubmit={ (event) => {this.submitNewActivity(event)}}>
                             <PageHeader title={'Create Activity'}>
                                 {
@@ -1359,8 +1357,10 @@ class CreateNewActivity extends Component {
     }
 }
 
+const history = createHashHistory();
 const mapStateToProps = state => ({
-    uihelper: state.uihelper
+    uihelper: state.uihelper,
+    user: state.user
 });
 
 export default connect(mapStateToProps) (CreateNewActivity);
