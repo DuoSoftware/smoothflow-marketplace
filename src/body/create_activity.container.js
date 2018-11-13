@@ -672,14 +672,14 @@ class CreateNewActivity extends Component {
                                 _self.setState({
                                     success: true
                                 });
-                                this.props.history.push('/user/activities');
+                                _self.props.history.push('/user/activities');
                             });
                         } else {
                             alert('Activity created successfully');
                             _self.setState({
                                 success: true
                             });
-                            this.props.history.push('/user/activities');
+                            _self.props.history.push('/user/activities');
                         }
                     }
                 })
