@@ -15,11 +15,13 @@ const cook = document.cookie.split('; ');
 let _t = null;
 let _token = null;
 
-_t = cook.map(c => {
+for(const c in cook) {
     if(c.split('=')[0] === 'satellizer_token') {
-        return c.split('=')[1];
+        _t = c.split('=')[1];
+        return;
     }
-});
+}
+
 if (_t) {
     _token = _t;
     localStorage.setItem('satellizer_token', _t);
