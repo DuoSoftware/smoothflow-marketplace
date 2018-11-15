@@ -14,15 +14,14 @@ const store = createStore(rootReducer);
 const cook = document.cookie.split('; ');
 let _t = null;
 
-if(!localStorage.getItem('satellizer_token')) {
-    for(const c in cook) {
-        if(c.split('=')[0] === 'satellizer_token') {
-            _t = c.split('=')[1];
-        }
-    };
-    if(_t){
-        localStorage.setItem('satellizer_token', _t);
+for(const c in cook) {
+    if(c.split('=')[0] === 'satellizer_token') {
+        _t = c.split('=')[1];
     }
+}
+
+if(_t){
+    localStorage.setItem('satellizer_token', _t);
 }
 
 const _token = _t;

@@ -18,6 +18,7 @@ import PrivateRoute from './_base/_private.route';
 import Dashboard from "./body/dashboard.container";
 import URLs from "./_base/_urls";
 import { User, PreloadShell } from './_base/actions';
+import Reviews from "./body/reviews.container";
 
 class App extends Component {
     constructor(props){
@@ -25,13 +26,21 @@ class App extends Component {
     };
 
     componentDidMount() {
-        const _token = localStorage.getItem('satellizer_token');
+        const cook = document.cookie.split('; ');
+        let _t = null;
+
+        for(const c in cook) {
+            if(c.split('=')[0] === 'satellizer_token') {
+                _t = c.split('=')[1];
+            }
+        }
+        const _token = _t;
         if(_token) {
             this.props.dispatch(PreloadShell(true));
             UserService.getUserProfile()
                 .then(profile => {
                     if(profile.data.IsSuccess){
-                        const _tokenParsed = UIHelper.parseJWT(localStorage.getItem('satellizer_token'));
+                        const _tokenParsed = UIHelper.parseJWT(_t);
                         const company = _tokenParsed.companyName;
                         const host = 'dev.smoothflow.io';//window.location.host;
                         UserService.getUserSettings(URLs.auth.getUserSettings(host, company))
@@ -77,6 +86,7 @@ class App extends Component {
                                             <PrivateRoute exact path="/user/activities" is_logged_in={this.props.user.is_logged_in} component={MyActiivities} />
                                             <PrivateRoute exact path="/user/blueprints" is_logged_in={this.props.user.is_logged_in} component={MyBlueprints} />
                                             <PrivateRoute exact path="/user/integrations" is_logged_in={this.props.user.is_logged_in} component={Integrations} />
+                                            <PrivateRoute exact path="/user/reviews" is_logged_in={this.props.user.is_logged_in} component={Reviews} />
                                             <PrivateRoute path="/user/activities/create" is_logged_in={this.props.user.is_logged_in} component={CreateNewActivity} />
                                             <PrivateRoute path="/user/integrations/create" is_logged_in={this.props.user.is_logged_in} component={CreateNewIntegration} />
                                         </Switch>
