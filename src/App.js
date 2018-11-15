@@ -26,21 +26,13 @@ class App extends Component {
     };
 
     componentDidMount() {
-        const cook = document.cookie.split('; ');
-        let _t = null;
-
-        for(const c in cook) {
-            if(c.split('=')[0] === 'satellizer_token') {
-                _t = c.split('=')[1];
-            }
-        }
-        const _token = _t;
+        const _token = localStorage.getItem('satellizer_token');
         if(_token) {
             this.props.dispatch(PreloadShell(true));
             UserService.getUserProfile()
                 .then(profile => {
                     if(profile.data.IsSuccess){
-                        const _tokenParsed = UIHelper.parseJWT(_t);
+                        const _tokenParsed = UIHelper.parseJWT(localStorage.getItem('satellizer_token'));
                         const company = _tokenParsed.companyName;
                         const host = 'dev.smoothflow.io';//window.location.host;
                         UserService.getUserSettings(URLs.auth.getUserSettings(host, company))

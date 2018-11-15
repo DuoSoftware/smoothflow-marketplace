@@ -11,18 +11,10 @@ const ActivitiesService = {
         return axios.post(URLs.activity.saveNewActivity, newActivity)
     },
     publishActivity: (file, lang, callback) => {
-        const cook = document.cookie.split('; ');
-        let _t = null;
-
-        for(const c in cook) {
-            if(c.split('=')[0] === 'satellizer_token') {
-                _t = c.split('=')[1];
-            }
-        }
         if(lang.node) {
             debugger
             const _formdata = new FormData();
-            const _token = _t;
+            const _token = localStorage.getItem('satellizer_token');
 
             _formdata.append('uploadedFiles', file);
 

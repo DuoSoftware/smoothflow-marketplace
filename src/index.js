@@ -14,8 +14,9 @@ const store = createStore(rootReducer);
 const cook = document.cookie.split('; ');
 let _t = null;
 
-for(const c in cook) {
-    if(c.split('=')[0] === 'satellizer_token') {
+for(const c of cook) {
+    const a = c.split('=');
+    if(a[0] === 'satellizer_token') {
         _t = c.split('=')[1];
     }
 }
