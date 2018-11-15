@@ -16,7 +16,9 @@ let _t = null;
 let _token = null;
 
 _t = cook.map(c => {
-    if(c.split('=')[0] === 'satellizer_token') return c.split('=')[1];
+    if(c.split('=')[0] === 'satellizer_token') {
+        return c.split('=')[1];
+    }
 });
 if (_t) {
     _token = _t;
