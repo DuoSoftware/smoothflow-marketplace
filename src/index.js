@@ -15,7 +15,7 @@ const cook = document.cookie.split('; ');
 const _t = cook.map(c => {
     if(c.split('=')[0] === 'satellizer_token') return c.split('=')[1];
 });
-localStorage.setItem('satellizer_token', _t);
+if(_t) localStorage.setItem('satellizer_token', _t);
 const _token = localStorage.getItem('satellizer_token');
 
 // HTTP config ----------------------------------------------------//
