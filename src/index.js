@@ -12,11 +12,11 @@ import URLs from './_base/_urls';
 const store = createStore(rootReducer);
 
 const cook = document.cookie.split('; ');
-debugger
 const _t = cook.map(c => {
+    debugger
     if(c.split('=')[0] === 'satellizer_token') return c.split('=')[1];
 });
-if(_t) localStorage.setItem('satellizer_token', _t);
+if (_t != '') localStorage.setItem('satellizer_token', _t);
 const _token = localStorage.getItem('satellizer_token');
 
 // HTTP config ----------------------------------------------------//
