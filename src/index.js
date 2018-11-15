@@ -18,7 +18,6 @@ let _token = null;
 for(const c in cook) {
     if(c.split('=')[0] === 'satellizer_token') {
         _t = c.split('=')[1];
-        return;
     }
 }
 
