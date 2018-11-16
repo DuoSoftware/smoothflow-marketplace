@@ -25,7 +25,7 @@ if(_t){
     localStorage.setItem('satellizer_token', _t);
 }
 
-const _token = _t;
+const _token = localStorage.getItem('satellizer_token');
 
 // HTTP config ----------------------------------------------------//
 axios.defaults.baseURL = URLs.bot;

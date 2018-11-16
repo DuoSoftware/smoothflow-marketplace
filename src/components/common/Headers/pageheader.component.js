@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import './pageheader.scss'
+import Wrap from "../../../_base/_wrap";
 
 const PageHeader = (props) => {
     return (
@@ -12,9 +13,9 @@ const PageHeader = (props) => {
                 </div>
                 <div className="sf-page-header-subtitle">{ props.subtitle }</div>
             </div>
-            <div>
+            <Wrap>
                 { props.children }
-            </div>
+            </Wrap>
         </div>
     )
 };

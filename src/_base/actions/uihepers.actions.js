@@ -10,10 +10,22 @@ export const PreloadShell = loader => ({
     loader
 });
 
+export const PreloadDialog = loader => ({
+    category: 'UIHELPER',
+    type: 'PRELOAD_DIALOG',
+    loader
+});
+
 export const CandidateInt = integration => ({
     category: 'UIHELPER',
     type: 'CANDIDATE_ITEM',
     item : {
         integration : integration
     }
+});
+
+export const InitPublishPRIVATE = init => ({
+    category: 'UIHELPER',
+    type: 'INIT_PUBLISHING',
+    init
 });

@@ -233,7 +233,7 @@ a {
 .sf-image-text-container {
   overflow: auto;
   display: flex;
-  align-items: center;
+  align-items: start;
   .sf-img {
     display: inline-block;
     //float: left;
@@ -494,6 +494,15 @@ form {
 }
 /* ===================================== */
 
+.sf-dialog-backdrop {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #00000020;
+  z-index: 110000;
+}
 
 //Animations
 .sf-route-content {

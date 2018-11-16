@@ -27,6 +27,10 @@ class Sidenav extends Component {
                 name: 'integrations',
                 icon: 'code',
                 active: false
+            },{
+                name: 'Usage',
+                icon: 'items',
+                active: false
             }],
             _structuredList : {
                 "taps": {
@@ -143,24 +147,49 @@ class Sidenav extends Component {
                                                 <List>
                                                     {
                                                         this.state._sidenav.map(nav => {
-                                                            return <li key={KEY()} className={nav.active ? 'sf-list-active' : null}>
-                                                                <Link to={'/user/' + nav.name}
-                                                                      onClick={event => this.setActiveNav(event, nav.name)}
-                                                                      id={`NAV_${nav.name.toUpperCase()}`}>
-                                                                    <Textbox icon={nav.icon} size="17">
-                                                                        <span>{nav.name}</span>
-                                                                    </Textbox>
-                                                                </Link>
-                                                            </li>
+                                                            return  <li key={KEY()} className={nav.active ? 'sf-list-active' : null}>
+                                                                        <Link to={'/user/' + nav.name}
+                                                                              onClick={event => this.setActiveNav(event, nav.name)}
+                                                                              id={`NAV_${nav.name.toUpperCase()}`}>
+                                                                            <Textbox icon={nav.icon} size="17">
+                                                                                <span>{nav.name}</span>
+                                                                            </Textbox>
+                                                                        </Link>
+                                                                    </li>
                                                         })
                                                     }
                                                 </List>
+                                                <Block/>
+                                                <List>
+                                                    <li key={KEY()}>
+                                                        <Link to={'/user/usagebilling'}
+                                                              onClick={event => this.setActiveNav(event, 'reviews')}
+                                                              id={'NAV_REVIEWS'}>
+                                                            <Textbox icon="code" size="17">
+                                                                <span>Billing</span>
+                                                            </Textbox>
+                                                        </Link>
+                                                    </li>
+                                                </List>
+                                                <div className="sf-hr" style={{margin: '10px 0'}}></div>
+                                                <List>
+                                                    <li key={KEY()}>
+                                                        <Link to={'/user/reviews'}
+                                                              onClick={event => this.setActiveNav(event, 'reviews')}
+                                                              id={'NAV_REVIEWS'}>
+                                                            <Textbox icon="code" size="17">
+                                                                <span>Activity Reviews</span>
+                                                            </Textbox>
+                                                        </Link>
+                                                    </li>
+                                                </List>
                                             </Block>
-                                            <Block />
+
                                         </div>
                                     </Wrap>
                                 :   null
                             }
+
                             <div className="sf-list">
                                 <div className="sf-list-block">
                                     <div className="sf-list-header">Activities</div>

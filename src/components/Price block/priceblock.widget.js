@@ -24,7 +24,7 @@ class PriceBlock extends Component {
                     </div>
                 </div>
                 <div className="sf-prcblk-footer">
-                    <button className="sf-btn sf-btn-block sf-btn-primary sf-btn-lite">Buy</button>
+                    {/*<button className="sf-button sf-button-primary sf-button-primary-p">Buy</button>*/}
                 </div>
             </div>
         )

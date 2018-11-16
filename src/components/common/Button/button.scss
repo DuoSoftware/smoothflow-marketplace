@@ -95,6 +95,12 @@
     width: 40px;
     height: 40px;
     border-radius: 100%;
+    justify-content: center;
+    &.sf-button-iconed {
+      .sf-icon {
+        margin-right: 0;
+      }
+    }
   }
   &.sf-button-caps {
     text-transform: uppercase;

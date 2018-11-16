@@ -18,7 +18,7 @@ class ItemCard extends Component {
                     <Link to={{ pathname: (this.props.item.type === 'activity' ? '/activities/' : '/integrations/') + this.props.item.name , activity: {...this.props.item}, advanced: this.props.advanced }} className={`sf-item-card sf-border-box sf-item-card-clickable${ this.props.className ? ' ' + this.props.className : null}`}>
                         <div className="sf-item-card-header bordered">
                             <h3>{ this.props.item.name }</h3>
-                            <span className="sf-activity-status">{ this.props.item.status }</span>
+                            <span className={`sf-activity-state sf-activity-${this.props.item.state}`}>{ this.props.item.state }</span>
                         </div>
                         <div className="sf-item-card-body">
                             <div className="sf-image-text-container" style={{overflow:'hidden'}}>
@@ -30,8 +30,9 @@ class ItemCard extends Component {
                                 </div>
                             </div>
 
-                            <TableTwoCol tabledata={this.props.item.pricings} />
+                            {/*<TableTwoCol tabledata={this.props.item.pricings} />*/}
                             {/* <UMInfo text="Free for customers viewing and creating tickets" /> */}
+
                             <Block />
                             <div>
                                 <TagBlock tags={ this.props.item.tags } />

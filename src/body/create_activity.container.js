@@ -613,7 +613,6 @@ class CreateNewActivity extends Component {
         document.getElementById('varIsAdvanced').value = "";
         document.getElementById('varKey').focus();
     };
-
     removeVariable = (e, i) => {
         let _variables = [...this.state.newActivity.variables];
         _variables.splice(i, 1);
@@ -637,7 +636,7 @@ class CreateNewActivity extends Component {
             "scope": "567890",
             "activities": []
         };
-        let _publishFile;
+        let _publishFile = null;
         if (this.state.temp_selected_langs.node) {
             _publishFile = this.state.publish_content.node.file;
         }
@@ -647,6 +646,11 @@ class CreateNewActivity extends Component {
             _publishFile.ActivityName += this.state.newActivity.activity_name;
             _publishFile.Description = this.state.newActivity.description;
         }
+
+        // Activity source validation
+        // This checks whether the user has entered the source code of the Activity.
+        if( this.state.newActivity.variables.length > 0 && _publishFile) _self.state.newActivity.publish_eligible = true;
+        // ===========================================================================================================
 
         _payload.description = this.state.newActivity.activity_name;
         _payload.activities.push(this.state.newActivity);
@@ -1277,79 +1281,6 @@ class CreateNewActivity extends Component {
                                 </div>
                             </div>
                             <div className="sf-hr"></div>
-                            <div className="sf-input-group">
-                                <h3 className = "sf-heading-sub sf-heading-form"> Publish </h3>
-
-                                <div className="sf-flexbox-row">
-                                    <div className="sf-p-p-h" style={{'width':'150px'}}>
-                                        <label> Language </label>
-                                        <div className="sf-p-p-h">
-                                            <div className="sf-input-block">
-                                                <Input type="radio" name="publishLang" className="sf-radiobox" id="languageNode" label="Node JS" value="nodeJs" onChange={(event) => this.addInfo(event)} />
-                                            </div>
-                                            <div className="sf-input-block">
-                                                <Input type="radio" name="publishLang" className="sf-radiobox" id="languageGo" label="GO" value="GO" onChange={(event) => this.addInfo(event)} />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {
-                                        this.state.temp_selected_langs.golang ?
-                                            <div className="sf-flex-1">
-                                                <div className="sf-flexbox-column">
-                                                    <div className="sf-flex-1 sf-p-p">
-                                                        <label> Code </label>
-                                                        <div className="sf-p-p-h">
-                                                            <Input type="textarea" rows="10" id="publishGO" spellCheck="false" className="sf-custom-scroll sf-bg-s sf-txt-c-s" value={this.state.publish_content.golang.payload.GoCode} onChange={ (event) => this.updatePublishContent(event)}/>
-                                                            {
-                                                                this.state.publish_content.golang.errors.length > 0 ?
-                                                                    this.state.publish_content.golang.errors.map((error) =>
-                                                                        <div className="sf-m-p-t" key={KEY()}>
-                                                                            <Error title={error.Title} body={error.Error} remark={error.Reason} />
-                                                                        </div>)
-                                                                    :   this.state.publish_content.golang.noerrors ?
-                                                                    <div className="sf-m-p-t">
-                                                                        <ListI list={ [{icon:'check_circle_thin', text:'No errors found'}] }/>
-                                                                    </div>
-                                                                    :   null
-                                                            }
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="sf-p-p-v">
-                                                    <button type="button" className="sf-button sf-button-secondary" onClick={ (event)=>this.testGoCode(event) }>Test</button>
-                                                </div>
-                                            </div>
-                                            : null
-                                    }
-                                    {
-                                        this.state.temp_selected_langs.node ?
-                                            <div className="sf-flex-1 sf-flexbox-column">
-                                                <div className="sf-flex-1 sf-p-p sf-flexbox-column">
-                                                    <label> File </label>
-                                                    <div className="sf-card sf-card-block sf-flexbox-column sf-flex-1" style={{padding: '15px 0px'}}>
-                                                        <div className="sf-card-content sf-card-bordered sf-flex-1 sf-flexbox-column">
-                                                            <div className="sf-flex-1">
-                                                                {
-                                                                    this.state.publish_content.node.file ?
-                                                                        <div className="sf-card">
-                                                                            <div className="sf-card-content sf-card-bordered sf-card-centered-row">
-                                                                                <div className="sf-flex-1">
-                                                                                    <ListI list={ this.state.publish_content.node.info }/>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        : null
-                                                                }
-                                                            </div>
-                                                            <input type="file" id="publishNode" onChange={ (event) => this.updatePublishContent(event)}/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            : null
-                                    }
-                                </div>
-                            </div>
                         </form>
                 }
             </div>

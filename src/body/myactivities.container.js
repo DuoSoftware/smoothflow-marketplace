@@ -37,8 +37,10 @@ class MyActivities extends Component {
                 if(typeof(res.data.Result) === "object" && res.data.Result.activities.length > 0) {
                     const loadedActivities = res.data.Result.activities.map((activity, index) => {
                         return {
+                            ...activity,
+                            original: activity,
                             type: 'activity',
-                            status: activity.status,
+                            state: activity.state,
                             name: activity.activity_name,
                             image: activity.image,
                             description: activity.description,
@@ -107,7 +109,8 @@ class MyActivities extends Component {
                                         "control": v.control,
                                         "placeholder": v.placeholder
                                     }
-                                })
+                                }),
+                            reviews: []
                         }
                     });
                     this.props.dispatch(GetMyActivities(loadedActivities));

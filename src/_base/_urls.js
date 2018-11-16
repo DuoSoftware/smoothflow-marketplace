@@ -20,7 +20,9 @@ const URLs = {
         saveNewActivity : 'TenantActivitiesService',
         publishNewActivity : 'activity/publish',
         uploadGoCode : 'processengine/PublishActivity',
-        getTagsList : 'TenantActivitiesService/tag/list'
+        getTagsList : 'TenantActivitiesService/tag/list',
+        addActivityToReview : 'MarketplaceReview',
+        getActivityComments : 'MarketplaceReviewComment'
     },
     integration: {
         getAllIntegrations: 'https://smoothbotservicesdev.plus.smoothflow.io/DBF/API/1.0.0.0/userIntegrations',
