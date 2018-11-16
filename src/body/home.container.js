@@ -116,7 +116,7 @@ class Home extends Component {
                                         </div>
                                         <div className="sf-flexbox-row" style={{alignItems: 'flex-end', zIndex: 1, color: '#fff'}}>
                                             <div className="sf-flex-1">
-                                                <h2>Smoothflow Marketplace</h2>
+                                                <h2>Smoothflow for Developers</h2>
                                                 <p>From app integrations to machine learning. <br/>
                                                     Everything you need to automate your workflow.</p>
                                             </div>
