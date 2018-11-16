@@ -21,7 +21,7 @@ class Integrations extends Component {
                         return {
                             type: 'integration',
                             name: integ.integrationName,
-                            image: '/images/'+ integ.integrationType.toLowerCase() + '.svg',
+                            image: 'marketplace/images/'+ integ.integrationType.toLowerCase() + '.svg',
                             description: integ.description,
                             features:[],
                             tags: [{
