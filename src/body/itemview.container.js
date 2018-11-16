@@ -474,7 +474,11 @@ class ItemView extends Component {
         return(
             <div className="sf-route-content">
                 <PageHeader title={this.props.location.activity.name}>
-                    <Button className="sf-button sf-button-primary sf-button-primary-p sf-button-iconed" icon="cloud_upload" mat="true" style={{marginRight: '10px'}} onClick={ (e) => this.init_publish(e) }>Publish</Button>
+                    {
+                        this.props.location.activity.state === 'private'
+                        ?   <Button className="sf-button sf-button-primary sf-button-primary-p sf-button-iconed" icon="cloud_upload" mat="true" style={{marginRight: '10px'}} onClick={ (e) => this.init_publish(e) }>Publish</Button>
+                        :   null
+                    }
                     <Link 
                         to={{
                             pathname: this.props.location.activity.type === 'activity' ? '/user/activities/create' : '/user/integrations/create',
