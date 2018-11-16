@@ -12,7 +12,6 @@ const ActivitiesService = {
     },
     publishActivity: (file, lang, callback) => {
         if(lang.node) {
-            debugger
             const _formdata = new FormData();
             const _token = localStorage.getItem('satellizer_token');
 
@@ -22,11 +21,13 @@ const ActivitiesService = {
             xhr.open('POST', URLs.botactivity + URLs.activity.publishNewActivity);
             xhr.setRequestHeader("Authorization", 'Bearer ' + _token);
             xhr.onload = function () {
-                callback(null, xhr.response);
+                debugger
+                if (xhr.status === 200) callback(true, xhr.response);
+                else callback(false, JSON.parse(xhr.response));
             };
             xhr.onerror = function () {
                 debugger
-                callback(xhr.response);
+                callback(false, xhr.response);
             };
             xhr.send(_formdata);
 

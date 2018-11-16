@@ -116,23 +116,23 @@ class ItemView extends Component {
                 break;
 
             case "varValue":
-                if(e.target.value === '') {
-                    this.setState(prevState => ({
-                        ...prevState,
-                        temp_variable: {
-                            ...prevState.temp_variable,
-                            is_val_added: false
-                        }
-                    }))
-                } else {
-                    this.setState(prevState => ({
-                        ...prevState,
-                        temp_variable: {
-                            ...prevState.temp_variable,
-                            is_val_added: true
-                        }
-                    }))
-                }
+                // if(e.target.value === '') {
+                //     this.setState(prevState => ({
+                //         ...prevState,
+                //         temp_variable: {
+                //             ...prevState.temp_variable,
+                //             is_val_added: false
+                //         }
+                //     }))
+                // } else {
+                //     this.setState(prevState => ({
+                //         ...prevState,
+                //         temp_variable: {
+                //             ...prevState.temp_variable,
+                //             is_val_added: true
+                //         }
+                //     }))
+                // }
                 this.variable.Value = e.target.value;
                 break;
 
@@ -187,6 +187,23 @@ class ItemView extends Component {
 
             case "varControls":
                 this.variable.control = e.target.value;
+                if(e.target.value === 'Dropdown') {
+                    this.setState(prevState => ({
+                        ...prevState,
+                        temp_variable: {
+                            ...prevState.temp_variable,
+                            is_val_dropdown: true
+                        }
+                    }));
+                } else {
+                    this.setState(prevState => ({
+                        ...prevState,
+                        temp_variable: {
+                            ...prevState.temp_variable,
+                            is_val_dropdown: false
+                        }
+                    }));
+                }
                 break;
 
             case "varIsAdvanced":
@@ -372,7 +389,6 @@ class ItemView extends Component {
         } else if (this.props.location.activity.variables.length === 0 && this.state.newActivity.variables.length === 0) {
             alert('You are required to enter the variables to publish the Activity');
         } else {
-            debugger
             this.props.dispatch(PreloadDialog(true));
             const _self = this.self;
             let _publishFile = this.state.publish_content.node.file;
@@ -383,29 +399,35 @@ class ItemView extends Component {
                 "scope": "567890",
                 "activities": []
             };
-            ActivitiesService.publishActivity(_publishFile, {"node": true,"golang": false}, function (res) {
-                _self.setState(state => ({
-                    ...state,
-                    newActivity : {
-                        ...state.newActivity,
-                        activity_name : _self.props.location.activity.activity_name,
-                        insertOrUpdate : "update",
-                        state: 'published'
-                    }
-                }));
-                _payload.activities.push(_self.state.newActivity);
-                ActivitiesService.saveNewActivity(_payload)
-                    .then((res) => {
-                        if (res.data.IsSuccess) {
-                            _self.props.dispatch(PreloadDialog(false));
-                            _self.props.dispatch(InitPublishPRIVATE(false));
-                            alert('Activity published successfully');
-                            _self.props.history.push('/user/activities');
+            ActivitiesService.publishActivity(_publishFile, {"node": true,"golang": false}, function (status, res) {
+                if (status) {
+                    _self.setState(state => ({
+                        ...state,
+                        newActivity : {
+                            ...state.newActivity,
+                            activity_name : _self.props.location.activity.activity_name,
+                            insertOrUpdate : "update",
+                            state: 'published'
                         }
-                    })
-                    .catch((errorres) => {
-                        debugger
-                    });
+                    }));
+                    _payload.activities.push(_self.state.newActivity);
+                    ActivitiesService.saveNewActivity(_payload)
+                        .then((res) => {
+                            if (res.data.IsSuccess) {
+                                _self.props.dispatch(PreloadDialog(false));
+                                _self.props.dispatch(InitPublishPRIVATE(false));
+                                alert('Activity published successfully');
+                                _self.props.history.push('/user/activities');
+                            }
+                        })
+                        .catch((errorres) => {
+                            debugger
+                        });
+                } else {
+                    if (res.message != '') alert(res.message);
+                    else alert('Activity publishing failed. Please check your inputs and try again');
+                    _self.props.dispatch(PreloadDialog(false));
+                }
 
                 });
             }
@@ -582,7 +604,7 @@ class ItemView extends Component {
                                                                 this.state.newActivity.variables.map((variable, index) =>
                                                                     <div className="sf-card" key={KEY()}>
                                                                         <div className="sf-card-content sf-card-bordered sf-card-centered-row">
-                                                                            <div className="sf-flexbox-column">
+                                                                            <div className="sf-flex-1">
                                                                                 <div className="sf-txtblock-text">
                                                                                     <span className="sf-text-semibold">Key : </span>
                                                                                     <span>{variable.Key}</span>
@@ -598,20 +620,25 @@ class ItemView extends Component {
                                                                                             <span>{variable.Key}</span>
                                                                                         </div>
                                                                                         :   <div className="sf-txtblock-text sf-flexbox-row">
-                                                                                            <span className="sf-text-semibold">ValueList : </span>
+                                                                            <span
+                                                                                className="sf-text-semibold">ValueList : </span>
                                                                                             <div>
                                                                                                 {
                                                                                                     variable.ValueList.map((val) =>
-                                                                                                        <Wrap key={KEY()}>
-                                                                                                            <div className="sf-txtblock-text sf-flexbox-row">
-                                                                                                                <span className="sf-text-semibold">Key : </span>
-                                                                                                                <span>{val.Key}</span>
-                                                                                                            </div>
-                                                                                                            <div className="sf-txtblock-text sf-flexbox-row">
-                                                                                                                <span className="sf-text-semibold">Value : </span>
-                                                                                                                <span>{val.Value}</span>
-                                                                                                            </div>
-                                                                                                        </Wrap>
+                                                                                                            <Wrap key={KEY()}>
+                                                                                                                <div
+                                                                                                                    className="sf-txtblock-text sf-flexbox-row">
+                                                                                                <span
+                                                                                                    className="sf-text-semibold">Key : </span>
+                                                                                                                    <span>{val.Key}</span>
+                                                                                                                </div>
+                                                                                                                <div
+                                                                                                                    className="sf-txtblock-text sf-flexbox-row">
+                                                                                                <span
+                                                                                                    className="sf-text-semibold">Value : </span>
+                                                                                                                    <span>{val.Value}</span>
+                                                                                                                </div>
+                                                                                                            </Wrap>
                                                                                                     )
                                                                                                 }
                                                                                             </div>
@@ -669,15 +696,31 @@ class ItemView extends Component {
                                                                 <div className="sf-input-block sf-flexbox-row">
                                                                     <input className="sf-flex-1" type="text" placeholder="Key" id="varKey" onChange={ (event) => this.createVariable(event) } />
                                                                     <input className="sf-flex-1" type="text" placeholder="Display Name" id="varDisplayName" onChange={ (event) => this.createVariable(event) } />
-                                                                    <input className="sf-flex-1" type="text" placeholder="Value" id="varValue" disabled={ this.state.temp_variable.temp_variable_vals.length > 0 } onChange={ (event) => this.createVariable(event) } />
-                                                                    <input className="sf-flex-1" type="text" placeholder="Group" value="Default" id="varGroup" onChange={ (event) => this.createVariable(event) } />
+                                                                    <div className="sf-flex-1">
+                                                                        <div className="sf-feature-block">
+                                                                            <div className="sf-feature-entry">
+                                                                                <div className="sf-input-block">
+                                                                                    <select name="varPriority" id="varControls" defaultValue={'_'} onChange={(event) => this.createVariable(event)} value={this.state.newActivity.control}>
+                                                                                        <option value="_" disabled>Control</option>
+                                                                                        <option value="Textbox">Textbox</option>
+                                                                                        <option value="Dropdown">Dropdown</option>
+                                                                                        <option value="APIControl">API Control</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="sf-spacer-p"></div>
+                                                                    <input className="sf-flex-1" type="text" placeholder="Value" id="varValue" disabled={ this.state.temp_variable.is_val_dropdown } onChange={ (event) => this.createVariable(event) } />
                                                                 </div>
                                                                 <div className="sf-flexbox-row">
+                                                                    <input className="sf-flex-1" type="text" placeholder="Group" value="Default" id="varGroup" onChange={ (event) => this.createVariable(event) } style={ {marginBottom: '10px'} }/>
+                                                                    <div className="sf-spacer-p"></div>
                                                                     <div className="sf-input-block sf-flex-1">
                                                                         <div className="sf-feature-block">
                                                                             <div className="sf-feature-entry">
                                                                                 <div className="sf-input-block">
-                                                                                    <select name="varType" id="varType" value={this.state.temp_variable.is_val_added ? 'hardcoded' : ''} onChange={(event) => this.createVariable(event)}>
+                                                                                    <select name="varType" id="varType" value={!this.state.temp_variable.is_val_dropdown ? 'hardcoded' : ''} onChange={(event) => this.createVariable(event)}>
                                                                                         <option value="_" disabled>Type</option>
                                                                                         <option value="dynamic">Dynamic</option>
                                                                                         <option value="hardcoded">Hardcoded</option>
@@ -728,24 +771,9 @@ class ItemView extends Component {
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div className="sf-spacer-p"></div>
-                                                                    <div className="sf-input-block sf-flex-1">
-                                                                        <div className="sf-feature-block">
-                                                                            <div className="sf-feature-entry">
-                                                                                <div className="sf-input-block">
-                                                                                    <select name="varPriority" id="varControls" defaultValue={'_'} onChange={(event) => this.createVariable(event)} value={this.state.newActivity.control}>
-                                                                                        <option value="_" disabled>Control</option>
-                                                                                        <option value="Textbox">Textbox</option>
-                                                                                        <option value="Dropdown">Dropdown</option>
-                                                                                        <option value="APIControl">API Control</option>
-                                                                                    </select>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
                                                                 </div>
                                                                 {
-                                                                    !this.state.temp_variable.is_val_added
+                                                                    this.state.temp_variable.is_val_dropdown
                                                                         ?   <div className="sf-input-block sf-flexbox-row" style={{alignItems: 'flex-end'}}>
                                                                             <div className="sf-flex-1">
                                                                                 <div className="sf-fill-width">
