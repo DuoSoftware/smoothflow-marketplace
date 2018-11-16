@@ -190,20 +190,20 @@ class Sidenav extends Component {
                                 :   null
                             }
 
-                            <div className="sf-list">
-                                <div className="sf-list-block">
-                                    <div className="sf-list-header">Activities</div>
-                                    <div className="sf-list-body">
-                                        <ul>
-                                            {
-                                                this.state._structuredList.taps.list.map((item) =>
-                                                    <li>{ item.name }</li>
-                                                )
-                                            }
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
+                            {/*<div className="sf-list">*/}
+                                {/*<div className="sf-list-block">*/}
+                                    {/*<div className="sf-list-header">Activities</div>*/}
+                                    {/*<div className="sf-list-body">*/}
+                                        {/*<ul>*/}
+                                            {/*{*/}
+                                                {/*this.state._structuredList.taps.list.map((item) =>*/}
+                                                    {/*<li>{ item.name }</li>*/}
+                                                {/*)*/}
+                                            {/*}*/}
+                                        {/*</ul>*/}
+                                    {/*</div>*/}
+                                {/*</div>*/}
+                            {/*</div>*/}
                         </div>
                 }
             </div>
