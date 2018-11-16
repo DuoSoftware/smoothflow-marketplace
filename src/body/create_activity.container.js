@@ -68,6 +68,13 @@ class CreateNewActivity extends Component {
             },
             success : false
         };
+        document.addEventListener('keypress', (event) => {
+            const code = event.keyCode || event.which;
+            if (code == 13) {
+                event.preventDefault();
+                return false;
+            }
+        });
     }
     componentDidMount() {
         this.getTagsList();
@@ -680,6 +687,7 @@ class CreateNewActivity extends Component {
     // Submit New Activity
     submitNewActivity = (e) => {
         e.preventDefault();
+
         const _self = this.self;
         this.props.dispatch(PreloadBody(true));
         let _payload = {
@@ -899,8 +907,8 @@ class CreateNewActivity extends Component {
                                         <Chips
                                             value={this.state.temp_tags}
                                             onChange={this.addTags}
-                                            suggestions={ this.activityCategories }
-                                            placeholder={'Tags'}
+                                            suggestions={ this.activityCategoraies }
+                                            placeholder={'Tags [Press "↹ TAB" to add tags]'}
                                         />
                                     </div>
                                 </div>
