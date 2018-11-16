@@ -19,6 +19,8 @@ import Dashboard from "./body/dashboard.container";
 import URLs from "./_base/_urls";
 import { User, PreloadShell } from './_base/actions';
 import Reviews from "./body/reviews.container";
+import Usage from "./body/usage.container";
+import Billing from "./body/billing.container";
 
 class App extends Component {
     constructor(props){
@@ -79,6 +81,8 @@ class App extends Component {
                                             <PrivateRoute exact path="/user/blueprints" is_logged_in={this.props.user.is_logged_in} component={MyBlueprints} />
                                             <PrivateRoute exact path="/user/integrations" is_logged_in={this.props.user.is_logged_in} component={Integrations} />
                                             <PrivateRoute exact path="/user/reviews" is_logged_in={this.props.user.is_logged_in} component={Reviews} />
+                                            <PrivateRoute exact path="/user/usage" is_logged_in={this.props.user.is_logged_in} component={Usage} />
+                                            <PrivateRoute exact path="/user/billing" is_logged_in={this.props.user.is_logged_in} component={Billing} />
                                             <PrivateRoute path="/user/activities/create" is_logged_in={this.props.user.is_logged_in} component={CreateNewActivity} />
                                             <PrivateRoute path="/user/integrations/create" is_logged_in={this.props.user.is_logged_in} component={CreateNewIntegration} />
                                         </Switch>

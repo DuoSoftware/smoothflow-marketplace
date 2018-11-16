@@ -162,7 +162,7 @@ class Sidenav extends Component {
                                                 <Block/>
                                                 <List>
                                                     <li key={KEY()}>
-                                                        <Link to={'/user/usagebilling'}
+                                                        <Link to={'/user/billing'}
                                                               onClick={event => this.setActiveNav(event, 'reviews')}
                                                               id={'NAV_REVIEWS'}>
                                                             <Textbox icon="code" size="17">

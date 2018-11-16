@@ -860,21 +860,23 @@ class CreateNewActivity extends Component {
                                     <h3 className="sf-heading-sub sf-heading-form">Features</h3>
                                     <div className="sf-clearfix">
                                         {
-                                            this.state.newActivity.features.map((feature, index) =>
-                                                <div className="sf-card" style={ {'width' : '50%'} } key={KEY()}>
-                                                    <div className="sf-card-content sf-card-bordered sf-card-centered-row">
-                                                        <div className="sf-flex-1">
-                                                            <div className="sf-txtblock-text">
-                                                                <div className="sf-txtblock-txt-title sf-text-semibold">{ feature.title }</div>
-                                                                <div className="sf-txtblock-txt-text">{ feature.description }</div>
+                                            this.state.newActivity.features.length
+                                            ?   this.state.newActivity.features.map((feature, index) =>
+                                                    <div className="sf-card" style={ {'width' : '50%'} } key={KEY()}>
+                                                        <div className="sf-card-content sf-card-bordered sf-card-centered-row">
+                                                            <div className="sf-flex-1">
+                                                                <div className="sf-txtblock-text">
+                                                                    <div className="sf-txtblock-txt-title sf-text-semibold">{ feature.title }</div>
+                                                                    <div className="sf-txtblock-txt-text">{ feature.description }</div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="sf-card-row-end">
+                                                                <button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" onClick={(event)=>this.removeFeature(event, index)}>x</button>
                                                             </div>
                                                         </div>
-                                                        <div className="sf-card-row-end">
-                                                            <button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" onClick={(event)=>this.removeFeature(event, index)}>x</button>
-                                                        </div>
                                                     </div>
-                                                </div>
-                                            )
+                                                )
+                                            :   null
                                         }
                                     </div>
                                     <div className="sf-feature-block">
@@ -950,26 +952,28 @@ class CreateNewActivity extends Component {
                                     <h3 className="sf-heading-sub sf-heading-form">Pricing</h3>
                                     <div className="sf-clearfix">
                                         {
-                                            this.state.newActivity.pricings.map((pack, index) =>
-                                                <div className="sf-card" style={{ 'maxWidth': '200px' }} key={KEY()}>
-                                                    <div className="sf-card-content sf-card-bordered sf-card-centered-row">
-                                                        <div className="sf-flex-1">
-                                                            <div className="sf-txtblock-text">
-                                                                <div className="sf-txtblock-txt-title sf-text-semibold">{pack.name}</div>
-                                                                {
-                                                                    pack.pricing_fts.map((ft, index) =>
-                                                                        <div className="sf-txtblock-txt-text" key={KEY()}>{ft.text ? ft.text : ft}</div>
-                                                                    )
-                                                                }
-                                                                <div className="sf-txtblock-txt-title sf-text-semibold">{pack.price}</div>
+                                            this.state.newActivity.pricings
+                                            ?   this.state.newActivity.pricings.map((pack, index) =>
+                                                    <div className="sf-card" style={{ 'maxWidth': '200px' }} key={KEY()}>
+                                                        <div className="sf-card-content sf-card-bordered sf-card-centered-row">
+                                                            <div className="sf-flex-1">
+                                                                <div className="sf-txtblock-text">
+                                                                    <div className="sf-txtblock-txt-title sf-text-semibold">{pack.name}</div>
+                                                                    {
+                                                                        pack.pricing_fts.map((ft, index) =>
+                                                                            <div className="sf-txtblock-txt-text" key={KEY()}>{ft.text ? ft.text : ft}</div>
+                                                                        )
+                                                                    }
+                                                                    <div className="sf-txtblock-txt-title sf-text-semibold">{pack.price}</div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="sf-card-row-end">
+                                                                <button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" onClick={(event) => this.removePricing(event, index)}>x</button>
                                                             </div>
                                                         </div>
-                                                        <div className="sf-card-row-end">
-                                                            <button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" onClick={(event) => this.removePricing(event, index)}>x</button>
-                                                        </div>
                                                     </div>
-                                                </div>
-                                            )
+                                                )
+                                            :   null
                                         }
                                     </div>
                                     <div className="sf-feature-block">
@@ -1023,21 +1027,23 @@ class CreateNewActivity extends Component {
                                     <h3 className="sf-heading-sub sf-heading-form">FAQ</h3>
                                     <div className="sf-clearfix">
                                         {
-                                            this.state.newActivity.faq.map((faq, index) =>
-                                                <div className="sf-card" style={ {'width' : '50%'} } key={KEY()}>
-                                                    <div className="sf-card-content sf-card-bordered sf-card-centered-row">
-                                                        <div className="sf-flex-1">
-                                                            <div className="sf-txtblock-text">
-                                                                <div className="sf-txtblock-txt-title sf-text-semibold" style={{marginBottom: '5px'}}>{ faq.question }</div>
-                                                                <div className="sf-txtblock-txt-text">{ faq.answer }</div>
+                                            this.state.newActivity.faq
+                                            ?   this.state.newActivity.faq.map((faq, index) =>
+                                                    <div className="sf-card" style={ {'width' : '50%'} } key={KEY()}>
+                                                        <div className="sf-card-content sf-card-bordered sf-card-centered-row">
+                                                            <div className="sf-flex-1">
+                                                                <div className="sf-txtblock-text">
+                                                                    <div className="sf-txtblock-txt-title sf-text-semibold" style={{marginBottom: '5px'}}>{ faq.question }</div>
+                                                                    <div className="sf-txtblock-txt-text">{ faq.answer }</div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="sf-card-row-end">
+                                                                <button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" onClick={(event)=>this.removeFAQ(event, index)}>x</button>
                                                             </div>
                                                         </div>
-                                                        <div className="sf-card-row-end">
-                                                            <button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" onClick={(event)=>this.removeFAQ(event, index)}>x</button>
-                                                        </div>
                                                     </div>
-                                                </div>
-                                            )
+                                                )
+                                            :   null
                                         }
                                     </div>
                                     <div className="sf-feature-block">
@@ -1062,88 +1068,90 @@ class CreateNewActivity extends Component {
                                     <h3 className="sf-heading-sub sf-heading-form">Variables</h3>
                                     <div className="sf-clearfix">
                                         {
-                                            this.state.newActivity.variables.map((variable, index) =>
-                                                <div className="sf-card" key={KEY()}>
-                                                    <div className="sf-card-content sf-card-bordered sf-card-centered-row">
-                                                        <div className="sf-flex-1">
-                                                            <div className="sf-txtblock-text">
-                                                                <span className="sf-text-semibold">Key : </span>
-                                                                <span>{variable.Key}</span>
-                                                            </div>
-                                                            <div className="sf-txtblock-text">
-                                                                <span className="sf-text-semibold">DisplayName : </span>
-                                                                <span>{variable.Key}</span>
-                                                            </div>
-                                                            {
-                                                                variable.ValueList.length == 0
-                                                                ?   <div className="sf-txtblock-text">
-                                                                        <span className="sf-text-semibold">Value : </span>
-                                                                        <span>{variable.Key}</span>
-                                                                    </div>
-                                                                :   <div className="sf-txtblock-text sf-flexbox-row">
+                                            this.state.newActivity.variables
+                                            ?   this.state.newActivity.variables.map((variable, index) =>
+                                                    <div className="sf-card" key={KEY()}>
+                                                        <div className="sf-card-content sf-card-bordered sf-card-centered-row">
+                                                            <div className="sf-flex-1">
+                                                                <div className="sf-txtblock-text">
+                                                                    <span className="sf-text-semibold">Key : </span>
+                                                                    <span>{variable.Key}</span>
+                                                                </div>
+                                                                <div className="sf-txtblock-text">
+                                                                    <span className="sf-text-semibold">DisplayName : </span>
+                                                                    <span>{variable.Key}</span>
+                                                                </div>
+                                                                {
+                                                                    variable.ValueList.length == 0
+                                                                        ?   <div className="sf-txtblock-text">
+                                                                            <span className="sf-text-semibold">Value : </span>
+                                                                            <span>{variable.Key}</span>
+                                                                        </div>
+                                                                        :   <div className="sf-txtblock-text sf-flexbox-row">
                                                                             <span
                                                                                 className="sf-text-semibold">ValueList : </span>
-                                                                        <div>
-                                                                            {
-                                                                                variable.ValueList.map((val) =>
-                                                                                    <Wrap key={KEY()}>
-                                                                                        <div
-                                                                                            className="sf-txtblock-text sf-flexbox-row">
+                                                                            <div>
+                                                                                {
+                                                                                    variable.ValueList.map((val) =>
+                                                                                        <Wrap key={KEY()}>
+                                                                                            <div
+                                                                                                className="sf-txtblock-text sf-flexbox-row">
                                                                                                 <span
                                                                                                     className="sf-text-semibold">Key : </span>
-                                                                                            <span>{val.Key}</span>
-                                                                                        </div>
-                                                                                        <div
-                                                                                            className="sf-txtblock-text sf-flexbox-row">
+                                                                                                <span>{val.Key}</span>
+                                                                                            </div>
+                                                                                            <div
+                                                                                                className="sf-txtblock-text sf-flexbox-row">
                                                                                                 <span
                                                                                                     className="sf-text-semibold">Value : </span>
-                                                                                            <span>{val.Value}</span>
-                                                                                        </div>
-                                                                                    </Wrap>
-                                                                                )
-                                                                            }
+                                                                                                <span>{val.Value}</span>
+                                                                                            </div>
+                                                                                        </Wrap>
+                                                                                    )
+                                                                                }
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                            }
-                                                            <div className="sf-txtblock-text">
-                                                                <span className="sf-text-semibold">Type : </span>
-                                                                <span>{variable.Type}</span>
+                                                                }
+                                                                <div className="sf-txtblock-text">
+                                                                    <span className="sf-text-semibold">Type : </span>
+                                                                    <span>{variable.Type}</span>
+                                                                </div>
+                                                                <div className="sf-txtblock-text">
+                                                                    <span className="sf-text-semibold">Category : </span>
+                                                                    <span>{variable.Category}</span>
+                                                                </div>
+                                                                <div className="sf-txtblock-text">
+                                                                    <span className="sf-text-semibold">DataType : </span>
+                                                                    <span>{variable.DataType}</span>
+                                                                </div>
+                                                                <div className="sf-txtblock-text">
+                                                                    <span className="sf-text-semibold">Group : </span>
+                                                                    <span>{variable.Group}</span>
+                                                                </div>
+                                                                <div className="sf-txtblock-text">
+                                                                    <span className="sf-text-semibold">Priority : </span>
+                                                                    <span>{variable.Priority}</span>
+                                                                </div>
+                                                                <div className="sf-txtblock-text">
+                                                                    <span className="sf-text-semibold">Advance : </span>
+                                                                    <span>{variable.advance}</span>
+                                                                </div>
+                                                                <div className="sf-txtblock-text">
+                                                                    <span className="sf-text-semibold">Control : </span>
+                                                                    <span>{variable.control}</span>
+                                                                </div>
+                                                                <div className="sf-txtblock-text">
+                                                                    <span className="sf-text-semibold">placeholder : </span>
+                                                                    <span>{variable.placeholder}</span>
+                                                                </div>
                                                             </div>
-                                                            <div className="sf-txtblock-text">
-                                                                <span className="sf-text-semibold">Category : </span>
-                                                                <span>{variable.Category}</span>
+                                                            <div className="sf-card-row-end">
+                                                                <button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" onClick={(event)=>this.removeVariable(event, index)}>x</button>
                                                             </div>
-                                                            <div className="sf-txtblock-text">
-                                                                <span className="sf-text-semibold">DataType : </span>
-                                                                <span>{variable.DataType}</span>
-                                                            </div>
-                                                            <div className="sf-txtblock-text">
-                                                                <span className="sf-text-semibold">Group : </span>
-                                                                <span>{variable.Group}</span>
-                                                            </div>
-                                                            <div className="sf-txtblock-text">
-                                                                <span className="sf-text-semibold">Priority : </span>
-                                                                <span>{variable.Priority}</span>
-                                                            </div>
-                                                            <div className="sf-txtblock-text">
-                                                                <span className="sf-text-semibold">Advance : </span>
-                                                                <span>{variable.advance}</span>
-                                                            </div>
-                                                            <div className="sf-txtblock-text">
-                                                                <span className="sf-text-semibold">Control : </span>
-                                                                <span>{variable.control}</span>
-                                                            </div>
-                                                            <div className="sf-txtblock-text">
-                                                                <span className="sf-text-semibold">placeholder : </span>
-                                                                <span>{variable.placeholder}</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="sf-card-row-end">
-                                                            <button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" onClick={(event)=>this.removeVariable(event, index)}>x</button>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            )
+                                                )
+                                            :   null
                                         }
                                     </div>
                                     <div className="sf-feature-block">
