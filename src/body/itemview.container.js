@@ -388,6 +388,8 @@ class ItemView extends Component {
                     ...state,
                     newActivity : {
                         ...state.newActivity,
+                        activity_name : _self.props.location.activity.activity_name,
+                        insertOrUpdate : "update",
                         state: 'published'
                     }
                 }));
