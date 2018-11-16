@@ -38,6 +38,9 @@
         &.sf-activity-private {
           background: $sf-private;
         }
+        &.sf-activity-published {
+          background: $sf-public;
+        }
         &.sf-activity-pending {
           background: $sf-pending;
         }
