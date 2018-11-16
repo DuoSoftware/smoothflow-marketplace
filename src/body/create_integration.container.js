@@ -144,7 +144,7 @@ class CreateNewIntegration extends Component {
 
         let is_update;
         this.props.location.candidate ? is_update = true : is_update = false; 
-        if(is_update) {
+        if (is_update) {
             IntegrationsService.updateIntegration(payload)
                 .then(res => {
                     if(res.data.IsSuccess) {
@@ -156,7 +156,7 @@ class CreateNewIntegration extends Component {
                 .catch(errorres => {
                     console.error(errorres);
                 });
-        }else{
+        } else {
             IntegrationsService.createIntegration(payload)
                 .then(res => {
                     if(res.data.IsSuccess) {

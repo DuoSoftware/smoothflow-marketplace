@@ -42,7 +42,8 @@ class CreateNewActivity extends Component {
             temp_prcing_fts : [],
             temp_variable : {
                 temp_variable_vals: [],
-                is_val_dropdown : false
+                is_val_dropdown : false,
+                is_val_api : false
             },
             temp_tags : [],
             temp_selected_langs : {
@@ -505,7 +506,11 @@ class CreateNewActivity extends Component {
                 //         }
                 //     }))
                 // }
-                this.variable.Value = e.target.value;
+                if (this.state.temp_variable.is_val_api) {
+                    this.variable.APIMethod = e.target.value;
+                } else {
+                    this.variable.Value = e.target.value;
+                }
                 break;
 
             case "varGroup":
@@ -514,6 +519,26 @@ class CreateNewActivity extends Component {
 
             case "varType":
                 this.variable.Type = e.target.value;
+                if (e.target.value === 'dynamic') {
+                    this.setState(prevState => ({
+                        ...prevState,
+                        temp_variable: {
+                            ...prevState.temp_variable,
+                            is_val_dropdown: true,
+                            is_val_api: false
+                        }
+                    }));
+                } else if (e.target.value === 'hardcoded') {
+                    this.variable.control = 'Textbox';
+                    this.setState(prevState => ({
+                        ...prevState,
+                        temp_variable: {
+                            ...prevState.temp_variable,
+                            is_val_dropdown: false,
+                            is_val_api: false
+                        }
+                    }));
+                }
                 break;
 
             case "varCategory":
@@ -564,7 +589,17 @@ class CreateNewActivity extends Component {
                         ...prevState,
                         temp_variable: {
                             ...prevState.temp_variable,
-                            is_val_dropdown: true
+                            is_val_dropdown: true,
+                            is_val_api: false
+                        }
+                    }));
+                } else if (e.target.value === 'APIControl') {
+                    this.setState(prevState => ({
+                        ...prevState,
+                        temp_variable: {
+                            ...prevState.temp_variable,
+                            is_val_dropdown: true,
+                            is_val_api: true
                         }
                     }));
                 } else {
@@ -572,7 +607,8 @@ class CreateNewActivity extends Component {
                         ...prevState,
                         temp_variable: {
                             ...prevState.temp_variable,
-                            is_val_dropdown: false
+                            is_val_dropdown: false,
+                            is_val_api: false
                         }
                     }));
                 }
@@ -1186,7 +1222,7 @@ class CreateNewActivity extends Component {
                                                     <div className="sf-feature-block">
                                                         <div className="sf-feature-entry">
                                                             <div className="sf-input-block">
-                                                                <select name="varPriority" id="varControls" defaultValue={'_'} onChange={(event) => this.createVariable(event)} value={this.state.newActivity.control}>
+                                                                <select name="varPriority" id="varControls" defaultValue={'_'} onChange={(event) => this.createVariable(event)} value={ !this.state.temp_variable.is_val_dropdown && !this.state.temp_variable.is_val_api ? 'Textbox' : this.state.newActivity.control }>
                                                                     <option value="_" disabled>Control</option>
                                                                     <option value="Textbox">Textbox</option>
                                                                     <option value="Dropdown">Dropdown</option>
@@ -1197,7 +1233,7 @@ class CreateNewActivity extends Component {
                                                     </div>
                                                 </div>
                                                 <div className="sf-spacer-p"></div>
-                                                <input className="sf-flex-1" type="text" placeholder="Value" id="varValue" disabled={ this.state.temp_variable.is_val_dropdown } onChange={ (event) => this.createVariable(event) } />
+                                                <input className="sf-flex-1" type="text" placeholder={ this.state.temp_variable.is_val_api ? 'API Method' : 'Value' } id="varValue" disabled={ this.state.temp_variable.is_val_dropdown } onChange={ (event) => this.createVariable(event) } />
                                             </div>
                                             <div className="sf-flexbox-row">
                                                 <input className="sf-flex-1" type="text" placeholder="Group" value="Default" id="varGroup" onChange={ (event) => this.createVariable(event) } style={ {marginBottom: '10px'} }/>
@@ -1259,7 +1295,7 @@ class CreateNewActivity extends Component {
                                                 </div>
                                             </div>
                                             {
-                                                this.state.temp_variable.is_val_dropdown
+                                                this.state.temp_variable.is_val_dropdown && !this.state.temp_variable.is_val_api
                                                 ?   <div className="sf-input-block sf-flexbox-row" style={{alignItems: 'flex-end'}}>
                                                         <div className="sf-flex-1">
                                                             <div className="sf-fill-width">
