@@ -42,7 +42,7 @@ class CreateNewActivity extends Component {
             temp_prcing_fts : [],
             temp_variable : {
                 temp_variable_vals: [],
-                is_val_added : false
+                is_val_dropdown : false
             },
             temp_tags : [],
             temp_selected_langs : {
@@ -488,23 +488,23 @@ class CreateNewActivity extends Component {
                 break;
 
             case "varValue":
-                if(e.target.value === '') {
-                    this.setState(prevState => ({
-                        ...prevState,
-                        temp_variable: {
-                            ...prevState.temp_variable,
-                            is_val_added: false
-                        }
-                    }))
-                } else {
-                    this.setState(prevState => ({
-                        ...prevState,
-                        temp_variable: {
-                            ...prevState.temp_variable,
-                            is_val_added: true
-                        }
-                    }))
-                }
+                // if(e.target.value === '') {
+                //     this.setState(prevState => ({
+                //         ...prevState,
+                //         temp_variable: {
+                //             ...prevState.temp_variable,
+                //             is_val_dropdown: false
+                //         }
+                //     }))
+                // } else {
+                //     this.setState(prevState => ({
+                //         ...prevState,
+                //         temp_variable: {
+                //             ...prevState.temp_variable,
+                //             is_val_dropdown: true
+                //         }
+                //     }))
+                // }
                 this.variable.Value = e.target.value;
                 break;
 
@@ -559,6 +559,23 @@ class CreateNewActivity extends Component {
 
             case "varControls":
                 this.variable.control = e.target.value;
+                if(e.target.value === 'Dropdown') {
+                    this.setState(prevState => ({
+                        ...prevState,
+                        temp_variable: {
+                            ...prevState.temp_variable,
+                            is_val_dropdown: true
+                        }
+                    }));
+                } else {
+                    this.setState(prevState => ({
+                        ...prevState,
+                        temp_variable: {
+                            ...prevState.temp_variable,
+                            is_val_dropdown: false
+                        }
+                    }));
+                }
                 break;
 
             case "varIsAdvanced":
@@ -1165,15 +1182,31 @@ class CreateNewActivity extends Component {
                                             <div className="sf-input-block sf-flexbox-row">
                                                 <input className="sf-flex-1" type="text" placeholder="Key" id="varKey" onChange={ (event) => this.createVariable(event) } />
                                                 <input className="sf-flex-1" type="text" placeholder="Display Name" id="varDisplayName" onChange={ (event) => this.createVariable(event) } />
-                                                <input className="sf-flex-1" type="text" placeholder="Value" id="varValue" disabled={ this.state.temp_variable.temp_variable_vals.length > 0 } onChange={ (event) => this.createVariable(event) } />
-                                                <input className="sf-flex-1" type="text" placeholder="Group" value="Default" id="varGroup" onChange={ (event) => this.createVariable(event) } />
+                                                <div className="sf-flex-1">
+                                                    <div className="sf-feature-block">
+                                                        <div className="sf-feature-entry">
+                                                            <div className="sf-input-block">
+                                                                <select name="varPriority" id="varControls" defaultValue={'_'} onChange={(event) => this.createVariable(event)} value={this.state.newActivity.control}>
+                                                                    <option value="_" disabled>Control</option>
+                                                                    <option value="Textbox">Textbox</option>
+                                                                    <option value="Dropdown">Dropdown</option>
+                                                                    <option value="APIControl">API Control</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="sf-spacer-p"></div>
+                                                <input className="sf-flex-1" type="text" placeholder="Value" id="varValue" disabled={ this.state.temp_variable.is_val_dropdown } onChange={ (event) => this.createVariable(event) } />
                                             </div>
                                             <div className="sf-flexbox-row">
+                                                <input className="sf-flex-1" type="text" placeholder="Group" value="Default" id="varGroup" onChange={ (event) => this.createVariable(event) } style={ {marginBottom: '10px'} }/>
+                                                <div className="sf-spacer-p"></div>
                                                 <div className="sf-input-block sf-flex-1">
                                                     <div className="sf-feature-block">
                                                         <div className="sf-feature-entry">
                                                             <div className="sf-input-block">
-                                                                <select name="varType" id="varType" value={this.state.temp_variable.is_val_added ? 'hardcoded' : ''} onChange={(event) => this.createVariable(event)}>
+                                                                <select name="varType" id="varType" value={!this.state.temp_variable.is_val_dropdown ? 'hardcoded' : ''} onChange={(event) => this.createVariable(event)}>
                                                                     <option value="_" disabled>Type</option>
                                                                     <option value="dynamic">Dynamic</option>
                                                                     <option value="hardcoded">Hardcoded</option>
@@ -1224,24 +1257,9 @@ class CreateNewActivity extends Component {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="sf-spacer-p"></div>
-                                                <div className="sf-input-block sf-flex-1">
-                                                    <div className="sf-feature-block">
-                                                        <div className="sf-feature-entry">
-                                                            <div className="sf-input-block">
-                                                                <select name="varPriority" id="varControls" defaultValue={'_'} onChange={(event) => this.createVariable(event)} value={this.state.newActivity.control}>
-                                                                    <option value="_" disabled>Control</option>
-                                                                    <option value="Textbox">Textbox</option>
-                                                                    <option value="Dropdown">Dropdown</option>
-                                                                    <option value="APIControl">API Control</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
                                             </div>
                                             {
-                                                !this.state.temp_variable.is_val_added
+                                                this.state.temp_variable.is_val_dropdown
                                                 ?   <div className="sf-input-block sf-flexbox-row" style={{alignItems: 'flex-end'}}>
                                                         <div className="sf-flex-1">
                                                             <div className="sf-fill-width">

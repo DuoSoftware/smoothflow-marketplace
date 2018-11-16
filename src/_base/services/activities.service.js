@@ -25,6 +25,7 @@ const ActivitiesService = {
                 callback(null, xhr.response);
             };
             xhr.onerror = function () {
+                debugger
                 callback(xhr.response);
             };
             xhr.send(_formdata);
