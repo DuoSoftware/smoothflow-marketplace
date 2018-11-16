@@ -209,7 +209,7 @@ class CreateNewIntegration extends Component {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <Button className="sf-button sf-button-circle"><span className="sf-icon icon-sf_ico_plus_circle"></span></Button>
+                                            {/*<Button className="sf-button sf-button-circle"><span className="sf-icon icon-sf_ico_plus_circle"></span></Button>*/}
                                         </div>
                                     </div>
                                     <div className="sf-input-block">
