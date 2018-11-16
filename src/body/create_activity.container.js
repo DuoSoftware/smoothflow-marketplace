@@ -1088,46 +1088,46 @@ class CreateNewActivity extends Component {
                                             this.state.newActivity.variables
                                             ?   this.state.newActivity.variables.map((variable, index) =>
                                                     <div className="sf-card" key={KEY()}>
-                                                        <div className="sf-card-content sf-card-bordered sf-card-centered-row">
-                                                            <div className="sf-flex-1">
+                                                        <div className="sf-card-content sf-card-bordered sf-card-centered-row sf-variables-wrap">
+                                                            <div className="sf-flexbox-column">
                                                                 <div className="sf-txtblock-text">
                                                                     <span className="sf-text-semibold">Key : </span>
                                                                     <span>{variable.Key}</span>
                                                                 </div>
                                                                 <div className="sf-txtblock-text">
                                                                     <span className="sf-text-semibold">DisplayName : </span>
-                                                                    <span>{variable.Key}</span>
+                                                                    <span>{variable.DisplayName}</span>
                                                                 </div>
                                                                 {
                                                                     variable.ValueList.length == 0
                                                                         ?   <div className="sf-txtblock-text">
-                                                                            <span className="sf-text-semibold">Value : </span>
-                                                                            <span>{variable.Key}</span>
-                                                                        </div>
-                                                                        :   <div className="sf-txtblock-text sf-flexbox-row">
-                                                                            <span
-                                                                                className="sf-text-semibold">ValueList : </span>
-                                                                            <div>
-                                                                                {
-                                                                                    variable.ValueList.map((val) =>
-                                                                                        <Wrap key={KEY()}>
-                                                                                            <div
-                                                                                                className="sf-txtblock-text sf-flexbox-row">
-                                                                                                <span
-                                                                                                    className="sf-text-semibold">Key : </span>
-                                                                                                <span>{val.Key}</span>
-                                                                                            </div>
-                                                                                            <div
-                                                                                                className="sf-txtblock-text sf-flexbox-row">
-                                                                                                <span
-                                                                                                    className="sf-text-semibold">Value : </span>
-                                                                                                <span>{val.Value}</span>
-                                                                                            </div>
-                                                                                        </Wrap>
-                                                                                    )
-                                                                                }
+                                                                                <span className="sf-text-semibold">Value : </span>
+                                                                                <span>{variable.Key}</span>
                                                                             </div>
-                                                                        </div>
+                                                                        :   <div className="sf-txtblock-text sf-flexbox-row">
+                                                                                <span
+                                                                                    className="sf-text-semibold">ValueList : </span>
+                                                                                <div>
+                                                                                    {
+                                                                                        variable.ValueList.map((val) =>
+                                                                                            <Wrap key={KEY()}>
+                                                                                                <div
+                                                                                                    className="sf-txtblock-text sf-flexbox-row">
+                                                                                                    <span
+                                                                                                        className="sf-text-semibold">Key : </span>
+                                                                                                    <span>{val.Key}</span>
+                                                                                                </div>
+                                                                                                <div
+                                                                                                    className="sf-txtblock-text sf-flexbox-row">
+                                                                                                    <span
+                                                                                                        className="sf-text-semibold">Value : </span>
+                                                                                                    <span>{val.Value}</span>
+                                                                                                </div>
+                                                                                            </Wrap>
+                                                                                        )
+                                                                                    }
+                                                                                </div>
+                                                                            </div>
                                                                 }
                                                                 <div className="sf-txtblock-text">
                                                                     <span className="sf-text-semibold">Type : </span>
@@ -1149,17 +1149,17 @@ class CreateNewActivity extends Component {
                                                                     <span className="sf-text-semibold">Priority : </span>
                                                                     <span>{variable.Priority}</span>
                                                                 </div>
-                                                                <div className="sf-txtblock-text">
-                                                                    <span className="sf-text-semibold">Advance : </span>
-                                                                    <span>{variable.advance}</span>
-                                                                </div>
+                                                                {
+                                                                    variable.advance
+                                                                    ?   <div className="sf-txtblock-text">
+                                                                            <span className="sf-text-semibold">Advance : </span>
+                                                                            <span>{variable.advance}</span>
+                                                                        </div>
+                                                                    :   null
+                                                                }
                                                                 <div className="sf-txtblock-text">
                                                                     <span className="sf-text-semibold">Control : </span>
                                                                     <span>{variable.control}</span>
-                                                                </div>
-                                                                <div className="sf-txtblock-text">
-                                                                    <span className="sf-text-semibold">placeholder : </span>
-                                                                    <span>{variable.placeholder}</span>
                                                                 </div>
                                                             </div>
                                                             <div className="sf-card-row-end">
