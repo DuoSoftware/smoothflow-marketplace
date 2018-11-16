@@ -124,7 +124,7 @@ class Home extends Component {
                                                 <Link to={'/create'} className="sf-btn sf-btn-primary sf-btn-thin">Get Started</Link>
                                             </div>
                                         </div>
-                                        <img src="images/smoothflow_illustration_automation_01.svg" />
+                                        <img src="./marketplace/images/smoothflow_illustration_automation_01.svg" />
                                     </div>
                                 </div>
                                 <div>
