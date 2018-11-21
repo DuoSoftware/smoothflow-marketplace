@@ -311,6 +311,11 @@ class ItemView extends Component {
             const reader = new FileReader();
             reader.readAsDataURL(e.target.files[0]);
             reader.onload = function(_e) {
+                const ft = file.type.split('/')[1];
+                if (ft !== 'x-tar' && ft !== 'x-zip-compressed' && ft !== 'x-zip') {
+                    alert("Invalid file format. Please make sure you are uploading an Image file");
+                    return;
+                }
                 const _info = [{
                     "text" : file.name,
                     "icon" : "check_circle_thin"

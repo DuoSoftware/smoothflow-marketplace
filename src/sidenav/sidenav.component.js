@@ -131,7 +131,7 @@ class Sidenav extends Component {
                                                     </Link>
                                                 </li>
                                                 <li>
-                                                    <Link to={''}>
+                                                    <Link to={'/user/blueprints'}>
                                                         <Textbox icon={'plus_circle'} size="15" onClick={ this.closeCreatePanel.bind() }>
                                                             <span>New Blueprint</span>
                                                         </Textbox>

@@ -184,8 +184,8 @@ class CreateNewIntegration extends Component {
                             
                                 {
                                     this.props.location.candidate
-                                    ?   <Link to={{ pathname: '/integrations/' + this.props.location.candidate.name , activity: {...this.props.location.candidate} }} className="sf-button sf-button-clear">Cancel</Link>
-                                    :   <Link to={'/user/integrations'} className="sf-button sf-button-clear">Cancel</Link>
+                                    ?   <Link to={{ pathname: '/integrations/' + this.props.location.candidate.name , activity: {...this.props.location.candidate} }}><Button className="sf-button sf-button-clear">Cancel</Button></Link>
+                                    :   <Link to={'/user/integrations'}><Button className="sf-button sf-button-clear">Cancel</Button></Link>
                                 }
                                 <Button className="sf-button sf-button-secondary" form="createIntegrationForm">Clear</Button>
                                 <Button className="sf-button sf-button-primary sf-button-primary-p sf-button-caps" type="submit"> { this.props.location.candidate ? 'Update' : 'Save' }</Button>
