@@ -113,7 +113,7 @@ class Sidenav extends Component {
                             {
                                 this.props.user.is_logged_in
                                 ?   <Wrap>
-                                        <Dropdown toggle={this.state._create_dd} width={'88%'} height={'125px'} dark>
+                                        <Dropdown toggle={this.state._create_dd} width={'89%'} height={'125px'} dark>
                                             <span className="sf-icon icon-sf_ico_close_circle" onClick={ this.closeCreatePanel.bind() }></span>
                                             <List>
                                                 <li>

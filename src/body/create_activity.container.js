@@ -287,6 +287,10 @@ class CreateNewActivity extends Component {
             reader.readAsDataURL(e.target.files[0]);
             reader.onload = function(_e) {
                 if (type === 'main') {
+                    if (file.type.split('/')[0] !== 'image') {
+                        alert("Invalid file format. Please make sure you are uploading an Image file");
+                        return;
+                    }
                     _self.setState(prevState => ({
                         newActivity: {
                             ...prevState.newActivity,
@@ -294,7 +298,8 @@ class CreateNewActivity extends Component {
                         }
                     }));
                     document.getElementById('newActivityImage').setAttribute('src', _e.target.result);
-                } else if (type === 'wyg') {
+                }
+                else if (type === 'wyg') {
                     _wyg.push({
                         'type': 'image',
                         'content': _e.target.result,
@@ -306,7 +311,8 @@ class CreateNewActivity extends Component {
                             what_you_get: _wyg
                         }
                     }));
-                } else if (type === 'publishNode') {
+                }
+                else if (type === 'publishNode') {
                     const _info = [{
                         "text" : file.name,
                         "icon" : "check_circle_thin"
@@ -887,8 +893,8 @@ class CreateNewActivity extends Component {
                             <PageHeader title={'Create Activity'}>
                                 {
                                     this.props.location.candidate
-                                        ?   <Link to={{ pathname: '/activities/' + this.props.location.candidate.name , activity: {...this.props.location.candidate}, advanced: true }} className="sf-button sf-button-clear">Cancel</Link>
-                                        :   <Link to={'/user/activities'} className="sf-button sf-button-clear">Cancel</Link>
+                                        ?   <Link to={{ pathname: '/activities/' + this.props.location.candidate.name , activity: {...this.props.location.candidate}, advanced: true }}><Button className="sf-button sf-button-clear">Cancel</Button></Link>
+                                        :   <Link to={'/user/activities'}><Button className="sf-button sf-button-clear">Cancel</Button></Link>
                                 }
                                 <Button type="button" className="sf-button sf-button-secondary" onClick={ (event) => {this.clearForm(event)}}>Clear</Button>
                                 <Button className="sf-button sf-button-primary sf-button-primary-p sf-button-caps" type="submit"> { this.props.location.candidate ? 'Update' : 'Save' }</Button>
