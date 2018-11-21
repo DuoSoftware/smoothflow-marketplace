@@ -570,35 +570,6 @@ class ItemView extends Component {
                                                     </div>
                                                 </div>
                                             </div>
-                                            {/*{*/}
-                                            {/*this.state.temp_selected_langs.golang ?*/}
-                                            {/*<div className="sf-flex-1">*/}
-                                            {/*<div className="sf-flexbox-column">*/}
-                                            {/*<div className="sf-flex-1 sf-p-p">*/}
-                                            {/*<label> Code </label>*/}
-                                            {/*<div className="sf-p-p-h">*/}
-                                            {/*<Input type="textarea" rows="10" id="publishGO" spellCheck="false" className="sf-custom-scroll sf-bg-s sf-txt-c-s" value={this.state.publish_content.golang.payload.GoCode} onChange={ (event) => this.updatePublishContent(event)}/>*/}
-                                            {/*{*/}
-                                            {/*this.state.publish_content.golang.errors.length > 0 ?*/}
-                                            {/*this.state.publish_content.golang.errors.map((error) =>*/}
-                                            {/*<div className="sf-m-p-t" key={KEY()}>*/}
-                                            {/*<Error title={error.Title} body={error.Error} remark={error.Reason} />*/}
-                                            {/*</div>)*/}
-                                            {/*:   this.state.publish_content.golang.noerrors ?*/}
-                                            {/*<div className="sf-m-p-t">*/}
-                                            {/*<ListI list={ [{icon:'check_circle_thin', text:'No errors found'}] }/>*/}
-                                            {/*</div>*/}
-                                            {/*:   null*/}
-                                            {/*}*/}
-                                            {/*</div>*/}
-                                            {/*</div>*/}
-                                            {/*</div>*/}
-                                            {/*<div className="sf-p-p-v">*/}
-                                            {/*<button type="button" className="sf-button sf-button-secondary" onClick={ (event)=>this.testGoCode(event) }>Test</button>*/}
-                                            {/*</div>*/}
-                                            {/*</div>*/}
-                                            {/*: null*/}
-                                            {/*}*/}
                                             {
                                                 this.state.temp_selected_langs.node
                                                 ?   <Wrap>
@@ -747,7 +718,7 @@ class ItemView extends Component {
                                                                         </div>
                                                                     </div>
                                                                     <div className="sf-spacer-p"></div>
-                                                                    <input className="sf-flex-1" type="text" placeholder={ this.state.temp_variable.is_val_api ? 'API Method' : 'Value' } id="varValue" disabled={ this.state.temp_variable.is_val_dropdown } onChange={ (event) => this.createVariable(event) } />
+                                                                    <input className="sf-flex-1" type="text" placeholder={ this.state.temp_variable.is_val_api ? 'API Method' : 'Value' } id="varValue" disabled={ this.state.temp_variable.is_val_dropdown && !this.state.temp_variable.is_val_api } onChange={ (event) => this.createVariable(event) } />
                                                                 </div>
                                                                 <div className="sf-flexbox-row">
                                                                     <input className="sf-flex-1" type="text" placeholder="Group" value="Default" id="varGroup" onChange={ (event) => this.createVariable(event) } style={ {marginBottom: '10px'} }/>
