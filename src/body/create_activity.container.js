@@ -46,6 +46,7 @@ class CreateNewActivity extends Component {
                 is_val_api : false
             },
             temp_tags : [],
+            existing_tags : [],
             temp_selected_langs : {
                 "node" : false,
                 "golang" : false
@@ -77,7 +78,7 @@ class CreateNewActivity extends Component {
         });
     }
     componentDidMount() {
-        this.getTagsList();
+        this.loadTagsList();
         if(this.props.location.candidate) {
             const _m = this.props.location.candidate;
             const __m = {
@@ -117,7 +118,6 @@ class CreateNewActivity extends Component {
         }
     };
     // ------------------------------------------------------------
-    activityCategories = ["#CatOne", "#CatTwo"];
 
     // Helper data
     feature = {
@@ -157,6 +157,7 @@ class CreateNewActivity extends Component {
         "control": "",
         "placeholder": ""
     };
+    activityCategories = [];
 
     addInfo = (e) => {
         switch (e.target.id) {
@@ -474,7 +475,7 @@ class CreateNewActivity extends Component {
             }
         }
     };
-    getTagsList = () => {
+    loadTagsList = () => {
         this.props.dispatch(PreloadBody(true));
         ActivitiesService.getTagsList()
             .then((res) => {
@@ -482,12 +483,11 @@ class CreateNewActivity extends Component {
                 this.props.dispatch(PreloadBody(false));
             })
             .catch((errorRes) => {
-                console.log(errorRes);
-                this.setState(prevState => ({
-                    ...prevState,
-                    loadingPage : false
-                }));
+                this.props.dispatch(PreloadBody(false));
             });
+    };
+    getTagsList = (tags) => {
+        tags(this.activityCategories);
     };
     createVariable = (e, i) => {
         let _keyvals = [...this.state.temp_variable.temp_variable_vals];
@@ -913,7 +913,9 @@ class CreateNewActivity extends Component {
                                         <Chips
                                             value={this.state.temp_tags}
                                             onChange={this.addTags}
-                                            suggestions={ this.activityCategoraies }
+                                            fetchSuggestions={(value, callback) => {
+                                                this.getTagsList(callback)
+                                            }}
                                             placeholder={'Tags [Press "↹ TAB" to add tags]'}
                                         />
                                     </div>
