@@ -10,6 +10,21 @@ import axios from 'axios';
 import URLs from './_base/_urls';
 
 const store = createStore(rootReducer);
+debugger;
+const cook = document.cookie.split('; ');
+let _t = null;
+
+for(const c of cook) {
+    const a = c.split('=');
+    if(a[0] === 'satellizer_token') {
+        _t = c.split('=')[1];
+    }
+}
+
+if(_t){
+    localStorage.setItem('satellizer_token', _t);
+}
+
 const _token = localStorage.getItem('satellizer_token');
 
 // HTTP config ----------------------------------------------------//

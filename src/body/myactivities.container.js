@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { GetMyActivities, MyActivitiesLoader } from '../_base/actions'
-import { ActivitiesService } from '../_base/services';
+import { GetMyActivities, MyActivitiesLoader, PreloadBody } from '../_base/actions'
+import {ActivitiesService, KEY} from '../_base/services';
 import ItemCard from '../components/Itemcard/itemcard.widget';
 import { BrowserRouter as Route, Link } from "react-router-dom";
-import {Preloader, PageHeader } from "../components/common";
+import {Preloader, PageHeader, Button} from "../components/common";
 
 class MyActivities extends Component {
     constructor(props) {
@@ -31,12 +31,16 @@ class MyActivities extends Component {
 
     // -------------------------------------------------------------------------------
     getMyActivities = () => {
-        this.props.dispatch(MyActivitiesLoader(true));
+        this.props.dispatch(PreloadBody(true));
         ActivitiesService.getAllActivities()
             .then((res) => {
                 if(typeof(res.data.Result) === "object" && res.data.Result.activities.length > 0) {
                     const loadedActivities = res.data.Result.activities.map((activity, index) => {
                         return {
+                            ...activity,
+                            original: activity,
+                            type: 'activity',
+                            state: activity.state,
                             name: activity.activity_name,
                             image: activity.image,
                             description: activity.description,
@@ -79,22 +83,46 @@ class MyActivities extends Component {
                             faq:
                                 activity.faq.map((fq) => {
                                     return  {
-                                        title: fq.question,
+                                        question: fq.question,
                                         answer: fq.answer
                                     }
-                                })
+                                }),
+                            variables:
+                                activity.variables.map((v) => {
+                                    return  {
+                                        "Key": v.Key,
+                                        "DisplayName": v.DisplayName,
+                                        "Value": v.Value,
+                                        "ValueList": v.ValueList.map(vl => {
+                                            return {
+                                                "key": vl.key,
+                                                "value": vl.value
+                                            }
+                                        }),
+                                        "APIMethod": v.APIMethod,
+                                        "Type": v.Type,
+                                        "Category": v.Category,
+                                        "DataType": v.DataType,
+                                        "Group": v.Group,
+                                        "Priority": v.Priority,
+                                        "advance": v.advance,
+                                        "control": v.control,
+                                        "placeholder": v.placeholder
+                                    }
+                                }),
+                            reviews: []
                         }
                     });
                     this.props.dispatch(GetMyActivities(loadedActivities));
-                    this.props.dispatch(MyActivitiesLoader(false));
+                    this.props.dispatch(PreloadBody(false));
                 } else {
                     this.props.dispatch(GetMyActivities([]));
-                    this.props.dispatch(MyActivitiesLoader(false));
+                    this.props.dispatch(PreloadBody(false));
                 }
             })
             .catch((errorRes) => {
                 console.log(errorRes);
-                this.props.dispatch(MyActivitiesLoader(false));
+                this.props.dispatch(PreloadBody(false));
             });
     };
 
@@ -138,22 +166,26 @@ class MyActivities extends Component {
 
     render() {
         return (
-            <div>
+            <div className="sf-route-content">
                 {
-                    this.props.user.loading
-                        ?   <Preloader />
-                        :   <div>
-                                <PageHeader title={'My Pods'}></PageHeader>
-                                <div>
-                                    {
-                                        !this.props.user.loading
-                                            ?   this.props.user.mypods.map((pod) => {
-                                                    if(pod) return <ItemCard item={pod} />
-                                                })
-                                            :   null
-                                    }
-                                </div>
+                    this.props.uihelper._preload_body_
+                    ?   <Preloader type={'BODY'} />
+                    :   <div>
+                            <PageHeader title={'My Activities'}>
+                                <Link to={'/user/activities/create'}>
+                                    <Button className="sf-button sf-button-primary sf-button-primary-p sf-button-raised">Create</Button>
+                                </Link>
+                            </PageHeader>
+                            <div>
+                                {
+                                    !this.props.uihelper._preload_body_
+                                    ?   this.props.user.myactivities.map((activity) => {
+                                            if(activity) return <ItemCard key={KEY()} item={activity} advanced={true} />
+                                        })
+                                    :   null
+                                }
                             </div>
+                        </div>
                 }
             </div>
         );
@@ -161,7 +193,8 @@ class MyActivities extends Component {
 }
 
 const mapStateToProps = state => ({
-    user: state.user
+    user: state.user,
+    uihelper: state.uihelper
 });
 
 export default connect(mapStateToProps)(MyActivities);

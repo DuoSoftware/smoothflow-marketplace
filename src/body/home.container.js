@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { BrowserRouter as Route, Link, Redirect } from "react-router-dom";
 import { Activities, ActivitiesLoader } from '../_base/actions'
 import { ActivitiesService } from '../_base/services';
 import ItemCard from '../components/Itemcard/itemcard.widget';
 import Wrap from '../_base/_wrap'
-import { BrowserRouter as Route, Link } from "react-router-dom";
 import { Preloader } from '../components/common';
 
 class Home extends Component {
@@ -78,8 +78,9 @@ class Home extends Component {
     };
 
     render() {
+        if(this.props.user.is_logged_in) <Redirect to={'/user/dashboard'} />
         return (
-            <div>
+            <div className="sf-route-content">
                 {
                     this.props.activities.loading
                         ?   <Preloader />
@@ -104,8 +105,8 @@ class Home extends Component {
                                                                             <span className="sf-list-icon">
                                                                                 { c.selected ? <span className="sf-icon icon-sf_ico_check_circle"></span> : null }
                                                                             </span>
-                                                                    <span>{ c.text }</span>
-                                                                </li>
+                                                                            <span>{ c.text }</span>
+                                                                        </li>
                                                             })
                                                         }
                                                     </div>
@@ -115,7 +116,7 @@ class Home extends Component {
                                         </div>
                                         <div className="sf-flexbox-row" style={{alignItems: 'flex-end', zIndex: 1, color: '#fff'}}>
                                             <div className="sf-flex-1">
-                                                <h2>Smoothflow Marketplace</h2>
+                                                <h2>Smoothflow for Developers</h2>
                                                 <p>From app integrations to machine learning. <br/>
                                                     Everything you need to automate your workflow.</p>
                                             </div>
@@ -123,7 +124,7 @@ class Home extends Component {
                                                 <Link to={'/create'} className="sf-btn sf-btn-primary sf-btn-thin">Get Started</Link>
                                             </div>
                                         </div>
-                                        <img src="images/smoothflow_illustration_automation_01.svg" />
+                                        <img src="./marketplace/images/smoothflow_illustration_automation_01.svg" />
                                     </div>
                                 </div>
                                 <div>

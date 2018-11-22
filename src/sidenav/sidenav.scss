@@ -1,6 +1,7 @@
 @import "../core/styles/variables";
 
 .sf-sidenav {
+  position: relative;
   display: inline-block;
   float: left;
   width: 279px;
@@ -15,10 +16,10 @@
   .sf-user-nav {
     .sf-list {
       li {
+        padding: $sf-padding-third $sf-padding-primary;
+        margin: 0 (-$sf-padding-primary) ($sf-padding-primary - $sf-padding-third) (-$sf-padding-primary);
         &.sf-list-active {
-          padding: $sf-padding-third $sf-padding-primary;
           background: $sf-color-primary-light;
-          margin: 0 (-$sf-padding-primary) $sf-padding-primary (-$sf-padding-primary);
           // border-left: solid 5px $sf-color-primary;
           .sf-textbox-icon {
             color: $sf-color-primary-dark;
@@ -34,7 +35,40 @@
       color: $sf-color-primary;
     }
     .sf-textbox-text {
-      // font-weight: 500;
+      text-transform: capitalize;
+    }
+  }
+
+  .sf-overhead-dropdown {
+    .sf-list {
+      .sf-textbox {
+        .sf-textbox-icon {
+          color: $sf-color-primary;
+        }
+        .sf-textbox-text {
+          color: #ffffff;
+        }
+
+        &:hover {
+          .sf-textbox-icon {
+            color: #ffffff;
+          }
+          .sf-textbox-text {
+            font-weight: 500;
+          }
+        }
+      }
+    }
+    &>.sf-icon {
+      position: absolute;
+      right: $sf-padding-secondary;
+      top: $sf-padding-secondary;
+      color: #aaa;
+      font-size: 16px;
+      &:hover {
+        color: #fff;
+        cursor: pointer;
+      }
     }
   }
 }

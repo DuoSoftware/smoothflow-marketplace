@@ -2,19 +2,58 @@ import React, { Component } from 'react';
 import './topbar.scss';
 import { Link } from "react-router-dom";
 import { connect } from 'react-redux';
-import { Block, Button } from '../components/common';
+import { createHashHistory  } from 'history'
+import {Block, Button, List, Preloader, Textbox} from '../components/common';
 import { UIHelper} from "../_base/services";
 import URLs from "../_base/_urls";
+import Auth from '../_base/_auth.redirect';
+import Wrap from "../_base/_wrap";
+import {Dropdown} from "../components/common/Dropdown/dropdown.component";
 
 class Topbar extends Component {
     constructor(props) {
-        super(props)
+        super(props);
+        this.state = {
+            userctrl : {
+                togglePanel: false
+            }
+        }
     };
 
     localSignIn = () => {
         // LOCAL dev authentication ---------------------------//
-        localStorage.setItem('satellizer_token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJrYXN1bi53QGR1b3NvZnR3YXJlLmNvbSIsImp0aSI6IjU3MDEyZmFjLTZjZWQtNGEwYy04YjQ1LTM0NTY2NzhmM2JhMyIsInN1YiI6IkFjY2VzcyBjbGllbnQiLCJleHAiOjE1Mzk4NDcwMDMsInRlbmFudCI6MSwiY29tcGFueSI6NDEsImNvbXBhbnlOYW1lIjoia2FzdW4iLCJjb250ZXh0Ijp7fSwic2NvcGUiOlt7InJlc291cmNlIjoibXlOYXZpZ2F0aW9uIiwiYWN0aW9ucyI6WyJyZWFkIl19LHsicmVzb3VyY2UiOiJteVVzZXJQcm9maWxlIiwiYWN0aW9ucyI6WyJyZWFkIl19LHsicmVzb3VyY2UiOiJhdHRyaWJ1dGUiLCJhY3Rpb25zIjpbInJlYWQiLCJ3cml0ZSIsImRlbGV0ZSJdfSx7InJlc291cmNlIjoiZ3JvdXAiLCJhY3Rpb25zIjpbInJlYWQiLCJ3cml0ZSIsImRlbGV0ZSJdfSx7InJlc291cmNlIjoicmVzb3VyY2V0YXNrYXR0cmlidXRlIiwiYWN0aW9ucyI6WyJyZWFkIiwid3JpdGUiLCJkZWxldGUiXX0seyJyZXNvdXJjZSI6InRhc2siLCJhY3Rpb25zIjpbInJlYWQiLCJ3cml0ZSIsImRlbGV0ZSJdfSx7InJlc291cmNlIjoicHJvZHVjdGl2aXR5IiwiYWN0aW9ucyI6WyJyZWFkIiwid3JpdGUiLCJkZWxldGUiXX0seyJyZXNvdXJjZSI6IlNoYXJlZCIsImFjdGlvbnMiOlsicmVhZCIsIndyaXRlIiwiZGVsZXRlIl19LHsicmVzb3VyY2UiOiJ0YXNraW5mbyIsImFjdGlvbnMiOlsicmVhZCIsIndyaXRlIiwiZGVsZXRlIl19LHsicmVzb3VyY2UiOiJhcmRzcmVzb3VyY2UiLCJhY3Rpb25zIjpbInJlYWQiLCJ3cml0ZSIsImRlbGV0ZSJdfSx7InJlc291cmNlIjoiYXJkc3JlcXVlc3QiLCJhY3Rpb25zIjpbInJlYWQiLCJ3cml0ZSIsImRlbGV0ZSJdfSx7InJlc291cmNlIjoicmVxdWVzdG1ldGEiLCJhY3Rpb25zIjpbInJlYWQiLCJ3cml0ZSIsImRlbGV0ZSJdfSx7InJlc291cmNlIjoicXVldWUiLCJhY3Rpb25zIjpbInJlYWQiLCJ3cml0ZSIsImRlbGV0ZSJdfSx7InJlc291cmNlIjoicmVxdWVzdHNlcnZlciIsImFjdGlvbnMiOlsicmVhZCIsIndyaXRlIiwiZGVsZXRlIl19LHsicmVzb3VyY2UiOiJzaXB1c2VyIiwiYWN0aW9ucyI6WyJyZWFkIiwid3JpdGUiLCJkZWxldGUiXX0seyJyZXNvdXJjZSI6InVzZXIiLCJhY3Rpb25zIjpbInJlYWQiLCJ3cml0ZSIsImRlbGV0ZSJdfSx7InJlc291cmNlIjoidXNlclByb2ZpbGUiLCJhY3Rpb25zIjpbInJlYWQiLCJ3cml0ZSIsImRlbGV0ZSJdfSx7InJlc291cmNlIjoib3JnYW5pc2F0aW9uIiwiYWN0aW9ucyI6WyJyZWFkIiwid3JpdGUiXX0seyJyZXNvdXJjZSI6InJlc291cmNlIiwiYWN0aW9ucyI6WyJyZWFkIl19LHsicmVzb3VyY2UiOiJwYWNrYWdlIiwiYWN0aW9ucyI6WyJyZWFkIl19LHsicmVzb3VyY2UiOiJjb25zb2xlIiwiYWN0aW9ucyI6WyJyZWFkIl19LHsicmVzb3VyY2UiOiJ1c2VyU2NvcGUiLCJhY3Rpb25zIjpbInJlYWQiLCJ3cml0ZSIsImRlbGV0ZSJdfSx7InJlc291cmNlIjoidXNlckFwcFNjb3BlIiwiYWN0aW9ucyI6WyJyZWFkIiwid3JpdGUiLCJkZWxldGUiXX0seyJyZXNvdXJjZSI6InVzZXJNZXRhIiwiYWN0aW9ucyI6WyJyZWFkIiwid3JpdGUiLCJkZWxldGUiXX0seyJyZXNvdXJjZSI6InVzZXJBcHBNZXRhIiwiYWN0aW9ucyI6WyJyZWFkIiwid3JpdGUiLCJkZWxldGUiXX0seyJyZXNvdXJjZSI6ImNsaWVudCIsImFjdGlvbnMiOlsicmVhZCIsIndyaXRlIiwiZGVsZXRlIl19LHsicmVzb3VyY2UiOiJjbGllbnRTY29wZSIsImFjdGlvbnMiOlsicmVhZCIsIndyaXRlIiwiZGVsZXRlIl19LHsicmVzb3VyY2UiOiJ3YWxsZXQiLCJhY3Rpb25zIjpbInJlYWQiLCJ3cml0ZSIsImRlbGV0ZSJdfV0sImlhdCI6MTUzOTI0MjIwM30.x-OfdIwbf-tAayYpOS-Hs_ZBg0q5Eueug2D50kJz8HA');
+        localStorage.setItem('satellizer_token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJrYXN1bi53QGR1b3NvZnR3YXJlLmNvbSIsImp0aSI6IjE0NTY1YjEwLWMzYjMtNDM4Yi04NTZjLTU2ZjczNTBlMDhlMiIsInN1YiI6IkFjY2VzcyBjbGllbnQiLCJleHAiOjE1NDI5MDk3ODgsInRlbmFudCI6MSwiY29tcGFueSI6NDEsImNvbXBhbnlOYW1lIjoia2FzdW4iLCJjb250ZXh0Ijp7fSwic2NvcGUiOlt7InJlc291cmNlIjoibXlOYXZpZ2F0aW9uIiwiYWN0aW9ucyI6WyJyZWFkIl19LHsicmVzb3VyY2UiOiJteVVzZXJQcm9maWxlIiwiYWN0aW9ucyI6WyJyZWFkIl19LHsicmVzb3VyY2UiOiJhdHRyaWJ1dGUiLCJhY3Rpb25zIjpbInJlYWQiLCJ3cml0ZSIsImRlbGV0ZSJdfSx7InJlc291cmNlIjoiZ3JvdXAiLCJhY3Rpb25zIjpbInJlYWQiLCJ3cml0ZSIsImRlbGV0ZSJdfSx7InJlc291cmNlIjoicmVzb3VyY2V0YXNrYXR0cmlidXRlIiwiYWN0aW9ucyI6WyJyZWFkIiwid3JpdGUiLCJkZWxldGUiXX0seyJyZXNvdXJjZSI6InRhc2siLCJhY3Rpb25zIjpbInJlYWQiLCJ3cml0ZSIsImRlbGV0ZSJdfSx7InJlc291cmNlIjoicHJvZHVjdGl2aXR5IiwiYWN0aW9ucyI6WyJyZWFkIiwid3JpdGUiLCJkZWxldGUiXX0seyJyZXNvdXJjZSI6IlNoYXJlZCIsImFjdGlvbnMiOlsicmVhZCIsIndyaXRlIiwiZGVsZXRlIl19LHsicmVzb3VyY2UiOiJ0YXNraW5mbyIsImFjdGlvbnMiOlsicmVhZCIsIndyaXRlIiwiZGVsZXRlIl19LHsicmVzb3VyY2UiOiJhcmRzcmVzb3VyY2UiLCJhY3Rpb25zIjpbInJlYWQiLCJ3cml0ZSIsImRlbGV0ZSJdfSx7InJlc291cmNlIjoiYXJkc3JlcXVlc3QiLCJhY3Rpb25zIjpbInJlYWQiLCJ3cml0ZSIsImRlbGV0ZSJdfSx7InJlc291cmNlIjoicmVxdWVzdG1ldGEiLCJhY3Rpb25zIjpbInJlYWQiLCJ3cml0ZSIsImRlbGV0ZSJdfSx7InJlc291cmNlIjoicXVldWUiLCJhY3Rpb25zIjpbInJlYWQiLCJ3cml0ZSIsImRlbGV0ZSJdfSx7InJlc291cmNlIjoicmVxdWVzdHNlcnZlciIsImFjdGlvbnMiOlsicmVhZCIsIndyaXRlIiwiZGVsZXRlIl19LHsicmVzb3VyY2UiOiJzaXB1c2VyIiwiYWN0aW9ucyI6WyJyZWFkIiwid3JpdGUiLCJkZWxldGUiXX0seyJyZXNvdXJjZSI6InVzZXIiLCJhY3Rpb25zIjpbInJlYWQiLCJ3cml0ZSIsImRlbGV0ZSJdfSx7InJlc291cmNlIjoidXNlclByb2ZpbGUiLCJhY3Rpb25zIjpbInJlYWQiLCJ3cml0ZSIsImRlbGV0ZSJdfSx7InJlc291cmNlIjoib3JnYW5pc2F0aW9uIiwiYWN0aW9ucyI6WyJyZWFkIiwid3JpdGUiXX0seyJyZXNvdXJjZSI6InJlc291cmNlIiwiYWN0aW9ucyI6WyJyZWFkIl19LHsicmVzb3VyY2UiOiJwYWNrYWdlIiwiYWN0aW9ucyI6WyJyZWFkIl19LHsicmVzb3VyY2UiOiJjb25zb2xlIiwiYWN0aW9ucyI6WyJyZWFkIl19LHsicmVzb3VyY2UiOiJ1c2VyU2NvcGUiLCJhY3Rpb25zIjpbInJlYWQiLCJ3cml0ZSIsImRlbGV0ZSJdfSx7InJlc291cmNlIjoidXNlckFwcFNjb3BlIiwiYWN0aW9ucyI6WyJyZWFkIiwid3JpdGUiLCJkZWxldGUiXX0seyJyZXNvdXJjZSI6InVzZXJNZXRhIiwiYWN0aW9ucyI6WyJyZWFkIiwid3JpdGUiLCJkZWxldGUiXX0seyJyZXNvdXJjZSI6InVzZXJBcHBNZXRhIiwiYWN0aW9ucyI6WyJyZWFkIiwid3JpdGUiLCJkZWxldGUiXX0seyJyZXNvdXJjZSI6ImNsaWVudCIsImFjdGlvbnMiOlsicmVhZCIsIndyaXRlIiwiZGVsZXRlIl19LHsicmVzb3VyY2UiOiJjbGllbnRTY29wZSIsImFjdGlvbnMiOlsicmVhZCIsIndyaXRlIiwiZGVsZXRlIl19LHsicmVzb3VyY2UiOiJ3YWxsZXQiLCJhY3Rpb25zIjpbInJlYWQiLCJ3cml0ZSIsImRlbGV0ZSJdfV0sImlhdCI6MTU0MjMwNDk4OH0.IFEwrgTNbOt_1z45mGyTtHiYHiUA4bHA7QnLU4h5SYQ');
         // END - LOCAL dev authentication ---------------------//
+
+        return <Auth url={URLs.auth.signup} _rollback_point={window.location.href} />
+    };
+    signUp = () => {
+        window.location.replace(URLs.auth.signup + '?r=' + window.location.href);
+    };
+    signIn = () => {
+        window.location.replace(URLs.auth.signin + '?r=' + window.location.href);
+    };
+
+    toggleUserCtrlPanel = (task, e) => {
+        switch (task) {
+            case 'TOGGLE' :
+                this.setState(state => ({
+                    ...state,
+                    userctrl: {
+                        ...state.userctrl,
+                        togglePanel : !this.state.userctrl.togglePanel
+                    }
+                }));
+                break;
+
+            case 'LOGOUT' :
+                window.localStorage.removeItem('satellizer_token');
+                window.location.replace(URLs.auth.signin);
+                break;
+
+            default :
+                return;
+        }
     };
 
     // if ($rootScope.isNullOrEmptyOrUndefined($scope.dashboardData.settings.defaultImage)) {
@@ -40,21 +79,47 @@ class Topbar extends Component {
                                 </Link>
                             </div>
                         </div>
-                        <div className="sf-flexbox-row sf-flex-center">
+                        <div className="sf-flexbox-row sf-flex-center" style={{position: 'relative'}}>
                             {
-                                this.props.user.is_logged_in
-                                ?   <span>{ this.props.user.username }</span>
-                                :   <div>
-                                        <Button
-                                            className="sf-button sf-button-secondary sf-button-small sf-button-clear sf-button-caps"
-                                            style={{'margin-right':'10px'}}
-                                            onClick={()=> this.localSignIn()}
-                                        >Sign In</Button>
-                                        <Button
-                                            className="sf-button sf-button-secondary sf-button-small sf-button-clear sf-button-caps"
-                                            onClick={()=> this.localSignIn()}
-                                        >Sign Up</Button>
-                                    </div>
+                                this.props.uihelper._preload_shell_
+                                ?   <Preloader type={'SHELL:TOPBAR'} />
+                                :   <Wrap>
+                                        {
+                                            this.props.user.is_logged_in
+                                            ?   <Wrap>
+                                                    <span>{ this.props.user.username }</span>
+                                                    <Button
+                                                        className="sf-button sf-button-clear sf-button-circle"
+                                                        onClick={this.toggleUserCtrlPanel.bind(null, 'TOGGLE')}><span
+                                                        className={`sf-icon icon-sf_ico_${this.state.userctrl.togglePanel ? 'chevron_up' : 'chevron_down'}`}></span>
+                                                    </Button>
+                                                    <Dropdown toggle={this.state.userctrl.togglePanel} openPos={50} closedPos={16} height={'auto'}>
+                                                        <List>
+                                                            {/*<li onClick={ (e)=>this.toggleUserCtrlPanel(e, 'MYPROFILE')}>*/}
+                                                                {/*<Textbox icon={'home'}>My Profile</Textbox>*/}
+                                                            {/*</li>*/}
+                                                            {/*<li>*/}
+                                                                {/*<hr style={{opacity: 0.2}}/>*/}
+                                                            {/*</li>*/}
+                                                            <li onClick={ this.toggleUserCtrlPanel.bind(null, 'LOGOUT')}>
+                                                                <Textbox icon={'home'}>Log out</Textbox>
+                                                            </li>
+                                                        </List>
+                                                    </Dropdown>
+                                                </Wrap>
+                                            :   <div>
+                                                    <Button
+                                                        className="sf-button sf-button-secondary sf-button-small sf-button-clear sf-button-caps"
+                                                        style={{'marginRight':'10px'}}
+                                                        onClick={()=> this.signIn()}
+                                                    >Sign In</Button>
+                                                    <Button
+                                                        className="sf-button sf-button-secondary sf-button-small sf-button-clear sf-button-caps"
+                                                        onClick={()=> this.signUp()}
+                                                    >Sign Up</Button>
+                                                </div>
+                                        }
+                                    </Wrap>
                             }
                         </div>
                     </div>
@@ -64,8 +129,10 @@ class Topbar extends Component {
     }
 }
 
+const history = createHashHistory();
 const mapStateToProps = state => ({
-    user: state.user
+    user: state.user,
+    uihelper: state.uihelper
 });
 
 export default connect(mapStateToProps) (Topbar);

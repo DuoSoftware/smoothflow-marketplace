@@ -7,7 +7,7 @@ const URLs = {
         signin : 'https://dev.smoothflow.io/account/#/signin',
         getUserProfile : 'https://userserviceproduction.plus.smoothflow.io/DVP/API/1.0.0.0/Myprofile',
         getUserSettings: (host, company) => {
-            return 'http://' + host + '/data/' + company + '.' + host + '/dashboardData/' + company;
+            return 'https://' + host + '/data/' + company + '.' + host + '/dashboardData/' + company;
         }
     },
     media : {
@@ -20,7 +20,9 @@ const URLs = {
         saveNewActivity : 'TenantActivitiesService',
         publishNewActivity : 'activity/publish',
         uploadGoCode : 'processengine/PublishActivity',
-        getTagsList : 'TenantActivitiesService/tag/list'
+        getTagsList : 'TenantActivitiesService/tag/list',
+        addActivityToReview : 'MarketplaceReview',
+        getActivityComments : 'MarketplaceReviewComment'
     },
     integration: {
         getAllIntegrations: 'https://smoothbotservicesdev.plus.smoothflow.io/DBF/API/1.0.0.0/userIntegrations',

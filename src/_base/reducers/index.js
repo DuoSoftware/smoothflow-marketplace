@@ -6,5 +6,5 @@ import UIHelperReducer from './uihelper.reducer';
 export default combineReducers({
     'user': UserReducer,
     'public_': PublicReducer,
-    '_preload_body_': UIHelperReducer
+    'uihelper': UIHelperReducer
 })

@@ -31,6 +31,85 @@
 
     animation: rotateLoop 2s infinite;
   }
+
+  .sf-preloader-sidenav {
+    width: 80%;
+    height: 100%;
+    padding: $sf-padding-primary 0;
+    .elem-1 {
+      height: 40px;
+      border-radius: 23px;
+      background: #eee;
+      margin-bottom: $sf-padding-primary + 30;
+    }
+
+    .elem-2 {
+      margin-bottom: $sf-padding-primary + 30;
+      .elem-2_ {
+        display: flex;
+        span.elem-2__ {
+          width: 15px;
+          height: 15px;
+          border-radius: 100%;
+          background: #eee;
+          margin-right: $sf-padding-primary;
+        }
+        div.elem-2__ {
+          flex: 1;
+          margin-bottom: $sf-padding-primary;
+          height: 15px;
+          border-radius: 20px;
+          background: #eee;
+        }
+      }
+    }
+    .elem-3 {
+      margin-bottom: $sf-padding-primary;
+      .elem-3_ {
+        margin-bottom: $sf-padding-primary+10;
+        height: 10px;
+        border-radius: 10px;
+      }
+      .elem-3_:first-child {
+        background: #f3f3f3;
+      }
+      .elem-3_:nth-child(2) {
+        background: #f5f5f5;
+      }
+      .elem-3_:nth-child(3) {
+        background: #f7f7f7;
+      }
+      .elem-3_:nth-child(4) {
+        background: #f9f9f9;
+      }
+      .elem-3_:nth-child(5) {
+        background: #fafafa;
+      }
+    }
+  }
+
+  .sf-preloader-topbar {
+    position: absolute;
+    width: 200px;
+    right: 0;
+    display: flex;
+    align-items: center;
+    .elem-1_ {
+      display: inline-block;
+      width: 25px;
+      height: 25px;
+      border-radius: 100%;
+      background: #eee;
+      margin-right: $sf-padding-primary+10;
+    }
+    .elem-2_ {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border-radius: 100%;
+      background: #eee;
+    }
+  }
 }
 
 @keyframes rotateLoop {
