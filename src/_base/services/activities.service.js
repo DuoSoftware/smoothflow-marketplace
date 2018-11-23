@@ -68,6 +68,9 @@ const ActivitiesService = {
     },
     getActivityComments: (id) => {
         return axios.get(URLs.activity.getActivityComments + '/' + id)
+    },
+    deleteActivity: (id) => {
+        return axios.delete(URLs.activity.deleteActivity + '/' + id)
     }
 };
 

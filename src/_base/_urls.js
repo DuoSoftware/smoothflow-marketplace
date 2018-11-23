@@ -18,6 +18,7 @@ const URLs = {
     activity : {
         getAllActivities : 'TenantActivitiesService',
         saveNewActivity : 'TenantActivitiesService',
+        deleteActivity : 'TenantActivitiesService',
         publishNewActivity : 'activity/publish',
         uploadGoCode : 'processengine/PublishActivity',
         getTagsList : 'TenantActivitiesService/tag/list',

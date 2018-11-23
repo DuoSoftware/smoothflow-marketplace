@@ -402,6 +402,9 @@ a {
 }
 
 //Custom Scroll
+.sf-custom-scroll {
+  outline: none;
+}
 .sf-custom-scroll::-webkit-scrollbar {
   background: none;
   width: 7px;
@@ -503,6 +506,16 @@ form {
   background: #00000020;
   z-index: 110000;
 }
+
+.sf-variables-wrap {
+  //.sf-txtblock-text {
+  //  padding: 0 $sf-padding-third;
+  //  border-radius: $sf-border-radius-primary;
+  //  margin-right: $sf-padding-third;
+  //  background: $sf-color-bg-secondary;
+  //}
+}
+
 
 //Animations
 .sf-route-content {
