@@ -34,7 +34,7 @@ class ItemCard extends Component {
                             {/* <UMInfo text="Free for customers viewing and creating tickets" /> */}
 
                             <Block />
-                            <div>
+                            <div style={{height: '27px', overflow: 'hidden'}}>
                                 <TagBlock tags={ this.props.item.tags } />
                             </div>
                         </div>

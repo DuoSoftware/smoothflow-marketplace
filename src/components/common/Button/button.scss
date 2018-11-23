@@ -12,7 +12,7 @@
   font-family: Poppins;
   display: inline-block;
   background: #fff;
-  height: 35px;
+  height: $sf-controls-height;
   border: none;
   padding: ($sf-padding-secondary - 2) $sf-padding-primary+10;
   border-radius: 100px;
@@ -107,4 +107,7 @@
     pointer-events: none!important;
     color: $sf-text-color-secondary;
   }
+}
+.sf-button-link {
+  height: $sf-controls-height;
 }

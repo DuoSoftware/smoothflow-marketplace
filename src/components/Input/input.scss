@@ -178,18 +178,49 @@ label {
 .sf-input-inputcontrol {
   display: flex;
   box-shadow: 0 1px 5px $sf-shadow-color-primary;
-  border-radius: $sf-border-radius-primary;
+  border-radius: $sf-border-radius-primary + 15;
   width: 60%;
+  height: $sf-controls-height;
   position: relative;
   .sf-inputcontrol-select {
     background: $sf-color-bg-secondary;
     padding: $sf-padding-secondary;
-    border-radius: $sf-border-radius-primary 0 0 $sf-border-radius-primary;
+    border-radius: ($sf-border-radius-primary + 15) 0 0 ($sf-border-radius-primary + 15);
     cursor: pointer;
     color: $sf-text-color-secondary;
+    display: flex;
+    align-items: center;
+    i.material-icons {
+      font-size: 17px;
+      margin-right: $sf-padding-third;
+    }
     span.sf-icon {
       margin-left: $sf-padding-secondary;
       font-size: 8px;
+    }
+  }
+  .sf-inputcontrol-state {
+    display: inline-block;
+    padding: 0 4px;
+    border-radius: 5px;
+    color: #fff;
+    &.state-All {
+      color: $sf-text-color-secondary;
+    }
+    &.state-PRIVATE {
+      background: #aaa;
+    }
+    &.state-INPROGRESS {
+      background: $sf-pending;
+    }
+    &.state-PUBLISHED {
+      background: $sf-color-green;
+    }
+    &.state-PENDINGREVISION {
+      background: $sf-inprogress;
+    }
+    &.state-FAILED {
+      background: $sf-failed;
     }
   }
   .input-dropdown {
@@ -228,7 +259,11 @@ label {
   input {
     flex: 1;
     border: none;
-    border-radius: 0 $sf-border-radius-primary $sf-border-radius-primary 0;
+    padding: 0 $sf-padding-secondary;
+    border-radius: 0 ($sf-border-radius-primary + 15) ($sf-border-radius-primary + 15) 0;
+    &:focus {
+      outline: none;
+    }
   }
 }
 
