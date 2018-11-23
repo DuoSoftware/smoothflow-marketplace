@@ -359,7 +359,6 @@ class ItemView extends Component {
             }));
         }
     };
-
     deleteCandidate = () => {
         this.props.dispatch(PreloadBody(true));
 
@@ -396,6 +395,9 @@ class ItemView extends Component {
     };
 
     // Publish Activity
+    init_publish = () => {
+        this.props.dispatch(InitPublishPRIVATE(true));
+    };
     publishActivityPUBLIC = (e, activity) => {
         // debugger
         if (activity.publish_eligible) {
@@ -437,7 +439,6 @@ class ItemView extends Component {
             this._NOTIF_('publish_not_eligible');
         }
     };
-
     publishActivityPRIVATE = (e) => {
         if (!this.state.publish_content.node.file) {
             alert('You are required to add the file to publish the Activity');
@@ -486,11 +487,6 @@ class ItemView extends Component {
             });
         }
     };
-
-    closeDialog = () => {
-        this.props.dispatch(InitPublishPRIVATE(false));
-    };
-
     addInfo = (e) => {
         switch (e.target.id) {
             case "activityName":
@@ -502,7 +498,6 @@ class ItemView extends Component {
                     }
                 }));
                 break;
-
             case "activityDescription":
                 const _desc = e.target.value;
                 this.setState(prevState => ({
@@ -512,7 +507,6 @@ class ItemView extends Component {
                     }
                 }));
                 break;
-
             case "languageNode":
             case "languageGo":
                 const _lang = [];
@@ -541,8 +535,9 @@ class ItemView extends Component {
 
         }
     };
-    init_publish = () => {
-        this.props.dispatch(InitPublishPRIVATE(true));
+
+    closeDialog = () => {
+        this.props.dispatch(InitPublishPRIVATE(false));
     };
 
     render() {
@@ -870,19 +865,19 @@ class ItemView extends Component {
                                     <div className="sf-text-sub">
                                         <p>{ this.props.location.activity.description }</p>
                                     </div>
-                                    <div style={ {'maxWidth':'400px'} }>
-                                        <TableTwoCol tabledata={ this.props.location.activity.pricings } />
-                                    </div>
+                                    {/*<div style={ {'maxWidth':'400px'} }>*/}
+                                        {/*<TableTwoCol tabledata={ this.props.location.activity.pricings } />*/}
+                                    {/*</div>*/}
                                     <div className="sf-p-p-h">
                                         {/* <UMInfo text="Free for customers viewing and creating tickets" /> */}
                                     </div>
                                     <div className="sf-flexbox-row" style={{alignItems: 'center'}}>
                                         {
-                                            this.props.location.advanced
-                                                ?   <Block className="sf-flex-1">
-                                                    <button className="sf-button sf-button-primary sf-button-primary-p sf-button-block">30 Days Trial</button>
-                                                </Block>
-                                                :   null
+                                            // this.props.location.advanced
+                                            //     ?   <Block className="sf-flex-1">
+                                            //         <button className="sf-button sf-button-primary sf-button-primary-p sf-button-block">30 Days Trial</button>
+                                            //     </Block>
+                                            //     :   null
                                         }
                                         <div>
                                             <TagBlock tags={ this.props.location.activity.tags } />
