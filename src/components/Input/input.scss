@@ -208,13 +208,13 @@ label {
       color: $sf-text-color-secondary;
     }
     &.state-PRIVATE {
-      background: #aaa;
+      background: $sf-private;
     }
     &.state-INPROGRESS {
       background: $sf-pending;
     }
     &.state-PUBLISHED {
-      background: $sf-color-green;
+      background: $sf-public;
     }
     &.state-PENDINGREVISION {
       background: $sf-inprogress;

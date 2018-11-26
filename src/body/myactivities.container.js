@@ -26,7 +26,9 @@ class MyActivities extends Component {
                     }
                 ],
                 toggleDropdown: false
-            }
+            },
+            filtered: [],
+            temp_filtered: []
         };
     }
     componentDidMount() {
@@ -118,6 +120,11 @@ class MyActivities extends Component {
                         }
                     });
                     this.props.dispatch(GetMyActivities(loadedActivities));
+                    this.setState(state => ({
+                        ...state,
+                        filtered: loadedActivities,
+                        temp_filtered: loadedActivities
+                    }));
                     this.props.dispatch(PreloadBody(false));
                 } else {
                     this.props.dispatch(GetMyActivities([]));
@@ -132,12 +139,12 @@ class MyActivities extends Component {
 
     // Search
     search = (e) => {
-        const _filtered = this.temp_all_activities.filter((activity) => {
-            return activity.name.toLowerCase().includes(e.target.value.toLowerCase());
+        const _filtered = this.state.temp_filtered.filter((activity) => {
+            return activity.activity_name.toLowerCase().includes(e.target.value.toLowerCase());
         });
-        this.setState(prevState => ({
-            ...prevState,
-            allActivities: _filtered
+        this.setState(state => ({
+            ...state,
+            filtered: _filtered
         }));
     };
     openSearchDropdown = (e) => {
@@ -152,19 +159,30 @@ class MyActivities extends Component {
     };
     updatedFilter = (e, selected) => {
         let _filters = [...this.state.filter.categories];
+        let filtered = [];
         _filters.map((f) => {
             if(f.text === selected) {
                 f.selected = true;
-            }else{
+            }
+            else{
                 f.selected = false;
             }
         });
+        if (selected === 'All') {
+            filtered = this.props.user.myactivities;
+        } else {
+            filtered = this.props.user.myactivities.filter(activity =>
+                activity.state === selected.toLowerCase()
+            );
+        }
         this.setState(prevState => ({
             ...prevState,
             filter: {
                 toggleDropdown: false,
                 categories: _filters
-            }
+            },
+            filtered: filtered,
+            temp_filtered: filtered
         }));
     };
 
@@ -207,7 +225,7 @@ class MyActivities extends Component {
                             <div>
                                 {
                                     !this.props.uihelper._preload_body_
-                                    ?   this.props.user.myactivities.map((activity) => {
+                                    ?   this.state.filtered.map((activity) => {
                                             if(activity) return <ItemCard key={KEY()} item={activity} advanced={true} />
                                         })
                                     :   null
