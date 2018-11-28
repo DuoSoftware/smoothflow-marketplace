@@ -17,7 +17,7 @@ import CreateNewIntegration from './body/create_integration.container'
 import PrivateRoute from './_base/_private.route';
 import Dashboard from "./body/dashboard.container";
 import URLs from "./_base/_urls";
-import {User, PreloadShell, GoBack, SignIn} from './_base/actions';
+import {User, PreloadShell, SignIn} from './_base/actions';
 import Reviews from "./body/reviews.container";
 import Usage from "./body/usage.container";
 import Billing from "./body/billing.container";
