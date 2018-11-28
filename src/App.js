@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { HashRouter as Router, Route, Switch  } from "react-router-dom";
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import './App.css';
 
 import {UIHelper, UserService} from "./_base/services";
@@ -12,24 +14,23 @@ import Integrations from './body/integrations.container';
 import ItemView from './body/itemview.container';
 import CreateNewActivity from './body/create_activity.container'
 import CreateNewIntegration from './body/create_integration.container'
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import PrivateRoute from './_base/_private.route';
 import Dashboard from "./body/dashboard.container";
 import URLs from "./_base/_urls";
-import { User, PreloadShell } from './_base/actions';
+import {User, PreloadShell, GoBack, SignIn} from './_base/actions';
 import Reviews from "./body/reviews.container";
 import Usage from "./body/usage.container";
 import Billing from "./body/billing.container";
+import UIHelperReducer from "./_base/reducers/uihelper.reducer";
 
 class App extends Component {
     constructor(props){
         super(props)
     };
-
     componentDidMount() {
         const _token = localStorage.getItem('satellizer_token');
         if(_token) {
+            this.props.dispatch(SignIn(true));
             this.props.dispatch(PreloadShell(true));
             UserService.getUserProfile()
                 .then(profile => {
@@ -56,7 +57,11 @@ class App extends Component {
                 });
         }
     }
-
+    componentWillReceiveProps (nextProps) {
+        if (nextProps.location !== this.props.location) {
+            this.props.dispatch(GoBack(this.props.location));
+        }
+    };
 
     render() {
         return (

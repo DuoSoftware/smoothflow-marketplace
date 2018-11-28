@@ -1,10 +1,11 @@
 import React from 'react'
 import './list.scss'
+import {KEY} from "../../../_base/services";
 
 const extractList = (list) => {
-    return list.map(li => {
-        <li>{ li }</li>
-    });
+    return list.map(li =>
+        <li key={KEY()}>{ li }</li>
+    );
 };
 
 const List = (props) => {
