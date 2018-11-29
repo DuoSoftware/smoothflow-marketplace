@@ -21,6 +21,7 @@ import Input from "../components/Input/input.widget";
 import Error from "../components/Error/error.widget";
 import ListI from "../components/List/list_iconed.widget";
 import Wrap from "../_base/_wrap";
+import {toastr} from 'react-redux-toastr';
 
 class ItemView extends Component {
     constructor(props) {
@@ -52,7 +53,7 @@ class ItemView extends Component {
                 }
             },
             newActivity : {
-                "state": this.props.location.activity.state,
+                "state": this.props.location.activity ? this.props.location.activity.state : null,
                 "variables": []
             },
             temp_variable : {
@@ -359,6 +360,13 @@ class ItemView extends Component {
             }));
         }
     };
+    deleteInit = () => {
+        const toastrConfirmOptions = {
+            onOk: () => this.deleteCandidate(),
+            onCancel: () => {}
+        };
+        toastr.confirm('Are you sure you want to delete this Activity?', toastrConfirmOptions);
+    };
     deleteCandidate = () => {
         this.props.dispatch(PreloadBody(true));
 
@@ -369,14 +377,14 @@ class ItemView extends Component {
                 .then(res => {
                     if(res.data.IsSuccess) {
                         this.props.dispatch(PreloadBody(false));
-                        alert('Activity deleted successfully');
+                        toastr.success('Success', 'Activity has been deleted');
                         this.props.history.push('/user/activities');
                     }
                 })
                 .catch(errres => {
                     if(!errres.data.IsSuccess) {
                         this.props.dispatch(PreloadBody(false));
-                        alert('Activity deleted failed');
+                        toastr.success('Failed', 'Activity deleting failed. Please try again later');
                     }
                 });
         } else if (this.props.location.activity.type === 'integration') {
@@ -565,9 +573,9 @@ class ItemView extends Component {
                                 </Link>
                                 {
                                     this.props.location.activity.type === 'integration'
-                                    ?   <Button className="sf-button sf-button-circle" onClick={ this.deleteCandidate.bind() }><span className="sf-icon icon-sf_ico_delete"></span></Button>
-                                    :   this.props.location.activity.type === 'activity' && this.props.location.activity.state === 'pending'
-                                    ?   <Button className="sf-button sf-button-circle" onClick={ this.deleteCandidate.bind() }><span className="sf-icon icon-sf_ico_delete"></span></Button>
+                                    ?   <Button className="sf-button sf-button-circle" onClick={ this.deleteInit.bind() }><span className="sf-icon icon-sf_ico_delete"></span></Button>
+                                    :   this.props.location.activity.type === 'activity' && this.props.location.activity.state === 'private'
+                                    ?   <Button className="sf-button sf-button-circle" onClick={ this.deleteInit.bind() }><span className="sf-icon icon-sf_ico_delete"></span></Button>
                                     :   null
                                 }
                             </PageHeader>

@@ -4,6 +4,7 @@ import { HashRouter as Router, Route, Switch  } from "react-router-dom";
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import './App.css';
 
+import ReduxToastr from 'react-redux-toastr'
 import {UIHelper, UserService} from "./_base/services";
 import Sidenav from './sidenav/sidenav.component';
 import Topbar from './topbar/topbar.component';
@@ -22,9 +23,10 @@ import Reviews from "./body/reviews.container";
 import Usage from "./body/usage.container";
 import Billing from "./body/billing.container";
 import UIHelperReducer from "./_base/reducers/uihelper.reducer";
+import Wrap from "./_base/_wrap";
 
 class App extends Component {
-    constructor(props){
+    constructor(props) {
         super(props)
     };
     componentDidMount() {
@@ -57,11 +59,6 @@ class App extends Component {
                 });
         }
     }
-    componentWillReceiveProps (nextProps) {
-        if (nextProps.location !== this.props.location) {
-            this.props.dispatch(GoBack(this.props.location));
-        }
-    };
 
     render() {
         return (
@@ -96,6 +93,14 @@ class App extends Component {
                             </div>
                         )}/>
                     </div>
+                    <ReduxToastr
+                        timeOut={4000}
+                        newestOnTop={false}
+                        preventDuplicates
+                        position="top-right"
+                        transitionIn="fadeIn"
+                        transitionOut="fadeOut"
+                        closeOnToastrClick/>
                 </div>
             </Router>
         );

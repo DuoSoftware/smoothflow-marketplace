@@ -12,6 +12,7 @@ import ListI from '../components/List/list_iconed.widget';
 import Error from '../components/Error/error.widget';
 import { PreloadBody } from '../_base/actions';
 import Wrap from "../_base/_wrap";
+import { toastr } from 'react-redux-toastr';
 
 class CreateNewActivity extends Component {
     constructor(props) {
@@ -440,7 +441,6 @@ class CreateNewActivity extends Component {
         }));
     };
     uploadBulkMedia = (callback) => {
-        debugger
         if (this.state.newActivity.image === null && this.state.newActivity.what_you_get.length === 0) return callback(false);
         if (typeof this.state.newActivity.image === 'string') return callback(false);
 
@@ -750,7 +750,7 @@ class CreateNewActivity extends Component {
                             });
                         }
                         else {
-                            alert('Activity created successfully');
+                            toastr.success('New Activity', 'New activity is created successfully');
                             _self.setState({
                                 success: true
                             });
