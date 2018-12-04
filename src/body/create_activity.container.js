@@ -770,7 +770,10 @@ class CreateNewActivity extends Component {
                     if(res.data.IsSuccess) {
                         if (_self.state.temp_selected_langs.node || _self.state.temp_selected_langs.golang) {
                             ActivitiesService.publishActivity(_publishFile, _self.state.temp_selected_langs,  function(res) {
-                                alert('Activity created successfully');
+                                _self.props.location.candidate
+                                ?   toastr.success('Activity update', 'Activity updated successfully')
+                                :   toastr.success('New Activity', 'New activity created successfully')
+
                                 _self.setState({
                                     success: true
                                 });
@@ -778,7 +781,9 @@ class CreateNewActivity extends Component {
                             });
                         }
                         else {
-                            toastr.success('New Activity', 'New activity is created successfully');
+                            _self.props.location.candidate
+                                ?   toastr.success('Activity update', 'Activity updated successfully')
+                                :   toastr.success('New Activity', 'New activity created successfully')
                             _self.setState({
                                 success: true
                             });
