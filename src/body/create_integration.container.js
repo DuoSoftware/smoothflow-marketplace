@@ -179,9 +179,7 @@ class CreateNewIntegration extends Component {
                     this.props.uihelper._preload_body_
                     ?   <Preloader type={'BODY'} />
                     :   <form name="createIntegrationForm" id="createIntegrationForm" onSubmit={(event) => this.saveIntegration()}>
-
                             <PageHeader title={'Create Integration'}>
-                            
                                 {
                                     this.props.location.candidate
                                     ?   <Link to={{ pathname: '/integrations/' + this.props.location.candidate.name , activity: {...this.props.location.candidate} }}><Button className="sf-button sf-button-clear">Cancel</Button></Link>
@@ -205,6 +203,7 @@ class CreateNewIntegration extends Component {
                                                             <option value="Facebook">Facebook</option>
                                                             <option value="Slack">Slack</option>
                                                             <option value="Zapier">Zapier</option>
+                                                            <option value="Typeform">Typeform</option>
                                                         </select>
                                                     </div>
                                                 </div>
