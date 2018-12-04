@@ -732,18 +732,12 @@ class ItemView extends Component {
                                                                                 <input className="sf-flex-1" type="text" placeholder="Key" id="varKey" onChange={ (event) => this.createVariable(event) } />
                                                                                 <input className="sf-flex-1" type="text" placeholder="Display Name" id="varDisplayName" onChange={ (event) => this.createVariable(event) } />
                                                                                 <div className="sf-flex-1">
-                                                                                    <div className="sf-feature-block">
-                                                                                        <div className="sf-feature-entry">
-                                                                                            <div className="sf-input-block">
-                                                                                                <select name="varPriority" id="varControls" defaultValue={'_'} onChange={(event) => this.createVariable(event)} value={ !this.state.temp_variable.is_val_dropdown && !this.state.temp_variable.is_val_api ? 'Textbox' : this.state.newActivity.control }>
-                                                                                                    <option value="_" disabled>Control</option>
-                                                                                                    <option value="Textbox">Textbox</option>
-                                                                                                    <option value="Dropdown">Dropdown</option>
-                                                                                                    <option value="APIControl">API Control</option>
-                                                                                                </select>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
+                                                                                    <select name="varPriority" id="varControls" defaultValue={'_'} onChange={(event) => this.createVariable(event)} value={ !this.state.temp_variable.is_val_dropdown && !this.state.temp_variable.is_val_api ? 'Textbox' : this.state.newActivity.control }>
+                                                                                        <option value="_" disabled>Control</option>
+                                                                                        <option value="Textbox">Textbox</option>
+                                                                                        <option value="Dropdown">Dropdown</option>
+                                                                                        <option value="APIControl">API Control</option>
+                                                                                    </select>
                                                                                 </div>
                                                                                 <div className="sf-spacer-p"></div>
                                                                                 <input className="sf-flex-1" type="text" placeholder={ this.state.temp_variable.is_val_api ? 'API Method' : 'Value' } id="varValue" disabled={ this.state.temp_variable.is_val_dropdown && !this.state.temp_variable.is_val_api } onChange={ (event) => this.createVariable(event) } />
@@ -752,59 +746,35 @@ class ItemView extends Component {
                                                                                 <input className="sf-flex-1" type="text" placeholder="Group" value="Default" id="varGroup" onChange={ (event) => this.createVariable(event) } style={ {marginBottom: '10px'} }/>
                                                                                 <div className="sf-spacer-p"></div>
                                                                                 <div className="sf-input-block sf-flex-1">
-                                                                                    <div className="sf-feature-block">
-                                                                                        <div className="sf-feature-entry">
-                                                                                            <div className="sf-input-block">
-                                                                                                <select name="varType" id="varType" value={!this.state.temp_variable.is_val_dropdown ? 'hardcoded' : ''} onChange={(event) => this.createVariable(event)}>
-                                                                                                    <option value="_" disabled>Type</option>
-                                                                                                    <option value="dynamic">Dynamic</option>
-                                                                                                    <option value="hardcoded">Hardcoded</option>
-                                                                                                </select>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
+                                                                                    <select name="varType" id="varType" value={!this.state.temp_variable.is_val_dropdown ? 'hardcoded' : ''} onChange={(event) => this.createVariable(event)}>
+                                                                                        <option value="_" disabled>Type</option>
+                                                                                        <option value="dynamic">Dynamic</option>
+                                                                                        <option value="hardcoded">Hardcoded</option>
+                                                                                    </select>
                                                                                 </div>
                                                                                 <div className="sf-spacer-p"></div>
                                                                                 <div className="sf-input-block sf-flex-1">
-                                                                                    <div className="sf-feature-block">
-                                                                                        <div className="sf-feature-entry">
-                                                                                            <div className="sf-input-block">
-                                                                                                <select name="varCategory" id="varCategory" defaultValue={'_'} onChange={(event) => this.createVariable(event)}>
-                                                                                                    <option value="_" disabled>Category</option>
-                                                                                                    <option value="InArgument">In Argument</option>
-                                                                                                    <option value="OutArgument">Out Argument</option>
-                                                                                                </select>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
+                                                                                    <select name="varCategory" id="varCategory" defaultValue={'_'} onChange={(event) => this.createVariable(event)}>
+                                                                                        <option value="_" disabled>Category</option>
+                                                                                        <option value="InArgument">In Argument</option>
+                                                                                        <option value="OutArgument">Out Argument</option>
+                                                                                    </select>
                                                                                 </div>
                                                                                 <div className="sf-spacer-p"></div>
                                                                                 <div className="sf-input-block sf-flex-1">
-                                                                                    <div className="sf-feature-block">
-                                                                                        <div className="sf-feature-entry">
-                                                                                            <div className="sf-input-block">
-                                                                                                <select name="varDataTYpe" id="varDataType" defaultValue={'_'} onChange={(event) => this.createVariable(event)}>
-                                                                                                    <option value="_" disabled>Data Type</option>
-                                                                                                    <option value="string">String</option>
-                                                                                                    <option value="int">Int</option>
-                                                                                                </select>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
+                                                                                    <select name="varDataTYpe" id="varDataType" defaultValue={'_'} onChange={(event) => this.createVariable(event)}>
+                                                                                        <option value="_" disabled>Data Type</option>
+                                                                                        <option value="string">String</option>
+                                                                                        <option value="int">Int</option>
+                                                                                    </select>
                                                                                 </div>
                                                                                 <div className="sf-spacer-p"></div>
                                                                                 <div className="sf-input-block sf-flex-1">
-                                                                                    <div className="sf-feature-block">
-                                                                                        <div className="sf-feature-entry">
-                                                                                            <div className="sf-input-block">
-                                                                                                <select name="varPriority" id="varPriority" defaultValue={'_'} onChange={(event) => this.createVariable(event)}>
-                                                                                                    <option value="_" disabled>Priority</option>
-                                                                                                    <option value="Mandatory">Mandatory</option>
-                                                                                                    <option value="NotMandatory">Not Mandatory</option>
-                                                                                                </select>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
+                                                                                    <select name="varPriority" id="varPriority" defaultValue={'_'} onChange={(event) => this.createVariable(event)}>
+                                                                                        <option value="_" disabled>Priority</option>
+                                                                                        <option value="Mandatory">Mandatory</option>
+                                                                                        <option value="NotMandatory">Not Mandatory</option>
+                                                                                    </select>
                                                                                 </div>
                                                                             </div>
                                                                             {

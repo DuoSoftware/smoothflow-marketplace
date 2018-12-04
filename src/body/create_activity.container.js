@@ -5,14 +5,16 @@ import Chips, { Chip } from 'react-chips';
 import { createHashHistory  } from 'history'
 import Input from '../components/Input/input.widget';
 import {ActivitiesService, KEY, MediaService, UIHelper} from '../_base/services';
-import { Preloader, Button, PageHeader } from '../components/common';
+import { Preloader, Button, PageHeader, Block } from '../components/common';
 import FeatureBlock from '../components/Input Blocks/Feature block/feature_block.widget';
 import Preview from '../components/Input Preview/create_activity.preview';
 import ListI from '../components/List/list_iconed.widget';
 import Error from '../components/Error/error.widget';
-import { PreloadBody } from '../_base/actions';
+import { PreloadBody, InitHELP } from '../_base/actions';
 import Wrap from "../_base/_wrap";
 import { toastr } from 'react-redux-toastr';
+import { debug } from 'util';
+import { Dialog } from '../components/common/Dialog/dialog.component';
 
 class CreateNewActivity extends Component {
     constructor(props) {
@@ -637,49 +639,75 @@ class CreateNewActivity extends Component {
                 break;
 
         }
-    }
+    };
+
+    validateVariable = (callback) => {
+        const var_ = {
+            varKey : document.getElementById('varKey').value,
+            varDisplayName : document.getElementById('varDisplayName').value,
+            varValue : document.getElementById('varValue').value,
+            varCategory : document.getElementById('varCategory').value,
+            varDataType : document.getElementById('varDataType').value,
+            varPriority : document.getElementById('varPriority').value
+        };
+
+        for (var v in var_) {
+            document.getElementById(v).classList.remove("sf-input-error");
+            if (var_[v] === '' || var_[v] === '_')
+                return callback(false, v);
+        }
+        return callback(true, null);
+    };
+
     addVariable = () => {
-        let _vars = [...this.state.newActivity.variables];
-        const _var = {
-            ...this.variable
-        };
-        _var.ValueList = this.state.temp_variable.temp_variable_vals;
-        _vars.push(_var);
-        this.setState(prevState => ({
-            ...prevState,
-            newActivity:{
-                ...prevState.newActivity,
-                variables: _vars
+        this.validateVariable( (val, id) => {
+            if(val) {
+                let _vars = [...this.state.newActivity.variables];
+                const _var = {
+                    ...this.variable
+                };
+                _var.ValueList = this.state.temp_variable.temp_variable_vals;
+                _vars.push(_var);
+                this.setState(prevState => ({
+                    ...prevState,
+                    newActivity:{
+                        ...prevState.newActivity,
+                        variables: _vars
+                    }
+                }));
+                this.variable = {
+                    "Key": "",
+                    "DisplayName": "",
+                    "Value": "",
+                    "ValueList": [{
+                        "key": "Equal",
+                        "value": "=="
+                    }],
+                    "APIMethod": "",
+                    "Type": "",
+                    "Category": "",
+                    "DataType": "",
+                    "Group": "Default",
+                    "Priority": "",
+                    "advance": false,
+                    "control": "",
+                    "placeholder": ""
+                };
+                document.getElementById('varKey').value = "";
+                document.getElementById('varDisplayName').value = "";
+                document.getElementById('varValue').value = "";
+                document.getElementById('varGroup').value = "";
+                document.getElementById('varType').value = "";
+                document.getElementById('varCategory').value = "";
+                document.getElementById('varDataType').value = "";
+                document.getElementById('varPriority').value = "";
+                document.getElementById('varIsAdvanced').value = "";
+                document.getElementById('varKey').focus();
+            } else {
+                document.getElementById(id).classList.add('sf-input-error');
+                document.getElementById(id).focus();
             }
-        }));
-        this.variable = {
-            "Key": "",
-            "DisplayName": "",
-            "Value": "",
-            "ValueList": [{
-                "key": "Equal",
-                "value": "=="
-            }],
-            "APIMethod": "",
-            "Type": "",
-            "Category": "",
-            "DataType": "",
-            "Group": "Default",
-            "Priority": "",
-            "advance": false,
-            "control": "",
-            "placeholder": ""
-        };
-        document.getElementById('varKey').value = "";
-        document.getElementById('varDisplayName').value = "";
-        document.getElementById('varValue').value = "";
-        document.getElementById('varGroup').value = "";
-        document.getElementById('varType').value = "";
-        document.getElementById('varCategory').value = "";
-        document.getElementById('varDataType').value = "";
-        document.getElementById('varPriority').value = "";
-        document.getElementById('varIsAdvanced').value = "";
-        document.getElementById('varKey').focus();
+        })
     };
     removeVariable = (e, i) => {
         let _variables = [...this.state.newActivity.variables];
@@ -886,6 +914,14 @@ class CreateNewActivity extends Component {
         document.getElementsByClassName('sf-body').scrollTop = 0;
     };
 
+    initHelp = () => {
+        this.props.dispatch(InitHELP(true));
+    };
+
+    closeHelp = () => {
+        this.props.dispatch(InitHELP(false));
+    };
+
     render() {
         return (
             <div className="sf-route-content">
@@ -991,8 +1027,10 @@ class CreateNewActivity extends Component {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="sf-p-p-h">
-                                        <label>What you get</label>
+                                    <div className="sf-p-p-h" style={{'position':'relative'}}>
+                                        <div className="sf-flexbox-row">
+                                            <label>What you get</label> <i className="material-icons" style={{'fontSize':'19px', 'marginLeft': '5px', 'cursor': 'pointer'}} onClick={ this.initHelp.bind() }>help</i>
+                                        </div>
                                         <div className="sf-clearfix">
                                             {
                                                 this.state.newActivity.what_you_get.map((wyg, index) =>
@@ -1015,6 +1053,17 @@ class CreateNewActivity extends Component {
                                                 <input type="file" onChange={(event) => this.addMedia(event, 'wyg')}/>
                                             </div>
                                         </div>
+
+                                        {
+                                            this.props.uihelper._init_help
+                                            ?   <Dialog title="publish" style={{'height': '250px', 'marginLeft': 0}}>
+                                                    <i className="material-icons" style={{'position':'absolute', 'right': '10px', 'top': '10px', 'cursor': 'pointer'}} onClick={ this.closeHelp.bind() }>close</i>
+                                                    <h3>What to do here?</h3>
+                                                    <Block><b>What you get</b> is where you can display actual screenshots, footages of your Activity. You can add multiple items here which will be displayed as a Carousel/Slider as shown below.</Block>
+                                                    <img src="images/what_you_get_sample.jpg" style={{'width':'100%'}}/>
+                                                </Dialog>
+                                            :   null
+                                        }
                                     </div>
                                 </div>
                                 <div className="sf-p-p" style={ {width:'300px'}}></div>
@@ -1235,18 +1284,12 @@ class CreateNewActivity extends Component {
                                                 <input className="sf-flex-1" type="text" placeholder="Key" id="varKey" onChange={ (event) => this.createVariable(event) } />
                                                 <input className="sf-flex-1" type="text" placeholder="Display Name" id="varDisplayName" onChange={ (event) => this.createVariable(event) } />
                                                 <div className="sf-flex-1">
-                                                    <div className="sf-feature-block">
-                                                        <div className="sf-feature-entry">
-                                                            <div className="sf-input-block">
-                                                                <select name="varPriority" id="varControls" defaultValue={'_'} onChange={(event) => this.createVariable(event)} value={ !this.state.temp_variable.is_val_dropdown && !this.state.temp_variable.is_val_api ? 'Textbox' : this.state.newActivity.control }>
-                                                                    <option value="_" disabled>Control</option>
-                                                                    <option value="Textbox">Textbox</option>
-                                                                    <option value="Dropdown">Dropdown</option>
-                                                                    <option value="APIControl">API Control</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    <select name="varPriority" id="varControls" defaultValue={'_'} onChange={(event) => this.createVariable(event)} value={ !this.state.temp_variable.is_val_dropdown && !this.state.temp_variable.is_val_api ? 'Textbox' : this.state.newActivity.control }>
+                                                        <option value="_" disabled>Control</option>
+                                                        <option value="Textbox">Textbox</option>
+                                                        <option value="Dropdown">Dropdown</option>
+                                                        <option value="APIControl">API Control</option>
+                                                    </select>  
                                                 </div>
                                                 <div className="sf-spacer-p"></div>
                                                 <input className="sf-flex-1" type="text" placeholder={ this.state.temp_variable.is_val_api ? 'API Method' : 'Value' } id="varValue" disabled={ this.state.temp_variable.is_val_dropdown && !this.state.temp_variable.is_val_api } onChange={ (event) => this.createVariable(event) } />
@@ -1255,59 +1298,35 @@ class CreateNewActivity extends Component {
                                                 <input className="sf-flex-1" type="text" placeholder="Group" value="Default" id="varGroup" onChange={ (event) => this.createVariable(event) } style={ {marginBottom: '10px'} }/>
                                                 <div className="sf-spacer-p"></div>
                                                 <div className="sf-input-block sf-flex-1">
-                                                    <div className="sf-feature-block">
-                                                        <div className="sf-feature-entry">
-                                                            <div className="sf-input-block">
-                                                                <select name="varType" id="varType" value={!this.state.temp_variable.is_val_dropdown ? 'hardcoded' : ''} onChange={(event) => this.createVariable(event)}>
-                                                                    <option value="_" disabled>Type</option>
-                                                                    <option value="dynamic">Dynamic</option>
-                                                                    <option value="hardcoded">Hardcoded</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    <select name="varType" id="varType" value={!this.state.temp_variable.is_val_dropdown ? 'hardcoded' : ''} onChange={(event) => this.createVariable(event)}>
+                                                        <option value="_" disabled>Type</option>
+                                                        <option value="dynamic">Dynamic</option>
+                                                        <option value="hardcoded">Hardcoded</option>
+                                                    </select>
                                                 </div>
                                                 <div className="sf-spacer-p"></div>
                                                 <div className="sf-input-block sf-flex-1">
-                                                    <div className="sf-feature-block">
-                                                        <div className="sf-feature-entry">
-                                                            <div className="sf-input-block">
-                                                                <select name="varCategory" id="varCategory" defaultValue={'_'} onChange={(event) => this.createVariable(event)}>
-                                                                    <option value="_" disabled>Category</option>
-                                                                    <option value="InArgument">In Argument</option>
-                                                                    <option value="OutArgument">Out Argument</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    <select name="varCategory" id="varCategory" defaultValue={'_'} onChange={(event) => this.createVariable(event)}>
+                                                        <option value="_" disabled>Category</option>
+                                                        <option value="InArgument">In Argument</option>
+                                                        <option value="OutArgument">Out Argument</option>
+                                                    </select>
                                                 </div>
                                                 <div className="sf-spacer-p"></div>
                                                 <div className="sf-input-block sf-flex-1">
-                                                    <div className="sf-feature-block">
-                                                        <div className="sf-feature-entry">
-                                                            <div className="sf-input-block">
-                                                                <select name="varDataTYpe" id="varDataType" defaultValue={'_'} onChange={(event) => this.createVariable(event)}>
-                                                                    <option value="_" disabled>Data Type</option>
-                                                                    <option value="string">String</option>
-                                                                    <option value="int">Int</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    <select name="varDataTYpe" id="varDataType" defaultValue={'_'} onChange={(event) => this.createVariable(event)}>
+                                                        <option value="_" disabled>Data Type</option>
+                                                        <option value="string">String</option>
+                                                        <option value="int">Int</option>
+                                                    </select>
                                                 </div>
                                                 <div className="sf-spacer-p"></div>
                                                 <div className="sf-input-block sf-flex-1">
-                                                    <div className="sf-feature-block">
-                                                        <div className="sf-feature-entry">
-                                                            <div className="sf-input-block">
-                                                                <select name="varPriority" id="varPriority" defaultValue={'_'} onChange={(event) => this.createVariable(event)}>
-                                                                    <option value="_" disabled>Priority</option>
-                                                                    <option value="Mandatory">Mandatory</option>
-                                                                    <option value="NotMandatory">Not Mandatory</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    <select name="varPriority" id="varPriority" defaultValue={'_'} onChange={(event) => this.createVariable(event)}>
+                                                        <option value="_" disabled>Priority</option>
+                                                        <option value="Mandatory">Mandatory</option>
+                                                        <option value="NotMandatory">Not Mandatory</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                             {

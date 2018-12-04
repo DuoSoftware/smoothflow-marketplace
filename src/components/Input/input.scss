@@ -1,7 +1,8 @@
 @import "../../core/styles/variables";
 
 input,
-textarea {
+textarea,
+select {
   font-family: 'Poppins';
   padding: $sf-padding-secondary;
   border-radius: $sf-border-radius-primary;
@@ -270,6 +271,10 @@ label {
 select {
   cursor: pointer;
   width: 100%;
-  border: none;
+  // border: none;
   outline: none;
+}
+
+.sf-input-error {
+  border-color: $sf-failed;
 }

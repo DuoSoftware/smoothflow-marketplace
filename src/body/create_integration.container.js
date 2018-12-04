@@ -195,19 +195,13 @@ class CreateNewIntegration extends Component {
                                         <Input type="text" placeholder="Integration name" name="integrationName" id="integrationName" className="sf-flex-1" value={this.state.newIntegration.integrationName} onChange={(event) => this.newIntegration(event) } required/>
                                         <div className="sf-spacer-p"></div>
                                         <div className="sf-input-block sf-flex-1 sf-flexbox-row">
-                                            <div className="sf-feature-block sf-flex-1">
-                                                <div className="sf-feature-entry">
-                                                    <div className="sf-input-block">
-                                                        <select name="integrationType" id="integrationType" value={this.state.newIntegration.integrationType ? this.state.newIntegration.integrationType : '_'} onChange={(event) => this.newIntegration(event) } required>
-                                                            <option value="_" disabled>Integration Type</option>
-                                                            <option value="Facebook">Facebook</option>
-                                                            <option value="Slack">Slack</option>
-                                                            <option value="Zapier">Zapier</option>
-                                                            <option value="Typeform">Typeform</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <select name="integrationType" id="integrationType" value={this.state.newIntegration.integrationType ? this.state.newIntegration.integrationType : '_'} onChange={(event) => this.newIntegration(event) } required>
+                                                <option value="_" disabled>Integration Type</option>
+                                                <option value="Facebook">Facebook</option>
+                                                <option value="Slack">Slack</option>
+                                                <option value="Zapier">Zapier</option>
+                                                <option value="Typeform">Typeform</option>
+                                            </select>
                                             {/*<Button className="sf-button sf-button-circle"><span className="sf-icon icon-sf_ico_plus_circle"></span></Button>*/}
                                         </div>
                                     </div>
