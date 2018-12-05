@@ -4,6 +4,7 @@ input,
 textarea,
 select {
   font-family: 'Poppins';
+  font-size: 13px;
   padding: $sf-padding-secondary;
   border-radius: $sf-border-radius-primary;
   border: solid 1px $sf-shadow-color-primary;
@@ -273,6 +274,30 @@ select {
   width: 100%;
   // border: none;
   outline: none;
+  -webkit-appearance: none;
+}
+
+.sf-custom-input {
+  position: relative;
+  padding-top: 20px;
+  &.sf-custom-select:before {
+    content: '▾';
+    color: #000;
+    z-index: 10;
+    position: absolute;
+    height: 5px;
+    line-height: 0;
+    right: 10px;
+    bottom: 17px;
+    margin: auto;
+  }
+  &>label {
+    position: absolute;
+    top: 0px;
+    font-size: 12px;
+    font-weight: normal;
+    color: #aaa;
+  }
 }
 
 .sf-input-error {
