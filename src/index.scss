@@ -455,6 +455,15 @@ a {
   padding: $sf-padding-primary;
 }
 
+.sf-icon-guide {
+  font-size: 16px;
+  margin-left: 5px;
+  cursor: pointer;
+}
+.sf-guide-holder {
+  position: relative;
+}
+
 /* ============== FORM ============== */
 .sf-input-group {
   margin-bottom: $sf-padding-primary+$sf-padding-primary;
@@ -499,7 +508,7 @@ form {
     }
   }
 }
-/* ===================================== */
+/* ================================== */
 
 .sf-dialog-backdrop {
   position: fixed;

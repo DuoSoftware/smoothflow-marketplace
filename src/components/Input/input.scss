@@ -283,15 +283,14 @@ select {
   &.sf-custom-select:before {
     content: '▾';
     color: #000;
-    z-index: 10;
     position: absolute;
     height: 5px;
     line-height: 0;
     right: 10px;
-    bottom: 17px;
+    top: 40px;
     margin: auto;
   }
-  &>label {
+  label {
     position: absolute;
     top: 0px;
     font-size: 12px;

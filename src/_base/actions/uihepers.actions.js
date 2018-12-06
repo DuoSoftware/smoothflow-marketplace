@@ -29,3 +29,15 @@ export const InitPublishPRIVATE = init => ({
     type: 'INIT_PUBLISHING',
     init
 });
+
+export const InitHELP = init => ({
+    category: 'UIHELPER',
+    type: 'INIT_HELP',
+    init
+});
+
+// export const GoBack = back => ({
+//     category: 'UIHELPER',
+//     type: 'GO_BACK',
+//     back
+// });
