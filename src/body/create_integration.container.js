@@ -192,11 +192,14 @@ class CreateNewIntegration extends Component {
                                 <div className="sf-flex-1">
                                     <h3 className="sf-heading-sub sf-heading-form">General</h3>
                                     <div className="sf-input-block sf-flexbox-row">
-                                        <Input type="text" placeholder="Integration name" name="integrationName" id="integrationName" className="sf-flex-1" value={this.state.newIntegration.integrationName} onChange={(event) => this.newIntegration(event) } required/>
+                                        <div className="sf-custom-input sf-flex-1">
+                                            <label>Integration name</label>
+                                            <Input type="text" name="integrationName" id="integrationName" className="sf-flex-1" value={this.state.newIntegration.integrationName} onChange={(event) => this.newIntegration(event) } required/>
+                                        </div>
                                         <div className="sf-spacer-p"></div>
-                                        <div className="sf-input-block sf-flex-1 sf-flexbox-row">
+                                        <div className="sf-input-block sf-flex-1 sf-flexbox-row sf-custom-input sf-custom-select">
+                                            <label>Integration type</label>
                                             <select name="integrationType" id="integrationType" value={this.state.newIntegration.integrationType ? this.state.newIntegration.integrationType : '_'} onChange={(event) => this.newIntegration(event) } required>
-                                                <option value="_" disabled>Integration Type</option>
                                                 <option value="Facebook">Facebook</option>
                                                 <option value="Slack">Slack</option>
                                                 <option value="Zapier">Zapier</option>
@@ -206,7 +209,10 @@ class CreateNewIntegration extends Component {
                                         </div>
                                     </div>
                                     <div className="sf-input-block">
-                                        <Input type="textarea" placeholder="Description" name="integrationDesc" id="integrationDesc" value={this.state.newIntegration.description} onChange={(event) => this.newIntegration(event) } required/>
+                                        <div className="sf-custom-input sf-flex-1">
+                                            <label>Description</label>
+                                            <Input type="textarea" name="integrationDesc" id="integrationDesc" value={this.state.newIntegration.description} onChange={(event) => this.newIntegration(event) } required/>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="sf-p-p" style={ {width:'300px'}}></div>
