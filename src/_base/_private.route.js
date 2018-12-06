@@ -17,9 +17,9 @@ const PrivateRoute = ({ component: Component, is_logged_in, ...rest }) => (
     <Route
         { ...rest }
         render = {
-            // (props) => _t
+            (props) => _t
             // (props) => is_logged_in
-            (props) => true
+            // (props) => true
             ?   <Component {...props} />
             :   <Auth url={URLs.auth.signin} _rollback_point={window.location.href} />
         }
