@@ -927,7 +927,6 @@ class CreateNewActivity extends Component {
             active_guide: comp
         }));
     };
-
     closeHelp = () => {
         this.props.dispatch(InitHELP(false));
     };

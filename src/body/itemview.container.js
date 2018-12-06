@@ -15,7 +15,7 @@ import Accordion from '../components/Accordion/accordion.widget';
 import AccordionItem from '../components/Accordion/accordion_item.widget';
 import {PageHeader, Block, Button, Preloader} from '../components/common';
 import {IntegrationsService, KEY, ActivitiesService} from "../_base/services";
-import {InitPublishPRIVATE, PreloadBody, PreloadDialog} from "../_base/actions";
+import {InitHELP, InitPublishPRIVATE, PreloadBody, PreloadDialog} from "../_base/actions";
 import {Dialog} from "../components/common/Dialog/dialog.component";
 import Input from "../components/Input/input.widget";
 import Error from "../components/Error/error.widget";
@@ -61,6 +61,7 @@ class ItemView extends Component {
                 is_val_dropdown : false,
                 is_val_api : false
             },
+            active_guide: 'WYG'
         }
     }
 
@@ -571,6 +572,17 @@ class ItemView extends Component {
     closeDialog = () => {
         this.props.dispatch(InitPublishPRIVATE(false));
     };
+    initHelp = (e, comp) => {
+        this.props.dispatch(InitHELP(true));
+        this.setState(state => ({
+            ...state,
+            active_guide: comp
+        }));
+    };
+    closeHelp = () => {
+        this.props.dispatch(InitHELP(false));
+    };
+
 
     render() {
         if (!this.props.location.activity) {
@@ -660,207 +672,284 @@ class ItemView extends Component {
                                                             this.props.location.activity.variables.length === 0
                                                                 ?   <div className="sf-flexbox-row sf-p-p-v">
                                                                     <div  style={{'width':'150px'}}></div>
-                                                                    <div className="sf-flex-1">
-                                                                        <label> Variables </label>
-                                                                        <div className="sf-clearfix">
-                                                                            {
-                                                                                this.state.newActivity.variables.map((variable, index) =>
-                                                                                    <div className="sf-card" key={KEY()}>
-                                                                                        <div className="sf-card-content sf-card-bordered sf-card-centered-row sf-variables-wrap">
-                                                                                            <div className="sf-flexbox-column">
-                                                                                                <div className="sf-txtblock-text">
-                                                                                                    <span className="sf-text-semibold">Key : </span>
-                                                                                                    <span>{variable.Key}</span>
-                                                                                                </div>
-                                                                                                <div className="sf-txtblock-text">
-                                                                                                    <span className="sf-text-semibold">DisplayName : </span>
-                                                                                                    <span>{variable.DisplayName}</span>
-                                                                                                </div>
-                                                                                                {
-                                                                                                    variable.ValueList.length == 0
-                                                                                                        ?   <div className="sf-txtblock-text">
-                                                                                                            <span className="sf-text-semibold">Value : </span>
-                                                                                                            <span>{variable.Key}</span>
-                                                                                                        </div>
-                                                                                                        :   <div className="sf-txtblock-text">
-                                                                                                            <div className="sf-text-semibold">ValueList</div>
-                                                                                                            <div style={{paddingLeft: '10px'}}>
-                                                                                                                {
-                                                                                                                    variable.ValueList.map((val) =>
-                                                                                                                        <Wrap key={KEY()}>
-                                                                                                                            <div
-                                                                                                                                className="sf-txtblock-text sf-flexbox-row">
-                                                                                                                                <span><i>Key : </i></span>
-                                                                                                                                <span> {val.key}</span>
-                                                                                                                            </div>
-                                                                                                                            <div
-                                                                                                                                className="sf-txtblock-text sf-flexbox-row">
-                                                                                                                                <span><i>Value : </i></span>
-                                                                                                                                <span> {val.value}</span>
-                                                                                                                            </div>
-                                                                                                                        </Wrap>
-                                                                                                                    )
-                                                                                                                }
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                }
-                                                                                                {/*<div className="sf-txtblock-text">*/}
-                                                                                                {/*<span className="sf-text-semibold">Type : </span>*/}
-                                                                                                {/*<span>{variable.Type}</span>*/}
-                                                                                                {/*</div>*/}
-                                                                                                <div className="sf-txtblock-text">
-                                                                                                    <span className="sf-text-semibold">Category : </span>
-                                                                                                    <span>{variable.Category}</span>
-                                                                                                </div>
-                                                                                                <div className="sf-txtblock-text">
-                                                                                                    <span className="sf-text-semibold">DataType : </span>
-                                                                                                    <span>{variable.DataType}</span>
-                                                                                                </div>
-                                                                                                <div className="sf-txtblock-text">
-                                                                                                    <span className="sf-text-semibold">Group : </span>
-                                                                                                    <span>{variable.Group}</span>
-                                                                                                </div>
-                                                                                                <div className="sf-txtblock-text">
-                                                                                                    <span className="sf-text-semibold">Priority : </span>
-                                                                                                    <span>{variable.Priority}</span>
-                                                                                                </div>
-                                                                                                {
-                                                                                                    variable.advance
-                                                                                                        ?   <div className="sf-txtblock-text">
-                                                                                                            <span className="sf-text-semibold">Advance : </span>
-                                                                                                            <span>{variable.advance}</span>
-                                                                                                        </div>
-                                                                                                        :   null
-                                                                                                }
-                                                                                                {/*<div className="sf-txtblock-text">*/}
-                                                                                                {/*<span className="sf-text-semibold">Control : </span>*/}
-                                                                                                {/*<span>{variable.control}</span>*/}
-                                                                                                {/*</div>*/}
-                                                                                            </div>
-                                                                                            <div className="sf-card-row-end">
-                                                                                                <button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" onClick={(event)=>this.removeVariable(event, index)}>x</button>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                )
-                                                                            }
-                                                                        </div>
-                                                                        <div className="sf-feature-block">
-                                                                            <div className="sf-feature-entry">
-                                                                                <div className="sf-flexbox-row">
-                                                                                    <div className="sf-input-block sf-flexbox-row sf-flex-center">
+                                                                    <div className="sf-feature-block sf-flex-1">
+                                                                        <div className="sf-feature-entry">
+                                                                            <div className="sf-flexbox-row">
+                                                                                <div className="sf-flex-1 sf-guide-holder">
+                                                                                    <div className="sf-input-block sf-flexbox-row" style={{marginBottom: '10px'}}>
                                                                                         <Input type="checkbox" id="varIsAdvanced" value={this.state.newActivity.advance} onChange={(event) => this.createVariable(event)}/>
-                                                                                        <span>Advance</span>
+                                                                                        <span>Advance</span> <i className="material-icons sf-icon-guide" onClick={ (e) => this.initHelp(e, 'VAR:ADVANCE') }>help</i>
                                                                                     </div>
-                                                                                </div>
-                                                                                <div className="sf-input-block sf-flexbox-row">
-                                                                                    <div className="sf-custom-input sf-flex-1">
-                                                                                        <input type="text" placeholder="Key" id="varKey" onChange={ (event) => this.createVariable(event) } />
-                                                                                    </div>
-                                                                                    <div className="sf-spacer-p"></div>
-                                                                                    <div className="sf-custom-input sf-flex-1">
-                                                                                        <input type="text" placeholder="Display Name" id="varDisplayName" onChange={ (event) => this.createVariable(event) } />
-                                                                                    </div>
-                                                                                    <div className="sf-spacer-p"></div>
-                                                                                    <div className="sf-flex-1 sf-custom-input sf-custom-select">
-                                                                                        <label>Control</label>
-                                                                                        <select name="varPriority" id="varControls" defaultValue={'_'} onChange={(event) => this.createVariable(event)} value={ !this.state.temp_variable.is_val_dropdown && !this.state.temp_variable.is_val_api ? 'Textbox' : this.state.newActivity.control }>
-                                                                                            {/*<option value="_" disabled>Control</option>*/}
-                                                                                            <option value="Textbox">Textbox</option>
-                                                                                            <option value="Dropdown">Dropdown</option>
-                                                                                            <option value="APIControl">API Control</option>
-                                                                                        </select>
-                                                                                    </div>
-                                                                                    <div className="sf-spacer-p"></div>
-                                                                                    <div className="sf-custom-input sf-flex-1">
-                                                                                        <input className="sf-flex-1" type="text" placeholder={ this.state.temp_variable.is_val_api ? 'API Method' : 'Value' } id="varValue" disabled={ this.state.temp_variable.is_val_dropdown && !this.state.temp_variable.is_val_api } onChange={ (event) => this.createVariable(event) } />
-                                                                                    </div>
-                                                                                </div>
-                                                                                {
-                                                                                    this.state.temp_variable.is_val_dropdown && !this.state.temp_variable.is_val_api
-                                                                                        ?   <div className="sf-input-block sf-flexbox-row" style={{alignItems: 'flex-end'}}>
-                                                                                            <div className="sf-flex-1">
-                                                                                                <div className="sf-fill-width">
-                                                                                                    <label>Value List</label>
-                                                                                                    <div className="sf-clearfix">
-                                                                                                        {
-                                                                                                            this.state.temp_variable.temp_variable_vals.map((keyval, index) =>
-                                                                                                                <div className="sf-card" key={KEY()}>
-                                                                                                                    <div className="sf-card-content sf-card-bordered sf-card-centered-row">
-                                                                                                                        <div className="sf-flex-1" style={{'paddingRight': '15px'}}>
-                                                                                                                            <div className="sf-txtblock-text">
-                                                                                                                                <div className="sf-txtblock-txt-title"><span className="sf-text-semibold">Key : </span>{keyval.key}</div>
-                                                                                                                                <div className="sf-txtblock-txt-title"><span className="sf-text-semibold">Value : </span>{keyval.value}</div>
-                                                                                                                            </div>
-                                                                                                                        </div>
-                                                                                                                        <div className="sf-card-row-end">
-                                                                                                                            <button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" id="removeVarKeyVal" onClick={(event) => this.createVariable(event, index)}>x</button>
-                                                                                                                        </div>
-                                                                                                                    </div>
-                                                                                                                </div>
-                                                                                                            )
-                                                                                                        }
-                                                                                                    </div>
-                                                                                                    <div className="sf-feature-block">
-                                                                                                        <div className="sf-feature-entry">
-                                                                                                            <div className="sf-input-block sf-flexbox-row">
-                                                                                                                <input type="text" placeholder="Key" id="varValListKey" onChange={(event) => this.var_key_val.key = event.target.value} />
-                                                                                                                <input type="text" placeholder="Value" id="varValListValue" onChange={(event) => this.var_key_val.value = event.target.value} />
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                        <div className="sf-feature-add">
-                                                                                                            <button type="button" id="addVarKeyVal" className="sf-button sf-button-primary sf-button-primary-light" onClick={(event) => this.createVariable(event)}>+</button>
-                                                                                                        </div>
-                                                                                                    </div>
+                                                                                    {
+                                                                                        this.props.uihelper._init_help && this.state.active_guide === 'VAR:ADVANCE'
+                                                                                            ?   <Dialog type={'GUIDE'} title="publish">
+                                                                                                <div className="sf-dg-header">
+                                                                                                    <h3>What to do here?</h3>
+                                                                                                    <i className="material-icons sf-dg-header-close" onClick={ this.closeHelp.bind() }>close</i>
                                                                                                 </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        :   null
-                                                                                }
-                                                                                <div className="sf-flexbox-row">
-                                                                                    <div className="sf-custom-input sf-flex-1">
-                                                                                        <input className="sf-flex-1" type="text" placeholder="Group" value="Default" id="varGroup" onChange={ (event) => this.createVariable(event) } style={ {marginBottom: '10px'} }/>
-                                                                                    </div>
-                                                                                    <div className="sf-spacer-p"></div>
-                                                                                    <div className="sf-input-block sf-flex-1 sf-custom-input sf-custom-select">
-                                                                                        <label>Type</label>
-                                                                                        <select name="varType" id="varType" value={!this.state.temp_variable.is_val_dropdown ? 'hardcoded' : ''} onChange={(event) => this.createVariable(event)}>
-                                                                                            {/*<option value="_" disabled>Type</option>*/}
-                                                                                            <option value="dynamic">Dynamic</option>
-                                                                                            <option value="hardcoded">Hardcoded</option>
-                                                                                        </select>
-                                                                                    </div>
-                                                                                    <div className="sf-spacer-p"></div>
-                                                                                    <div className="sf-input-block sf-flex-1 sf-custom-input sf-custom-select">
-                                                                                        <label>Category</label>
-                                                                                        <select name="varCategory" id="varCategory" defaultValue={'_'} onChange={(event) => this.createVariable(event)}>
-                                                                                            {/*<option value="_" disabled>Category</option>*/}
-                                                                                            <option value="InArgument">In Argument</option>
-                                                                                            <option value="OutArgument">Out Argument</option>
-                                                                                        </select>
-                                                                                    </div>
-                                                                                    <div className="sf-spacer-p"></div>
-                                                                                    <div className="sf-input-block sf-flex-1 sf-custom-input sf-custom-select">
-                                                                                        <label>Data Type</label>
-                                                                                        <select name="varDataTYpe" id="varDataType" defaultValue={'_'} onChange={(event) => this.createVariable(event)}>
-                                                                                            {/*<option value="_" disabled>Data Type</option>*/}
-                                                                                            <option value="string">String</option>
-                                                                                            <option value="int">Int</option>
-                                                                                        </select>
-                                                                                    </div>
-                                                                                    <div className="sf-spacer-p"></div>
-                                                                                    <div className="sf-input-block sf-flex-1 sf-custom-input sf-custom-select">
-                                                                                        <label>Priority</label>
-                                                                                        <select name="varPriority" id="varPriority" defaultValue={'_'} onChange={(event) => this.createVariable(event)}>
-                                                                                            {/*<option value="_" disabled>Priority</option>*/}
-                                                                                            <option value="Mandatory">Mandatory</option>
-                                                                                            <option value="NotMandatory">Not Mandatory</option>
-                                                                                        </select>
-                                                                                    </div>
+                                                                                                <div>
+                                                                                                    <Block>This implies whether the Variable is an <b>Advanced</b> variable or a <b>Basic</b> variable.
+                                                                                                        <p>If you create a Variable with this value selected, the Variable will not be visible on initial( Basic) variables list at the designer environment.</p>
+                                                                                                    </Block>
+                                                                                                </div>
+                                                                                            </Dialog>
+                                                                                            :   null
+                                                                                    }
+                                                                                </div>
+                                                                                <div className="sf-spacer-p"></div>
+                                                                                <div className="sf-flex-1"></div>
+                                                                            </div>
+                                                                            <div className="sf-input-block sf-flexbox-row">
+                                                                                <div className="sf-custom-input sf-flex-1">
+                                                                                    <label className="sf-flexbox-row">Key <i className="material-icons sf-icon-guide" onClick={ (e) => this.initHelp(e, 'VAR:KEY') }>help</i></label>
+                                                                                    <input type="text" id="varKey" onChange={ (event) => this.createVariable(event) } />
+                                                                                    {
+                                                                                        this.props.uihelper._init_help && this.state.active_guide === 'VAR:KEY'
+                                                                                            ?   <Dialog type={'GUIDE'} title="publish">
+                                                                                                <div className="sf-dg-header">
+                                                                                                    <h3>What to do here?</h3>
+                                                                                                    <i className="material-icons sf-dg-header-close" onClick={ this.closeHelp.bind() }>close</i>
+                                                                                                </div>
+                                                                                                <div>
+                                                                                                    <Block>Variable Key</Block>
+                                                                                                </div>
+                                                                                            </Dialog>
+                                                                                            :   null
+                                                                                    }
+                                                                                </div>
+                                                                                <div className="sf-spacer-p"></div>
+                                                                                <div className="sf-custom-input sf-flex-1">
+                                                                                    <label className="sf-flexbox-row">Display Name <i className="material-icons sf-icon-guide" onClick={ (e) => this.initHelp(e, 'VAR:DISPLAY_NAME') }>help</i></label>
+                                                                                    <input type="text" id="varDisplayName" onChange={ (event) => this.createVariable(event) } />
+                                                                                    {
+                                                                                        this.props.uihelper._init_help && this.state.active_guide === 'VAR:DISPLAY_NAME'
+                                                                                            ?   <Dialog type={'GUIDE'} title="publish">
+                                                                                                <div className="sf-dg-header">
+                                                                                                    <h3>What to do here?</h3>
+                                                                                                    <i className="material-icons sf-dg-header-close" onClick={ this.closeHelp.bind() }>close</i>
+                                                                                                </div>
+                                                                                                <div>
+                                                                                                    <Block>Display name of the Variable</Block>
+                                                                                                </div>
+                                                                                            </Dialog>
+                                                                                            :   null
+                                                                                    }
                                                                                 </div>
                                                                             </div>
-                                                                            <div className="sf-feature-add">
-                                                                                <button type="button" className="sf-button sf-button-primary sf-button-primary-light" onClick={ this.addVariable }>+</button>
+                                                                            <div className="sf-input-block sf-flexbox-row">
+                                                                                <div className="sf-flex-1 sf-custom-input sf-custom-select">
+                                                                                    <label className="sf-flexbox-row">Control <i className="material-icons sf-icon-guide" onClick={ (e) => this.initHelp(e, 'VAR:CONTROL') }>help</i></label>
+                                                                                    <select name="varPriority" id="varControls" defaultValue={'_'} onChange={(event) => this.createVariable(event)} value={ !this.state.temp_variable.is_val_dropdown && !this.state.temp_variable.is_val_api ? 'Textbox' : this.state.newActivity.control }>
+                                                                                        {/*<option value="_" disabled>Control</option>*/}
+                                                                                        <option value="Textbox">Textbox</option>
+                                                                                        <option value="Dropdown">Dropdown</option>
+                                                                                        <option value="APIControl">API Control</option>
+                                                                                    </select>
+                                                                                    {
+                                                                                        this.props.uihelper._init_help && this.state.active_guide === 'VAR:CONTROL'
+                                                                                            ?   <Dialog type={'GUIDE'} title="publish">
+                                                                                                <div className="sf-dg-header">
+                                                                                                    <h3>What to do here?</h3>
+                                                                                                    <i className="material-icons sf-dg-header-close" onClick={ this.closeHelp.bind() }>close</i>
+                                                                                                </div>
+                                                                                                <div>
+                                                                                                    <Block>This implies the behaviour of the variable when it is in use. If <b>Textbox</b> is selected, a text field will be displayed as the input component. <b>Dropdown</b> will display as a dropdown with multiple choices.</Block>
+                                                                                                </div>
+                                                                                            </Dialog>
+                                                                                            :   null
+                                                                                    }
+                                                                                </div>
+                                                                                <div className="sf-spacer-p"></div>
+                                                                                <div className="sf-custom-input sf-flex-1">
+                                                                                    <label className="sf-flexbox-row">{ this.state.temp_variable.is_val_api ? 'API Method' : 'Value' } <i className="material-icons sf-icon-guide" onClick={ (e) => this.initHelp(e, 'VAR:API_METHOD') }>help</i></label>
+                                                                                    <input className="sf-flex-1" type="text" id="varValue" disabled={ this.state.temp_variable.is_val_dropdown && !this.state.temp_variable.is_val_api } onChange={ (event) => this.createVariable(event) } />
+                                                                                    {
+                                                                                        this.props.uihelper._init_help && this.state.active_guide === 'VAR:API_METHOD'
+                                                                                            ?   <Dialog type={'GUIDE'} title="publish">
+                                                                                                <div className="sf-dg-header">
+                                                                                                    <h3>What to do here?</h3>
+                                                                                                    <i className="material-icons sf-dg-header-close" onClick={ this.closeHelp.bind() }>close</i>
+                                                                                                </div>
+                                                                                                <div>
+                                                                                                    <Block>{
+                                                                                                        this.state.temp_variable.is_val_api
+                                                                                                            ?   <span>Add the URL for the API here.</span>
+                                                                                                            :   <span><b>Textbox</b> value to access text input.</span>
+                                                                                                    }</Block>
+                                                                                                </div>
+                                                                                            </Dialog>
+                                                                                            :   null
+                                                                                    }
+                                                                                </div>
+                                                                            </div>
+                                                                            {
+                                                                                this.state.temp_variable.is_val_dropdown && !this.state.temp_variable.is_val_api
+                                                                                ?   <div className="sf-input-block sf-flexbox-row" style={{alignItems: 'flex-end', margin: '20px 0'}}>
+                                                                                    <div className="sf-flex-1">
+                                                                                        <div className="sf-fill-width">
+                                                                                            <label className="sf-flexbox-row">Value List <i className="material-icons sf-icon-guide" onClick={ (e) => this.initHelp(e, 'VAR:VALUE_LIST') }>help</i></label>
+                                                                                            <div className="sf-clearfix">
+                                                                                                {
+                                                                                                    this.state.temp_variable.temp_variable_vals.map((keyval, index) =>
+                                                                                                        <div className="sf-card" key={KEY()}>
+                                                                                                            <div className="sf-card-content sf-card-bordered sf-card-centered-row">
+                                                                                                                <div className="sf-flex-1" style={{'paddingRight': '15px'}}>
+                                                                                                                    <div className="sf-txtblock-text">
+                                                                                                                        <div className="sf-txtblock-txt-title"><span className="sf-text-semibold">Key : </span>{keyval.key}</div>
+                                                                                                                        <div className="sf-txtblock-txt-title"><span className="sf-text-semibold">Value : </span>{keyval.value}</div>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                                <div className="sf-card-row-end">
+                                                                                                                    <button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" id="removeVarKeyVal" onClick={(event) => this.createVariable(event, index)}>x</button>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    )
+                                                                                                }
+                                                                                            </div>
+                                                                                            {
+                                                                                                this.props.uihelper._init_help && this.state.active_guide === 'VAR:VALUE_LIST'
+                                                                                                    ?   <Dialog type={'GUIDE'} title="publish">
+                                                                                                        <div className="sf-dg-header">
+                                                                                                            <h3>What to do here?</h3>
+                                                                                                            <i className="material-icons sf-dg-header-close" onClick={ this.closeHelp.bind() }>close</i>
+                                                                                                        </div>
+                                                                                                        <div>
+                                                                                                            <Block>You can add the values here that come under the type(Dropdown) you selected in Control section.</Block>
+                                                                                                        </div>
+                                                                                                    </Dialog>
+                                                                                                    :   null
+                                                                                            }
+                                                                                            <div className="sf-feature-block">
+                                                                                                <div className="sf-feature-entry">
+                                                                                                    <div className="sf-input-block sf-flexbox-row">
+                                                                                                        <input type="text" placeholder="Key" id="varValListKey" onChange={(event) => this.var_key_val.key = event.target.value} />
+                                                                                                        <input type="text" placeholder="Value" id="varValListValue" onChange={(event) => this.var_key_val.value = event.target.value} />
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div className="sf-feature-add">
+                                                                                                    <button type="button" id="addVarKeyVal" className="sf-button sf-button-primary sf-button-primary-light" onClick={(event) => this.createVariable(event)}>+</button>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                :   null
+                                                                            }
+                                                                            <div className="sf-flexbox-row">
+                                                                                <div className="sf-custom-input sf-flex-1">
+                                                                                    <label className="sf-flexbox-row">Default <i className="material-icons sf-icon-guide" onClick={ (e) => this.initHelp(e, 'VAR:DEFAULT') }>help</i></label>
+                                                                                    <input className="sf-flex-1" type="text" placeholder="Group" value="Default" id="varGroup" onChange={ (event) => this.createVariable(event) } style={ {marginBottom: '10px'} }/>
+                                                                                    {
+                                                                                        this.props.uihelper._init_help && this.state.active_guide === 'VAR:DEFAULT'
+                                                                                            ?   <Dialog type={'GUIDE'} title="publish">
+                                                                                                <div className="sf-dg-header">
+                                                                                                    <h3>What to do here?</h3>
+                                                                                                    <i className="material-icons sf-dg-header-close" onClick={ this.closeHelp.bind() }>close</i>
+                                                                                                </div>
+                                                                                                <div>
+                                                                                                    <Block>This implies whether the Variable is an <b>Advanced</b> variable or a <b>Basic</b> variable.</Block>
+                                                                                                </div>
+                                                                                            </Dialog>
+                                                                                            :   null
+                                                                                    }
+                                                                                </div>
+                                                                                <div className="sf-spacer-p"></div>
+                                                                                <div className="sf-input-block sf-flex-1 sf-custom-input sf-custom-select">
+                                                                                    <label className="sf-flexbox-row">Type <i className="material-icons sf-icon-guide" onClick={ (e) => this.initHelp(e, 'VAR:TYPE') }>help</i></label>
+                                                                                    <select name="varType" id="varType" value={!this.state.temp_variable.is_val_dropdown ? 'hardcoded' : ''} onChange={(event) => this.createVariable(event)}>
+                                                                                        {/*<option value="_" disabled>Type</option>*/}
+                                                                                        <option value="dynamic">Dynamic</option>
+                                                                                        <option value="hardcoded">Hardcoded</option>
+                                                                                    </select>
+                                                                                    {
+                                                                                        this.props.uihelper._init_help && this.state.active_guide === 'VAR:TYPE'
+                                                                                            ?   <Dialog type={'GUIDE'} title="publish">
+                                                                                                <div className="sf-dg-header">
+                                                                                                    <h3>What to do here?</h3>
+                                                                                                    <i className="material-icons sf-dg-header-close" onClick={ this.closeHelp.bind() }>close</i>
+                                                                                                </div>
+                                                                                                <div>
+                                                                                                    <Block>This implies whether the value is hardcoded or not. This will be vary depending on the <b>Control</b> type you select.</Block>
+                                                                                                </div>
+                                                                                            </Dialog>
+                                                                                            :   null
+                                                                                    }
+                                                                                </div>
+                                                                            </div>
+                                                                            <div className="sf-flexbox-row">
+                                                                                <div className="sf-input-block sf-flex-1 sf-custom-input sf-custom-select">
+                                                                                    <label className="sf-flexbox-row">Category <i className="material-icons sf-icon-guide" onClick={ (e) => this.initHelp(e, 'VAR:CATEGORY') }>help</i></label>
+                                                                                    <select name="varCategory" id="varCategory" defaultValue={'_'} onChange={(event) => this.createVariable(event)}>
+                                                                                        {/*<option value="_" disabled>Category</option>*/}
+                                                                                        <option value="InArgument">In Argument</option>
+                                                                                        <option value="OutArgument">Out Argument</option>
+                                                                                    </select>
+                                                                                    {
+                                                                                        this.props.uihelper._init_help && this.state.active_guide === 'VAR:CATEGORY'
+                                                                                            ?   <Dialog type={'GUIDE'} title="publish">
+                                                                                                <div className="sf-dg-header">
+                                                                                                    <h3>What to do here?</h3>
+                                                                                                    <i className="material-icons sf-dg-header-close" onClick={ this.closeHelp.bind() }>close</i>
+                                                                                                </div>
+                                                                                                <div>
+                                                                                                    <Block>This implies whether the variable works as an IN argument or an OUT argument.</Block>
+                                                                                                </div>
+                                                                                            </Dialog>
+                                                                                            :   null
+                                                                                    }
+                                                                                </div>
+                                                                                <div className="sf-spacer-p"></div>
+                                                                                <div className="sf-input-block sf-flex-1 sf-custom-input sf-custom-select">
+                                                                                    <label className="sf-flexbox-row">Data type <i className="material-icons sf-icon-guide" onClick={ (e) => this.initHelp(e, 'VAR:DATA_TYPE') }>help</i></label>
+                                                                                    <select name="varDataTYpe" id="varDataType" defaultValue={'_'} onChange={(event) => this.createVariable(event)}>
+                                                                                        {/*<option value="_" disabled>Data Type</option>*/}
+                                                                                        <option value="string">String</option>
+                                                                                        <option value="int">Int</option>
+                                                                                    </select>
+                                                                                    {
+                                                                                        this.props.uihelper._init_help && this.state.active_guide === 'VAR:DATA_TYPE'
+                                                                                            ?   <Dialog type={'GUIDE'} title="publish">
+                                                                                                <div className="sf-dg-header">
+                                                                                                    <h3>What to do here?</h3>
+                                                                                                    <i className="material-icons sf-dg-header-close" onClick={ this.closeHelp.bind() }>close</i>
+                                                                                                </div>
+                                                                                                <div>
+                                                                                                    <Block>Data type of the variable.</Block>
+                                                                                                </div>
+                                                                                            </Dialog>
+                                                                                            :   null
+                                                                                    }
+                                                                                </div>
+                                                                            </div>
+                                                                            <div className="sf-flexbox-row">
+                                                                                <div className="sf-input-block sf-flex-1 sf-custom-input sf-custom-select">
+                                                                                    <label className="sf-flexbox-row">Priority <i className="material-icons sf-icon-guide" onClick={ (e) => this.initHelp(e, 'VAR:PRIORITY') }>help</i></label>
+                                                                                    <select name="varPriority" id="varPriority" defaultValue={'_'} onChange={(event) => this.createVariable(event)}>
+                                                                                        {/*<option value="_" disabled>Priority</option>*/}
+                                                                                        <option value="Mandatory">Mandatory</option>
+                                                                                        <option value="NotMandatory">Not Mandatory</option>
+                                                                                    </select>
+                                                                                    {
+                                                                                        this.props.uihelper._init_help && this.state.active_guide === 'VAR:PRIORITY'
+                                                                                            ?   <Dialog type={'GUIDE'} title="publish">
+                                                                                                <div className="sf-dg-header">
+                                                                                                    <h3>What to do here?</h3>
+                                                                                                    <i className="material-icons sf-dg-header-close" onClick={ this.closeHelp.bind() }>close</i>
+                                                                                                </div>
+                                                                                                <div>
+                                                                                                    <Block>Whether the variable is mandatory or not.</Block>
+                                                                                                </div>
+                                                                                            </Dialog>
+                                                                                            :   null
+                                                                                    }
+                                                                                </div>
+                                                                                <div className="sf-spacer-p"></div>
+                                                                                <div className="sf-input-block sf-flex-1"></div>
+                                                                            </div>
+                                                                            <div className="sf-flexbox-row">
+                                                                                <div className="sf-flex-1"></div>
+                                                                                <button type="button" className="sf-button sf-button-primary sf-button-primary-p" onClick={ this.addVariable }>ADD</button>
                                                                             </div>
                                                                         </div>
                                                                     </div>
