@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './carousel.scss';
 import Slider from "react-slick";
+import {KEY} from "../../_base/services";
 
 class Carousel extends Component {
     settings = {
@@ -15,7 +16,7 @@ class Carousel extends Component {
     getSlides(slides) {
         const _slides = slides.map((slide) => {
             if(slide.type === 'image') {
-                return <div><img src={ slide.file } alt=""/></div>
+                return <div key={KEY()}><img src={ slide.file } alt=""/></div>
             }
         });
         return _slides;

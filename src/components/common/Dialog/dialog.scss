@@ -16,6 +16,21 @@
   -webkit-box-shadow: 0 5px 30px $sf-shadow-color-primary;
   -moz-box-shadow: 0 5px 30px $sf-shadow-color-primary;
   box-shadow: 0 5px 30px $sf-shadow-color-primary;
+  &.sf-dialog-guide {
+    height: 150px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 20px;
+    .sf-dg-header {
+      display: flex;
+      h3 {
+        flex: 1;
+      }
+      .sf-dg-header-close {
+        cursor: pointer;
+      }
+    }
+  }
   .sf-dialog-body {
     //position: relative;
     flex: 1;

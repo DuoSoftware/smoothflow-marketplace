@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { HashRouter as Router, Route, Switch  } from "react-router-dom";
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import './App.css';
 
+import ReduxToastr from 'react-redux-toastr'
 import {UIHelper, UserService} from "./_base/services";
 import Sidenav from './sidenav/sidenav.component';
 import Topbar from './topbar/topbar.component';
@@ -12,24 +15,24 @@ import Integrations from './body/integrations.container';
 import ItemView from './body/itemview.container';
 import CreateNewActivity from './body/create_activity.container'
 import CreateNewIntegration from './body/create_integration.container'
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import PrivateRoute from './_base/_private.route';
 import Dashboard from "./body/dashboard.container";
 import URLs from "./_base/_urls";
-import { User, PreloadShell } from './_base/actions';
+import {User, PreloadShell, SignIn} from './_base/actions';
 import Reviews from "./body/reviews.container";
 import Usage from "./body/usage.container";
 import Billing from "./body/billing.container";
+import UIHelperReducer from "./_base/reducers/uihelper.reducer";
+import Wrap from "./_base/_wrap";
 
 class App extends Component {
-    constructor(props){
+    constructor(props) {
         super(props)
     };
-
     componentDidMount() {
         const _token = localStorage.getItem('satellizer_token');
         if(_token) {
+            this.props.dispatch(SignIn(true));
             this.props.dispatch(PreloadShell(true));
             UserService.getUserProfile()
                 .then(profile => {
@@ -56,7 +59,6 @@ class App extends Component {
                 });
         }
     }
-
 
     render() {
         return (
@@ -91,6 +93,14 @@ class App extends Component {
                             </div>
                         )}/>
                     </div>
+                    <ReduxToastr
+                        timeOut={4000}
+                        newestOnTop={false}
+                        preventDuplicates
+                        position="top-right"
+                        transitionIn="fadeIn"
+                        transitionOut="fadeOut"
+                        closeOnToastrClick/>
                 </div>
             </Router>
         );

@@ -1,5 +1,6 @@
 @import "./core/styles/variables";
 @import "./core/icons/icons.css";
+@import '../node_modules/react-redux-toastr/src/styles/index';
 
 body,
 html,
@@ -94,6 +95,9 @@ a {
 }
 .sf-m-p-b {
   margin-bottom: $sf-padding-primary;
+}
+.sf-m-p-r {
+  margin-right: $sf-padding-primary;
 }
 .sf-text-semibold {
   font-weight: 600;
@@ -402,6 +406,9 @@ a {
 }
 
 //Custom Scroll
+.sf-custom-scroll {
+  outline: none;
+}
 .sf-custom-scroll::-webkit-scrollbar {
   background: none;
   width: 7px;
@@ -448,6 +455,15 @@ a {
   padding: $sf-padding-primary;
 }
 
+.sf-icon-guide {
+  font-size: 16px;
+  margin-left: 5px;
+  cursor: pointer;
+}
+.sf-guide-holder {
+  position: relative;
+}
+
 /* ============== FORM ============== */
 .sf-input-group {
   margin-bottom: $sf-padding-primary+$sf-padding-primary;
@@ -492,7 +508,7 @@ form {
     }
   }
 }
-/* ===================================== */
+/* ================================== */
 
 .sf-dialog-backdrop {
   position: fixed;
@@ -503,6 +519,16 @@ form {
   background: #00000020;
   z-index: 110000;
 }
+
+.sf-variables-wrap {
+  //.sf-txtblock-text {
+  //  padding: 0 $sf-padding-third;
+  //  border-radius: $sf-border-radius-primary;
+  //  margin-right: $sf-padding-third;
+  //  background: $sf-color-bg-secondary;
+  //}
+}
+
 
 //Animations
 .sf-route-content {

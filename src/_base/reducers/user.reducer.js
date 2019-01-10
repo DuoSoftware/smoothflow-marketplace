@@ -22,12 +22,17 @@ const UserReducer = (state = initState, action) => {
         case 'SIGNIN' :
             return {
                 ...state,
+                is_logged_in: action.issignedin
+            };
+
+        case 'AUTH' :
+            return {
+                ...state,
                 username: action.user.username,
                 _id: action.user._id,
                 email: {
                     contact: action.user.email.contact
-                },
-                is_logged_in: true
+                }
             };
 
         case 'SIGNOUT' :

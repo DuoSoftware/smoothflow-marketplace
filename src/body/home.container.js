@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter as Route, Link, Redirect } from "react-router-dom";
 import { Activities, ActivitiesLoader } from '../_base/actions'
-import { ActivitiesService } from '../_base/services';
+import {ActivitiesService, KEY} from '../_base/services';
 import ItemCard from '../components/Itemcard/itemcard.widget';
 import Wrap from '../_base/_wrap'
-import { Preloader } from '../components/common';
+import {Button, Preloader} from '../components/common';
 
 class Home extends Component {
     constructor(props) {
@@ -32,9 +32,8 @@ class Home extends Component {
         this.getAllItems();
     }
 
-    // -------------------------------------------------------------------------------
     temp_all_activities = [];
-
+    // -------------------------------------------------------------------------------
     getAllItems = () => {
     };
 
@@ -101,7 +100,7 @@ class Home extends Component {
                                                     <div className={`input-dropdown ${this.state.filter.toggleDropdown ? ' input-dropdown-opened' : ''}`}>
                                                         {
                                                             this.state.filter.categories.map((c) => {
-                                                                return  <li onClick={ (e)=>this.updatedFilter(e, c.text)}>
+                                                                return  <li key={KEY()} onClick={ (e)=>this.updatedFilter(e, c.text)}>
                                                                             <span className="sf-list-icon">
                                                                                 { c.selected ? <span className="sf-icon icon-sf_ico_check_circle"></span> : null }
                                                                             </span>
@@ -121,7 +120,9 @@ class Home extends Component {
                                                     Everything you need to automate your workflow.</p>
                                             </div>
                                             <div>
-                                                <Link to={'/create'} className="sf-btn sf-btn-primary sf-btn-thin">Get Started</Link>
+                                                <Link to={'/user/activities/create'} className="sf-btn sf-btn-primary sf-btn-thin">
+                                                    <Button className="sf-button sf-button-primary sf-button-primary-p">Get Started!</Button>
+                                                </Link>
                                             </div>
                                         </div>
                                         <img src="./marketplace/images/smoothflow_illustration_automation_01.svg" />

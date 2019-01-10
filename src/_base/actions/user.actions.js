@@ -1,7 +1,13 @@
 export const User = user => ({
     category: 'AUTH',
-    type: 'SIGNIN',
+    type: 'AUTH',
     user
+});
+
+export const SignIn = issignedin => ({
+    category: 'AUTH',
+    type: 'SIGNIN',
+    issignedin
 });
 
 export const SignOut = user => ({

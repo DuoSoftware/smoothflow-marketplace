@@ -5,14 +5,14 @@ import {connect} from "react-redux";
 import {InitPublishPRIVATE, PreloadBody, PreloadDialog} from "../../../_base/actions";
 
 const Dialog = (props) => {
-    return  <div {...props} className="sf-dialog sf-flexbox-column">
+    return  <div className={`sf-dialog sf-flexbox-column ${ props.type === 'GUIDE' ? 'sf-dialog-guide' : null }`} {...props}>
                 <div className="sf-dialog-body sf-custom-scroll">
                     {
                         props.uihelper._preload_dialog_
                         ?   <Preloader type={'BODY'}/>
-                        :   <Block>
+                        :   <div>
                                 { props.children }
-                            </Block>
+                            </div>
                     }
                 </div>
             </div>
