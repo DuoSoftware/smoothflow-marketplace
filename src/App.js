@@ -25,6 +25,8 @@ import Billing from "./body/billing.container";
 import UIHelperReducer from "./_base/reducers/uihelper.reducer";
 import Wrap from "./_base/_wrap";
 
+import jwt from 'jsonwebtoken';
+
 class App extends Component {
     constructor(props) {
         super(props)

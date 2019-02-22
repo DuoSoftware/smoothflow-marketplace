@@ -32,6 +32,22 @@ const MediaService = {
         //     callback(xhr.response);
         // };
         // xhr.send(_formdata);
+    },
+    getMedia: (url) => {
+        return axios({
+            method: 'GET',
+            dataType: 'jsonp',
+            url: url,
+            headers: {
+                'Content-Type' : 'application/zip'
+            }
+        })
+            .then(res=> {
+                return res;
+            })
+            .catch(erres => {
+                return erres
+            })
     }
 };
 

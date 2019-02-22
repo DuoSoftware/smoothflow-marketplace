@@ -13,7 +13,8 @@ const URLs = {
     media : {
         base : 'https://smoothmediaservicedev.plus.smoothflow.io/media/1/41',
         profile : '/apis/media/tenant/',
-        upload : '/upload'
+        upload : '/upload',
+        download : '/download'
     },
     activity : {
         getAllActivities : 'TenantActivitiesService',
@@ -21,9 +22,12 @@ const URLs = {
         deleteActivity : 'TenantActivitiesService',
         publishNewActivity : 'activity/publish',
         uploadGoCode : 'processengine/PublishActivity',
+        publishPath : 'activity/remote/publish',
         getTagsList : 'TenantActivitiesService/tag/list',
         addActivityToReview : 'MarketplaceReview',
-        getActivityComments : 'MarketplaceReviewComment'
+        getActivityComments : 'MarketplaceReviewComment',
+        getMarketplaceReviewByActivityName : 'MarketplaceReviewByActivityName',
+        marketplaceReviewByTenant : 'MarketplaceReviewByTenant'
     },
     integration: {
         getAllIntegrations: 'https://smoothbotservicesdev.plus.smoothflow.io/DBF/API/1.0.0.0/userIntegrations',

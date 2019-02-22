@@ -51,7 +51,7 @@ class CreateNewActivity extends Component {
             temp_tags : [],
             existing_tags : [],
             temp_selected_langs : {
-                "node" : false,
+                "node" : true,
                 "golang" : false
             },
             publish_content: {
@@ -85,33 +85,34 @@ class CreateNewActivity extends Component {
         this.loadTagsList();
         if(this.props.location.candidate) {
             const _m = this.props.location.candidate;
+            const _tags = [];
+            for(let x of _m.tags) {
+                // x['tag'] = x.name;
+                // delete x.name;
+                _tags.push(x.tag);
+            }
             const __m = {
                 "insertOrUpdate": "update",
                 "date": new Date(),
-                "activity_name": _m.name,
-                "tenant_name": "tistuslabs",
-                "type": "chat",
-                "reviewed": false,
-                "state": "FB",
-                "path": "1000",
-                "npm_module": "@smoothflow/zappier-integration",
-                "npm_version": "18.0.0",
+                "activity_name": _m.activity_name,
+                "tenant_name": _m.tenant_name,
+                "type": _m.type,
+                "reviewed": _m.reviewed,
+                "state": _m.state,
+                "path": _m.path,
+                "npm_module": _m.npm_module,
+                "npm_version": _m.npm_version,
                 "image": _m.image ? _m.image : null,
                 "description": _m.description != '' ? _m.description : '',
-                "languages":[],
+                "languages": _m.languages.length ? _m.languages : [],
                 "features": _m.features.length ? _m.features : '',
-                "tags": [],
+                "tags": _m.tags.length ? _m.tags : [],
                 "what_you_get": _m.what_you_get.length ? _m.what_you_get : [],
                 "pricings": _m.pricings.length ? _m.pricings : [],
                 "faq": _m.faq.length ? _m.faq : [],
                 "variables": _m.variables.length ? _m.variables : [],
                 "_id": _m._id
             };
-            const _tags = [];
-            for(const t of _m.tags) {
-                _tags.push(t.name);
-            };
-
             this.setState(state => ({
                 ...state,
                 newActivity: __m,
@@ -152,13 +153,13 @@ class CreateNewActivity extends Component {
             "value": "=="
         }],
         "APIMethod": "",
-        "Type": "",
-        "Category": "",
-        "DataType": "",
+        "Type": "hardcoded",
+        "Category": "InArgument",
+        "DataType": "string",
         "Group": "Default",
-        "Priority": "",
+        "Priority": "Mandatory",
         "advance": false,
-        "control": "",
+        "control": "Textbox",
         "placeholder": ""
     };
     activityCategories = [];
@@ -318,26 +319,33 @@ class CreateNewActivity extends Component {
                     }));
                 }
                 else if (type === 'publishNode') {
-                    const _info = [{
-                        "text" : file.name,
-                        "icon" : "check_circle_thin"
-                    }, {
-                        "text": file.type,
-                        "icon": "check_circle_thin"
-                    }, {
-                        "text": file.size,
-                        "icon": "check_circle_thin"
-                    }]
-                    _self.setState(prevState => ({
-                        ...prevState,
-                        publish_content: {
-                            ...prevState.publish_content,
-                            node: {
-                                "file" : file,
-                                "info" : _info
+                    const ft = file.type.split('/')[1];
+                    if (ft !== 'x-tar' && ft !== 'x-zip-compressed' && ft !== 'x-zip' && ft !== 'tar' && ft !== 'zip-compressed' && ft !== 'zip') {
+                        toastr.error("Invalid file format", "Please make sure you are uploading a ZIP or a TAR file");
+                        return;
+                    } else {
+                        const _info = [{
+                            "text" : file.name,
+                            "icon" : "check_circle_thin"
+                        }, {
+                            "text": file.type,
+                            "icon": "check_circle_thin"
+                        }, {
+                            "text": file.size,
+                            "icon": "check_circle_thin"
+                        }];
+                        // _self.props.location.activity.publish_eligible = true;
+                        _self.setState(prevState => ({
+                            ...prevState,
+                            publish_content: {
+                                ...prevState.publish_content,
+                                node: {
+                                    "file" : file,
+                                    "info" : _info
+                                }
                             }
-                        }
-                    }));
+                        }));
+                    }
                 }
             };
         }
@@ -646,7 +654,7 @@ class CreateNewActivity extends Component {
         const var_ = {
             varKey : document.getElementById('varKey').value,
             varDisplayName : document.getElementById('varDisplayName').value,
-            varValue : document.getElementById('varValue').value,
+            // varValue : document.getElementById('varValue').value,
             varCategory : document.getElementById('varCategory').value,
             varDataType : document.getElementById('varDataType').value,
             varPriority : document.getElementById('varPriority').value
@@ -747,7 +755,7 @@ class CreateNewActivity extends Component {
 
         // Activity source validation
         // This checks whether the user has entered the source code of the Activity.
-        if( this.state.newActivity.variables.length > 0 && _publishFile) _self.state.newActivity.publish_eligible = true;
+        // if( this.state.newActivity.variables.length > 0 && _publishFile) _self.state.newActivity.publish_eligible = true;
         // ===========================================================================================================
 
         _payload.description = this.state.newActivity.activity_name;
@@ -766,22 +774,35 @@ class CreateNewActivity extends Component {
                     }
                 }
             }
-            ActivitiesService.saveNewActivity(_payload)
-                .then((res) => {
-                    if(res.data.IsSuccess) {
-                        if (_self.state.temp_selected_langs.node || _self.state.temp_selected_langs.golang) {
-                            ActivitiesService.publishActivity(_publishFile, _self.state.temp_selected_langs,  function(res) {
-                                _self.props.location.candidate
-                                ?   toastr.success('Activity update', 'Activity updated successfully')
-                                :   toastr.success('New Activity', 'New activity created successfully')
 
+            if (_publishFile) {
+                // Upload activity to S3
+                MediaService.uploadMedia(_publishFile, function (mres) {
+                    // debugger
+                    _payload.activities[0].path = mres.data.url;
+                    ActivitiesService.saveNewActivity(_payload)
+                        .then((res) => {
+                            if(res.data.IsSuccess) {
+                                _self.props.location.candidate
+                                    ?   toastr.success('Activity update', 'Activity updated successfully')
+                                    :   toastr.success('New Activity', 'New activity created successfully')
                                 _self.setState({
                                     success: true
                                 });
                                 _self.props.history.push('/user/activities');
-                            });
-                        }
-                        else {
+                            }
+                        })
+                        .catch((errorRes) => {
+                            toastr.error('New Activity', 'Failed to create New Activity');
+                            console.log(errorRes);
+                        });
+                }, function (erres) {
+                    toastr.error('Activity Submission', 'Failed to upload Activity file')
+                });
+            } else {
+                ActivitiesService.saveNewActivity(_payload)
+                    .then((res) => {
+                        if(res.data.IsSuccess) {
                             _self.props.location.candidate
                                 ?   toastr.success('Activity update', 'Activity updated successfully')
                                 :   toastr.success('New Activity', 'New activity created successfully')
@@ -790,11 +811,12 @@ class CreateNewActivity extends Component {
                             });
                             _self.props.history.push('/user/activities');
                         }
-                    }
-                })
-                .catch((errorRes) => {
-                    console.log(errorRes);
-                });
+                    })
+                    .catch((errorRes) => {
+                        toastr.error('New Activity', 'Failed to create New Activity');
+                        console.log(errorRes);
+                    });
+            }
         });
 
     };
@@ -1573,6 +1595,48 @@ class CreateNewActivity extends Component {
                                 </div>
                             </div>
                             <div className="sf-hr"></div>
+                            <div className="sf-flexbox-row">
+                                <div className="sf-p-p-h" style={{'width':'150px'}}>
+                                    <label> Language </label>
+                                    <div className="sf-p-p-h">
+                                        <div className="sf-input-block">
+                                            <Input type="radio" name="publishLang" className="sf-radiobox" id="languageNode" label="Node JS" value="nodeJs" onChange={(event) => this.addInfo(event)} checked />
+                                        </div>
+                                        <div className="sf-input-block">
+                                            <Input type="radio" name="publishLang" className="sf-radiobox" id="languageGo" label="GO" value="GO" onChange={(event) => this.addInfo(event)} disabled />
+                                        </div>
+                                    </div>
+                                </div>
+                                {
+                                    this.state.temp_selected_langs.node
+                                    ?   <Wrap>
+                                            <div className="sf-flex-1 sf-flexbox-column">
+                                                <div className="sf-flex-1 sf-p-p sf-flexbox-column">
+                                                    <label> File </label>
+                                                    <div className="sf-card sf-card-block sf-flexbox-column sf-flex-1" style={{padding: '15px 0px'}}>
+                                                        <div className="sf-card-content sf-card-bordered sf-flex-1 sf-flexbox-column">
+                                                            <div className="sf-flex-1">
+                                                                {
+                                                                    this.state.publish_content.node.file
+                                                                        ?   <div className="sf-card">
+                                                                            <div className="sf-card-content sf-card-bordered sf-card-centered-row">
+                                                                                <div className="sf-flex-1">
+                                                                                    <ListI list={ this.state.publish_content.node.info }/>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        :   null
+                                                                }
+                                                            </div>
+                                                            <input type="file" id="publishNode" onChange={ (event) => this.updatePublishContent(event)}/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </Wrap>
+                                    :   null
+                                }
+                            </div>
                         </form>
                 }
             </div>

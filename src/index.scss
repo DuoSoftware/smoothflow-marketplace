@@ -529,6 +529,55 @@ form {
   //}
 }
 
+.sf-comment-block {
+  //padding: 0 $sf-padding-secondary;
+  margin-bottom: $sf-padding-primary;
+  display: flex;
+  &.sf-comment-pendingrevision {
+    .sf-comment-block-prefix {
+      background: $sf-failed;
+    }
+  }
+  &.sf-comment-passed {
+    .sf-comment-block-prefix {
+      background: $sf-public;
+    }
+  }
+  .sf-comment-block-prefix {
+    padding: ($sf-padding-primary - 3) $sf-padding-third;
+    border-radius: $sf-border-radius-primary 0 0 $sf-border-radius-primary;
+    //background: red;
+    color: #ffffff;
+    .material-icons {
+      font-size: 20px;
+    }
+  }
+  .sf-comment-block-body {
+    flex: 1;
+    border: solid 1px #eeeeee;
+    border-radius: 0 $sf-border-radius-primary $sf-border-radius-primary 0;
+    h4 {
+      display: flex;
+      padding: $sf-padding-secondary;
+      align-items: center;
+      font-weight: normal;
+      .material-icons {
+        font-size: 22px;
+        color: #dddddd;
+        margin-right: $sf-padding-third;
+      }
+    }
+    .sf-comment-content {
+      padding: $sf-padding-secondary;
+      margin: 0;
+      color: $sf-text-color-secondary;
+      p {
+        margin: 0;
+      }
+    }
+  }
+}
+
 
 //Animations
 .sf-route-content {
@@ -547,4 +596,16 @@ form {
 .sf-fade-enter.sf-fade-enter-active {
   opacity: 1;
   transition: opacity 250ms ease-in;
+}
+
+.redux-toastr .toastr .close-toastr {
+  right: 10px;
+  top: 0px;
+  color: #ffffff;
+  font-size: 20px;
+}
+.rrt-confirm-holder .rrt-confirm .rrt-message {
+  font-family: "Poppins" !important;
+  font-size: 13px;
+  padding: 40px 30px;
 }
