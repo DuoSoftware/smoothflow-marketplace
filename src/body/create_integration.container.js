@@ -7,7 +7,7 @@ import { PageHeader, Button, Preloader } from '../components/common';
 import Input from '../components/Input/input.widget';
 import {IntegrationsService, KEY} from '../_base/services';
 import { PreloadBody, CandidateInt } from '../_base/actions';
-
+import {toastr} from 'react-redux-toastr'
 class CreateNewIntegration extends Component {
     constructor(props) {
         super(props);
@@ -149,19 +149,20 @@ class CreateNewIntegration extends Component {
                 .then(res => {
                     if(res.data.IsSuccess) {
                         this.props.dispatch(PreloadBody(false));
-                        alert('Update Success');
+                        toastr.success('Success', 'Integration has been updated');
                         this.props.history.push('/user/integrations');
                     }
                 })
                 .catch(errorres => {
                     console.error(errorres);
+                    toastr.error('Failed', 'Integration has been failed to create');
                 });
         } else {
             IntegrationsService.createIntegration(payload)
                 .then(res => {
                     if(res.data.IsSuccess) {
                         this.props.dispatch(PreloadBody(false));
-                        alert('Update Success');
+                        toastr.success('Success', 'Integration has been created');
                         this.props.history.push('/user/integrations');
                     }
                 })

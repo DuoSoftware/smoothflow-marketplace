@@ -407,10 +407,10 @@ class ItemView extends Component {
                     }
                 })
                 .catch(errres => {
-                    if(!errres.data.IsSuccess) {
+                    // if(!errres.data.IsSuccess) {
                         this.props.dispatch(PreloadBody(false));
-                        toastr.success('Failed', 'Activity deleting failed. Please try again later');
-                    }
+                        toastr.error('Failed', 'Activity deleting failed. Please try again later');
+                    // }
                 });
         } else if (this.props.location.activity.type === 'integration') {
             IntegrationsService.deleteIntegration(id)

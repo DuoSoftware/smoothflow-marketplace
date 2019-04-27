@@ -2,6 +2,7 @@ const initState = {
     Active: true,
     company: 0,
     created_at: "2018-08-02T06:58:54.121Z",
+    sesuser : null,
     email: {
         contact: "kasun.w@duosoftware.com",
         type: "email",
@@ -28,11 +29,7 @@ const UserReducer = (state = initState, action) => {
         case 'AUTH' :
             return {
                 ...state,
-                username: action.user.username,
-                _id: action.user._id,
-                email: {
-                    contact: action.user.email.contact
-                }
+                sesuser : action.user
             };
 
         case 'SIGNOUT' :

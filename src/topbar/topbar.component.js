@@ -86,7 +86,7 @@ class Topbar extends Component {
                                         {
                                             this.props.user.is_logged_in
                                             ?   <Wrap>
-                                                    <span>{ this.props.user.username }</span>
+                                                    <span>{ this.props.user.sesuser.given_name }</span>
                                                     <Button
                                                         className="sf-button sf-button-clear sf-button-circle"
                                                         onClick={this.toggleUserCtrlPanel.bind(null, 'TOGGLE')}><span
