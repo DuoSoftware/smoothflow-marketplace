@@ -15,6 +15,7 @@ class CreateNewIntegration extends Component {
             newIntegration : {
                 description: "",
                 enable: true,
+                image: null,
                 integrationData: [],
                 integrationName: "",
                 integrationType: ""
@@ -53,6 +54,29 @@ class CreateNewIntegration extends Component {
     integ_data_model = {
         key: "",
         value: ""
+    };
+
+    addMedia = (e, type) => {
+        let _self = this;
+        let file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.readAsDataURL(e.target.files[0]);
+            reader.onload = function(_e) {
+                if (file.type.split('/')[0] !== 'image') {
+                    alert("Invalid file format. Please make sure you are uploading an Image file");
+                    return;
+                }
+                _self.setState(state => ({
+                    ...state,
+                    newIntegration: {
+                        ...state.newIntegration,
+                        image: file
+                    }
+                }));
+                document.getElementById('newIntegrationImage').setAttribute('src', _e.target.result);
+            };
+        }
     };
 
     newIntegration = (e, i) => {
@@ -262,7 +286,7 @@ class CreateNewIntegration extends Component {
                                     </div>
                                     {
                                         this.state.newIntegration.integrationType === 'APIKeys'
-                                        ?   <div className="sf-feature-block">
+                                            ?   <div className="sf-feature-block">
                                                 <div className="sf-feature-entry sf-flexbox-row">
                                                     <div className="sf-input-block sf-flex-1" style={{marginBottom: '0'}}>
                                                         <input type="text" placeholder="Key" name="integrationDataKey" id="integrationDataKey" onChange={(event) => this.newIntegration(event) } />
@@ -276,7 +300,7 @@ class CreateNewIntegration extends Component {
                                                     <button type="button" id="addIntegrationData" className="sf-button sf-button-primary sf-button-primary-light" onClick={(event) => this.newIntegration(event) }>+</button>
                                                 </div>
                                             </div>
-                                        :   <div className="sf-input-block sf-flex-1" style={{marginBottom: '0'}}>
+                                            :   <div className="sf-input-block sf-flex-1" style={{marginBottom: '0'}}>
                                                 <div className="sf-custom-input sf-flex-1">
                                                     {/*<label>Integration name</label>*/}
                                                     <Input type="text" name="loginURL" id="loginURL" className="sf-flex-1" value={this.state.newIntegration.integrationData} onChange={(event) => this.newIntegration(event) } required placeholder="Login URL"/>
@@ -286,6 +310,31 @@ class CreateNewIntegration extends Component {
                                 </div>
                                 <div className="sf-p-p" style={ {width:'300px'}}></div>
                             </div>
+                            <div className="sf-input-group sf-flexbox-row">
+                                <div className="sf-flex-1">
+                                    <h3 className="sf-heading-sub sf-heading-form">Image</h3>
+                                    <div className="sf-clearfix">
+                                        {
+                                            this.state.newIntegration.image !== null
+                                                ?   <div className="sf-card" style={ {'width' : '50%'} }>
+                                                    <div className="sf-card-content sf-card-bordered sf-card-centered-row">
+                                                        <div className="sf-flex-1">
+                                                            <img src={this.state.newIntegration.image} alt="" id="newIntegrationImage" style={{ height: '100px', width: 'auto' }} />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                :   null
+                                        }
+                                    </div>
+                                    <div className="sf-feature-block">
+                                        <div className="sf-feature-entry">
+                                            <input type="file" onChange={(event) => this.addMedia(event, 'main')}/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="sf-p-p" style={ {width:'300px'}}></div>
+                            </div>
+
                         </form>
                 }
             </div>

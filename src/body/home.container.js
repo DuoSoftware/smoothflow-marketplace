@@ -125,7 +125,7 @@ class Home extends Component {
                                                 </Link>
                                             </div>
                                         </div>
-                                        <img src="./marketplace/images/smoothflow_illustration_automation_01.svg" />
+                                        <img src="./images/smoothflow_illustration_automation_01.svg" />
                                     </div>
                                 </div>
                                 <div>
