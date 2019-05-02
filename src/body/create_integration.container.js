@@ -75,7 +75,8 @@ class CreateNewIntegration extends Component {
                     ...state,
                     newIntegration: {
                         ...state.newIntegration,
-                        integrationType: _input
+                        integrationType: _input,
+                        integrationData: []
                     }
                 }));
                 break;
@@ -102,14 +103,19 @@ class CreateNewIntegration extends Component {
                 // -----
                 _state_temp_integ_data.push(this.integ_data_model);
                 // -----
-
+                const data_ = [...this.state.newIntegration.integrationData];
+                data_.push(this.integ_data_model.key);
                 this.setState(state => ({
                     ...state,
-                    _temp_integ_data: _state_temp_integ_data
+                    _temp_integ_data: _state_temp_integ_data,
+                    newIntegration: {
+                        ...state.newIntegration,
+                        integrationData: data_
+                    }
                 }));
                 this.integ_data_model = {};
                 document.getElementById('integrationDataKey').value = "";
-                document.getElementById('integrationDataValue').value = "";
+                // document.getElementById('integrationDataValue').value = "";
                 document.getElementById('integrationDataKey').focus();
                 break;
 
@@ -123,6 +129,18 @@ class CreateNewIntegration extends Component {
                     _temp_integ_data: _state_temp_integ_data
                 }));
 
+            case 'loginURL' :
+                const data = [];
+                data.push(_input);
+                this.state.newIntegration.integrationData = [];
+                this.setState(state =>({
+                    ...state,
+                    newIntegration: {
+                        ...state.newIntegration,
+                        integrationData: data
+                    }
+                }));
+
             default : 
                 return;
         } 
@@ -134,13 +152,13 @@ class CreateNewIntegration extends Component {
         const _state_temp_integ_data = [...this.state._temp_integ_data];
         const payload = {...this.state.newIntegration};
 
-        for(const integ of _state_temp_integ_data) {
-            const _m = {};
-            _m[integ.key] = integ.value;
-            payload.integrationData.push(_m);
-        }
-
-        payload.integrationData = Object.assign({}, ...payload.integrationData);
+        // for(const integ of _state_temp_integ_data) {
+        //     const _m = {};
+        //     _m[integ.key] = integ.value;
+        //     payload.integrationData.push(_m);
+        // }
+        //
+        // payload.integrationData = Object.assign({}, ...payload.integrationData);
 
         let is_update;
         this.props.location.candidate ? is_update = true : is_update = false; 
@@ -201,10 +219,12 @@ class CreateNewIntegration extends Component {
                                         <div className="sf-input-block sf-flex-1 sf-flexbox-row sf-custom-input sf-custom-select">
                                             <label>Integration type</label>
                                             <select name="integrationType" id="integrationType" value={this.state.newIntegration.integrationType ? this.state.newIntegration.integrationType : '_'} onChange={(event) => this.newIntegration(event) } required>
-                                                <option value="Facebook">Facebook</option>
-                                                <option value="Slack">Slack</option>
-                                                <option value="Zapier">Zapier</option>
-                                                <option value="Typeform">Typeform</option>
+                                                {/*<option value="Facebook">Facebook</option>*/}
+                                                {/*<option value="Slack">Slack</option>*/}
+                                                {/*<option value="Zapier">Zapier</option>*/}
+                                                {/*<option value="Typeform">Typeform</option>*/}
+                                                <option value="LoginURL">Login URL</option>
+                                                <option value="APIKeys">API keys</option>
                                             </select>
                                             {/*<Button className="sf-button sf-button-circle"><span className="sf-icon icon-sf_ico_plus_circle"></span></Button>*/}
                                         </div>
@@ -240,20 +260,29 @@ class CreateNewIntegration extends Component {
                                             )
                                         }
                                     </div>
-                                    <div className="sf-feature-block">
-                                        <div className="sf-feature-entry sf-flexbox-row">
-                                            <div className="sf-input-block sf-flex-1" style={{marginBottom: '0'}}>
-                                                <input type="text" placeholder="Key" name="integrationDataKey" id="integrationDataKey" onChange={(event) => this.newIntegration(event) } />
+                                    {
+                                        this.state.newIntegration.integrationType === 'APIKeys'
+                                        ?   <div className="sf-feature-block">
+                                                <div className="sf-feature-entry sf-flexbox-row">
+                                                    <div className="sf-input-block sf-flex-1" style={{marginBottom: '0'}}>
+                                                        <input type="text" placeholder="Key" name="integrationDataKey" id="integrationDataKey" onChange={(event) => this.newIntegration(event) } />
+                                                    </div>
+                                                    {/*<div className="sf-spacer-p"></div>*/}
+                                                    {/*<div className="sf-input-block sf-flex-1">*/}
+                                                    {/*<input type="text" placeholder="Value" name="integrationDataValue" id="integrationDataValue" onChange={(event) => this.newIntegration(event) } />*/}
+                                                    {/*</div>*/}
+                                                </div>
+                                                <div className="sf-feature-add">
+                                                    <button type="button" id="addIntegrationData" className="sf-button sf-button-primary sf-button-primary-light" onClick={(event) => this.newIntegration(event) }>+</button>
+                                                </div>
                                             </div>
-                                            <div className="sf-spacer-p"></div>
-                                            <div className="sf-input-block sf-flex-1">
-                                                <input type="text" placeholder="Value" name="integrationDataValue" id="integrationDataValue" onChange={(event) => this.newIntegration(event) } />
+                                        :   <div className="sf-input-block sf-flex-1" style={{marginBottom: '0'}}>
+                                                <div className="sf-custom-input sf-flex-1">
+                                                    {/*<label>Integration name</label>*/}
+                                                    <Input type="text" name="loginURL" id="loginURL" className="sf-flex-1" value={this.state.newIntegration.integrationData} onChange={(event) => this.newIntegration(event) } required placeholder="Login URL"/>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="sf-feature-add">
-                                            <button type="button" id="addIntegrationData" className="sf-button sf-button-primary sf-button-primary-light" onClick={(event) => this.newIntegration(event) }>+</button>
-                                        </div>
-                                    </div>
+                                    }
                                 </div>
                                 <div className="sf-p-p" style={ {width:'300px'}}></div>
                             </div>
