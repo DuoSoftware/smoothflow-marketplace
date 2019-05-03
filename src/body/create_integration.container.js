@@ -5,7 +5,7 @@ import { createHashHistory  } from 'history'
 import { connect } from 'react-redux';
 import { PageHeader, Button, Preloader } from '../components/common';
 import Input from '../components/Input/input.widget';
-import {IntegrationsService, KEY} from '../_base/services';
+import {IntegrationsService, KEY, MediaService} from '../_base/services';
 import { PreloadBody, CandidateInt } from '../_base/actions';
 import {toastr} from 'react-redux-toastr'
 class CreateNewIntegration extends Component {
@@ -18,7 +18,7 @@ class CreateNewIntegration extends Component {
                 image: null,
                 integrationData: [],
                 integrationName: "",
-                integrationType: ""
+                integrationType: "LoginURL"
             },
             _temp_integ_data: []
         }
@@ -186,31 +186,39 @@ class CreateNewIntegration extends Component {
 
         let is_update;
         this.props.location.candidate ? is_update = true : is_update = false; 
-        if (is_update) {
-            IntegrationsService.updateIntegration(payload)
-                .then(res => {
-                    if(res.data.IsSuccess) {
-                        this.props.dispatch(PreloadBody(false));
-                        toastr.success('Success', 'Integration has been updated');
-                        this.props.history.push('/user/integrations');
-                    }
-                })
-                .catch(errorres => {
-                    console.error(errorres);
-                    toastr.error('Failed', 'Integration has been failed to create');
-                });
-        } else {
-            IntegrationsService.createIntegration(payload)
-                .then(res => {
-                    if(res.data.IsSuccess) {
-                        this.props.dispatch(PreloadBody(false));
-                        toastr.success('Success', 'Integration has been created');
-                        this.props.history.push('/user/integrations');
-                    }
-                })
-                .catch(errorres => {
-                    console.error(errorres);
-                });
+        if(payload.image) {
+            const _self = this;
+            MediaService.uploadMedia(payload.image, function (res) {
+                if (res.data.IsSuccess) {
+                    payload.image = res.data.url;
+                }
+                if (is_update) {
+                    IntegrationsService.updateIntegration(payload)
+                        .then(res => {
+                            if(res.data.IsSuccess) {
+                                _self.props.dispatch(PreloadBody(false));
+                                toastr.success('Success', 'Integration has been updated');
+                                _self.props.history.push('/user/integrations');
+                            }
+                        })
+                        .catch(errorres => {
+                            console.error(errorres);
+                            toastr.error('Failed', 'Integration has been failed to create');
+                        });
+                } else {
+                    IntegrationsService.createIntegration(payload)
+                        .then(res => {
+                            if(res.data.IsSuccess) {
+                                _self.props.dispatch(PreloadBody(false));
+                                toastr.success('Success', 'Integration has been created');
+                                _self.props.history.push('/user/integrations');
+                            }
+                        })
+                        .catch(errorres => {
+                            console.error(errorres);
+                        });
+                }
+            })
         }
 
     };

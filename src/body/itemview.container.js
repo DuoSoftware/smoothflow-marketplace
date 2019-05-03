@@ -417,7 +417,7 @@ class ItemView extends Component {
                 .then(res => {
                     if(res.data.IsSuccess) {
                         this.props.dispatch(PreloadBody(false));
-                        alert('Integration deleted successfully');
+                        toastr.success('Success', 'Integration deleted successfully');
                         this.props.history.push('/user/integrations');
                     }
                 })
@@ -565,7 +565,6 @@ class ItemView extends Component {
 
             default:
                 break;
-
         }
     };
 
@@ -582,7 +581,6 @@ class ItemView extends Component {
     closeHelp = () => {
         this.props.dispatch(InitHELP(false));
     };
-
 
     render() {
         if (!this.props.location.activity) {
