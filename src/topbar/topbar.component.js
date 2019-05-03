@@ -92,7 +92,7 @@ class Topbar extends Component {
                                                         onClick={this.toggleUserCtrlPanel.bind(null, 'TOGGLE')}><span
                                                         className={`sf-icon icon-sf_ico_${this.state.userctrl.togglePanel ? 'chevron_up' : 'chevron_down'}`}></span>
                                                     </Button>
-                                                    <Dropdown toggle={this.state.userctrl.togglePanel} openPos={50} closedPos={16} height={'auto'}>
+                                                    <Dropdown toggle={this.state.userctrl.togglePanel} openPos={50} closedPos={16} height={'auto'} width={200} left={'auto'}>
                                                         <List>
                                                             {/*<li onClick={ (e)=>this.toggleUserCtrlPanel(e, 'MYPROFILE')}>*/}
                                                                 {/*<Textbox icon={'home'}>My Profile</Textbox>*/}

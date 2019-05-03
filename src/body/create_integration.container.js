@@ -199,6 +199,9 @@ class CreateNewIntegration extends Component {
                                 _self.props.dispatch(PreloadBody(false));
                                 toastr.success('Success', 'Integration has been updated');
                                 _self.props.history.push('/user/integrations');
+                            } else {
+                                _self.props.dispatch(PreloadBody(false));
+                                toastr.error('Failed', 'Failed to update the integration');
                             }
                         })
                         .catch(errorres => {
@@ -212,6 +215,9 @@ class CreateNewIntegration extends Component {
                                 _self.props.dispatch(PreloadBody(false));
                                 toastr.success('Success', 'Integration has been created');
                                 _self.props.history.push('/user/integrations');
+                            } else {
+                                _self.props.dispatch(PreloadBody(false));
+                                toastr.error('Failed', 'Failed to create the integration');
                             }
                         })
                         .catch(errorres => {
@@ -264,7 +270,7 @@ class CreateNewIntegration extends Component {
                                     <div className="sf-input-block">
                                         <div className="sf-custom-input sf-flex-1">
                                             <label>Description</label>
-                                            <Input type="textarea" name="integrationDesc" id="integrationDesc" value={this.state.newIntegration.description} onChange={(event) => this.newIntegration(event) } required/>
+                                            <Input type="textarea" name="integrationDesc" id="integrationDesc" value={this.state.newIntegration.description} onChange={(event) => this.newIntegration(event) }/>
                                         </div>
                                     </div>
                                 </div>
@@ -311,7 +317,7 @@ class CreateNewIntegration extends Component {
                                             :   <div className="sf-input-block sf-flex-1" style={{marginBottom: '0'}}>
                                                 <div className="sf-custom-input sf-flex-1">
                                                     {/*<label>Integration name</label>*/}
-                                                    <Input type="text" name="loginURL" id="loginURL" className="sf-flex-1" value={this.state.newIntegration.integrationData} onChange={(event) => this.newIntegration(event) } required placeholder="Login URL"/>
+                                                    <Input type="url" name="loginURL" id="loginURL" className="sf-flex-1" value={this.state.newIntegration.integrationData} onChange={(event) => this.newIntegration(event) } required placeholder="Login URL"/>
                                                 </div>
                                             </div>
                                     }
