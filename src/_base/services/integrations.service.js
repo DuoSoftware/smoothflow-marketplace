@@ -4,16 +4,16 @@ import fs from 'fs';
 
 const IntegrationsService = {
     getAllIntegrations: () => {
-        return axios.get(URLs.integration.getAllIntegrations)
+        return axios.get(URLs.integration.base_ + URLs.integration.getAllIntegrations)
     },
     createIntegration: (integration) => {
-        return axios.post(URLs.integration.setupIntegration+'s', integration)
+        return axios.post(URLs.integration.base_ + URLs.integration.setupIntegration+'s', integration)
     },
     updateIntegration: (integration) => {
-        return axios.put(URLs.integration.setupIntegration+'s/' + integration._id, integration)
+        return axios.put(URLs.integration.base_ + URLs.integration.setupIntegration+'s/' + integration._id, integration)
     },
     deleteIntegration: (id) => {
-        return axios.delete(URLs.integration.setupIntegration+'s/' + id)
+        return axios.delete(URLs.integration.base_ + URLs.integration.setupIntegration+'s/' + id)
     }
 };
 
