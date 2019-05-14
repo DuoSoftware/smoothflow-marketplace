@@ -9,6 +9,7 @@
       margin-right: $sf-padding-primary;
       position: relative;
       cursor: pointer;
+
       a {
         display: inline-block;
         padding: $sf-padding-secondary $sf-padding-primary+10;
@@ -54,5 +55,8 @@
         }
       }
     }
+  }
+  .sf-tab-body {
+    position: relative;
   }
 }

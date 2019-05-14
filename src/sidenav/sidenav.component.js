@@ -32,6 +32,7 @@ class Sidenav extends Component {
                 icon: 'items',
                 active: false
             }],
+            reviewsActive : false,
             _structuredList : {
                 "taps": {
                     list: []
@@ -83,10 +84,19 @@ class Sidenav extends Component {
             if (nav.name === _name) nav.active = true;
             else nav.active = false;
         };
-        this.setState(state => ({
-            ...state,
-            _sidenav : _state_nav
-        }));
+
+        if (_name === 'reviews') {
+            this.setState(state => ({
+                ...state,
+                reviewsActive : true
+            }));
+        } else {
+            this.setState(state => ({
+                ...state,
+                _sidenav : _state_nav,
+                reviewsActive : false
+            }));
+        }
     };
 
     initCreatePanel = () => {
@@ -146,24 +156,24 @@ class Sidenav extends Component {
                                             <Block>
                                                 <List>
                                                     {
-                                                        this.state._sidenav.map(nav => {
-                                                            return  <li key={KEY()} className={nav.active ? 'sf-list-active' : null}>
-                                                                        <Link to={'/user/' + nav.name}
-                                                                              onClick={event => this.setActiveNav(event, nav.name)}
-                                                                              id={`NAV_${nav.name.toUpperCase()}`}>
-                                                                            <Textbox icon={nav.icon} size="17">
-                                                                                <span>{nav.name}</span>
-                                                                            </Textbox>
-                                                                        </Link>
-                                                                    </li>
-                                                        })
+                                                        this.state._sidenav.map(nav =>
+                                                            <li key={KEY()} className={nav.active ? 'sf-list-active' : null}>
+                                                                <Link to={'/user/' + nav.name}
+                                                                      onClick={event => this.setActiveNav(event, nav.name)}
+                                                                      id={`NAV_${nav.name.toUpperCase()}`}>
+                                                                    <Textbox icon={nav.icon} size="17">
+                                                                        <span>{nav.name}</span>
+                                                                    </Textbox>
+                                                                </Link>
+                                                            </li>
+                                                        )
                                                     }
                                                 </List>
                                                 <Block/>
                                                 <List>
                                                     <li key={KEY()}>
                                                         <Link to={'/user/billing'}
-                                                              onClick={event => this.setActiveNav(event, 'reviews')}
+                                                              onClick={event => this.setActiveNav(event, 'billing')}
                                                               id={'NAV_REVIEWS'}>
                                                             <Textbox icon="code" size="17">
                                                                 <span>Billing</span>
@@ -173,7 +183,7 @@ class Sidenav extends Component {
                                                 </List>
                                                 <div className="sf-hr" style={{margin: '10px 0'}}></div>
                                                 <List>
-                                                    <li key={KEY()}>
+                                                    <li key={KEY()} className={this.state.reviewsActive ? 'sf-list-active' : null}>
                                                         <Link to={'/user/reviews'}
                                                               onClick={event => this.setActiveNav(event, 'reviews')}
                                                               id={'NAV_REVIEWS'}>

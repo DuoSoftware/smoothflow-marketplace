@@ -23,6 +23,10 @@ class MyActivities extends Component {
                     {
                         text: 'PUBLISHED',
                         selected: false
+                    },
+                    {
+                        text: 'PENDING',
+                        selected: false
                     }
                 ],
                 toggleDropdown: false
@@ -61,7 +65,7 @@ class MyActivities extends Component {
                             tags:
                                 activity.tags.map((tag) => {
                                     return {
-                                        name: tag.tag
+                                        tag: tag.tag
                                     }
                                 }),
                             what_you_get:

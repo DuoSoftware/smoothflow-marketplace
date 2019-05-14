@@ -74,6 +74,12 @@ const ActivitiesService = {
     getActivityComments: (id) => {
         return axios.get(URLs.activity.review.base_ + URLs.activity.review.getActivityComments + '/' + id)
     },
+    marketplaceReviewByTenant: (tenant) => {
+        return axios.get(URLs.activity.marketplaceReviewByTenant + '/' + tenant)
+    },
+    getMarketplaceReviewByActivityName: (name) => {
+        return axios.get(URLs.activity.getMarketplaceReviewByActivityName + '/' + name)
+    },
     deleteActivity: (id) => {
         return axios.delete(URLs.activity.base_ + URLs.activity.deleteActivity + '/' + id)
     }

@@ -4,6 +4,12 @@ export const PreloadBody = loader => ({
     loader
 });
 
+export const PreloadTab = loader => ({
+    category: 'UIHELPER',
+    type: 'PRELOAD_TAB',
+    loader
+});
+
 export const PreloadShell = loader => ({
     category: 'UIHELPER',
     type: 'PRELOAD_SHELL',

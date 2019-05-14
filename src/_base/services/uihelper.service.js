@@ -1,3 +1,5 @@
+import jwt from 'jsonwebtoken';
+
 const UIHelper = {
     UUID : () => {
         const uuid = Math.floor((1 + Math.random()) * 0x1000000).toString(16).substring(1);
@@ -7,9 +9,10 @@ const UIHelper = {
         return code;
     },
     parseJWT: (token) => {
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace('-', '+').replace('_', '/');
-        return JSON.parse(window.atob(base64));
+        const _tokenParsed = jwt.decode(token);
+        // const base64Url = token.split('.')[1];
+        // const base64 = base64Url.replace('-', '+').replace('_', '/');
+        return _tokenParsed;
     }
 };
 export { UIHelper }

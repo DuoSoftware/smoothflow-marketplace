@@ -1,6 +1,7 @@
 const uihelper = {
     _preload_shell_ : false,
     _preload_body_ : false,
+    _preload_tab_ : false,
     _preload_dialog_ : false,
     candidate_item : {},
     _init_publish: false,
@@ -15,6 +16,12 @@ const UIHelperReducer = (state = uihelper, action) => {
                 _preload_body_ : action.loader
             };
         
+        case 'PRELOAD_TAB' :
+            return {
+                ...state,
+                _preload_tab_ : action.loader
+            };
+
         case 'PRELOAD_SHELL' :
             return {
                 ...state,

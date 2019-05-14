@@ -26,6 +26,8 @@ import UIHelperReducer from "./_base/reducers/uihelper.reducer";
 import Wrap from "./_base/_wrap";
 import Amplify from 'aws-amplify'
 
+import jwt from 'jsonwebtoken';
+
 class App extends Component {
     constructor(props) {
         super(props)

@@ -35,6 +35,11 @@ class Home extends Component {
     temp_all_activities = [];
     // -------------------------------------------------------------------------------
     getAllItems = () => {
+        const allActivities = this.props.user.myactivities;
+        this.setState(state => ({
+            ...state,
+            allActivities: allActivities
+        }))
     };
 
     // Search
@@ -131,7 +136,7 @@ class Home extends Component {
                                 <div>
                                     {
                                         !this.props.activities.loading
-                                            ?   this.props.activities.activities.map((activity) => {
+                                            ?  this.state.allActivities.map((activity) => {
                                                     if(activity) return <ItemCard item={activity} />
                                                 })
                                             :   null
