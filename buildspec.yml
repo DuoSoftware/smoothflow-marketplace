@@ -11,10 +11,6 @@ phases:
       commands:
         - npm run-script build
         - echo 'Starting to move files'
-<<<<<<< HEAD
         - aws s3 sync build s3://smoothflow-prod/developers
-=======
-        - aws s3 sync build s3://smoothflow-dev/developers
->>>>>>> development_aws
       finally:
         - echo 'Smoothflow Deployement Succeded.'
