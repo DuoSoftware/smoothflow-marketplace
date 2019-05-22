@@ -17,7 +17,23 @@ class Integrations extends Component {
         IntegrationsService.getAllIntegrations()
             .then(integs => {
                 if (integs.data.IsSuccess) {
+                    const dum = [{
+                        _id: '1',
+                        integrationName: 'Google Sheets',
+                        image: 'https://seeklogo.com/images/G/google-sheets-logo-70C2B2CA6A-seeklogo.com.png',
+                        description: 'Google Sheets is a spreadsheet program included as part of a free, web-based software office suite offered by Google within its Google Drive service',
+                        integrationData: [{
+                            integrationDataName: 'element1',
+                            integrationDataType: 'action',
+                            integrationDataLabel: 'Element one',
+                            integrationDataCon: 'Connection1',
+                            integrationDataAction: 'create',
+                            state: 'private'
+                        }],
+                        state: 'private'
+                    }];
                     const integs_ = integs.data.Result.map((integ, index) => {
+                    // const integs_ = dum.map((integ, index) => {
                         return {
                             type: 'integration',
                             name: integ.integrationName,
@@ -25,13 +41,15 @@ class Integrations extends Component {
                             description: integ.description,
                             features:[],
                             tags: [{
-                                name: integ.integrationType
+                                name: integ.integrationName
                             }],
                             what_you_get:[],
                             pricings: [],
                             faq:[],
                             data: integ.integrationData,
-                            _id: integ._id
+                            _id: integ._id,
+                            state: integ.state,
+                            reviews: []
                         }
                     })
                     this.props.dispatch(GetMyIntgrations(integs_));
@@ -60,7 +78,7 @@ class Integrations extends Component {
                     :   <Wrap>
                             {
                                 this.props.user.integrations.map(integ => {
-                                    return <ItemCard key={integ._id} item={integ} />
+                                    return <ItemCard key={integ._id} item={integ} advanced={true} />
                                 })
                             }
                         </Wrap>

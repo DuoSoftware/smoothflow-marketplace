@@ -30,24 +30,6 @@
         margin: 0;
         font-size: $sf-header-sub;
       }
-      .sf-activity-state {
-        display: inline-block;
-        padding: $sf-padding-third - 3 $sf-padding-third;
-        border-radius: $sf-border-radius-primary;
-        color: #ffffff;
-        &.sf-activity-private {
-          background: $sf-private;
-        }
-        &.sf-activity-published {
-          background: $sf-public;
-        }
-        &.sf-activity-pending {
-          background: $sf-pending;
-        }
-        &.sf-activity-public {
-          background: $sf-public;
-        }
-      }
     }
     .sf-item-card-body {
       padding: $sf-padding-primary;

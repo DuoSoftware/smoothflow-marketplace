@@ -1,6 +1,7 @@
 @import "./core/styles/variables";
 @import "./core/icons/icons.css";
 @import '../node_modules/react-redux-toastr/src/styles/index';
+@import '../node_modules/prismjs/themes/prism-solarizedlight.css';
 
 body,
 html,
@@ -575,6 +576,45 @@ form {
         margin: 0;
       }
     }
+  }
+}
+.sf-connection-widget {
+  padding: 10px;
+  border-radius: 5px;
+  border: solid 1px $sf-shadow-color-primary;
+  margin-bottom: $sf-padding-primary;
+  .sf-icon-row {
+    display: flex;
+    align-items: center;
+    i.material-icons {
+      margin-right: $sf-padding-secondary*2;
+      font-size: 35px;
+      color: $sf-color-secondary;
+    }
+    i.material-icons:last-child {
+      margin-right: $sf-padding-third;
+      font-size: 20px;
+      opacity: 0.5;
+      cursor: pointer;
+    }
+  }
+}
+.sf-activity-state {
+  display: inline-block;
+  padding: $sf-padding-third - 3 $sf-padding-third;
+  border-radius: $sf-border-radius-primary;
+  color: #ffffff;
+  &.sf-activity-private {
+    background: $sf-private;
+  }
+  &.sf-activity-published {
+    background: $sf-public;
+  }
+  &.sf-activity-pending {
+    background: $sf-pending;
+  }
+  &.sf-activity-public {
+    background: $sf-public;
   }
 }
 

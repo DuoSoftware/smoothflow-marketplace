@@ -31,14 +31,14 @@ class Tabs extends Component {
     renderActiveTabContent() {
         const {children} = this.props;
         const {activeTabIndex} = this.state;
-        if(children[activeTabIndex]) {
+        if (children[activeTabIndex]) {
             return children[activeTabIndex].props.children;
         }
     }
 
     render() {
         return (
-            <div className="sf-tabs">
+            <div className={`sf-tabs`}>
                 <ul className="sf-tabs-nav">
                     { this.renderChildrenWithTabsApiAsProps() }
                 </ul>
