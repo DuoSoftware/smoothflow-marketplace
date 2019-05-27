@@ -21,12 +21,21 @@ class ConnectionSection extends Component {
        }))
     }
     updateSection = (e) => {
-        IntegrationsService.updateConnectionSection()
+        debugger
+        const payload = {};
+        payload[this.props.section] = JSON.parse(this.state.code);
+        IntegrationsService.updateConnectionSection(this.props.appid, this.props.conid, this.props.section, payload)
+            .then(res => {
+                debugger
+            })
+            .catch(res => {
+                debugger
+            })
     }
     render() {
         return (
             <div className="sf-editor-wrap">
-                <Button className="sf-button sf-button-clear">SAVE</Button>
+                <Button className="sf-button sf-button-clear" onClick={(e)=>this.updateSection(e)}>SAVE</Button>
                 <Editor
                     value={this.state.code}
                     onValueChange={code => this.setState({ code })}
@@ -35,6 +44,7 @@ class ConnectionSection extends Component {
                     style={{
                         fontFamily: '"Fira code", "Fira Mono", monospace',
                         fontSize: 12,
+                        minHeight: 60
                     }}
                 />
             </div>

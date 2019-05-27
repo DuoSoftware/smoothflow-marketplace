@@ -95,6 +95,7 @@ class ItemView extends Component {
     is_eligible = false;
 
     componentDidMount() {
+        const _self = this;
         const candidate = this.props.location.activity;
         if (candidate && candidate.path) {
             if (candidate.path.includes('botmediastorage') && candidate.variables.length) {
@@ -115,11 +116,18 @@ class ItemView extends Component {
 
         if (candidate) {
             if (candidate.type === 'integration') {
-                IntegrationsService.getAllIntegrationConnections()
+                IntegrationsService.getAllIntegrationConnections(this.props.location.activity._id)
                     .then(res => {
                         debugger
+                        if (res.data.status) {
+                            _self.setState(s=>({
+                                ...s,
+                                connections: res.data.data
+                            }))
+                        }
                     })
                     .catch(eres => {
+                        debugger
                         const cons = [{
                             integrationConName: 'Connection1',
                             integrationConType: 'APIKey'
@@ -133,9 +141,15 @@ class ItemView extends Component {
                         }))
                     });
 
-                IntegrationsService.getAllIntegrationElements()
+                IntegrationsService.getAllIntegrationElements(this.props.location.activity._id)
                     .then(res => {
                         debugger
+                        if (res.data.status) {
+                            _self.setState(s=>({
+                                ...s,
+                                elements: res.data.data
+                            }))
+                        }
                     })
                     .catch(eres => {
                         const elems = [{
@@ -668,7 +682,7 @@ class ItemView extends Component {
             "features": [],
             "image": "(-_-)",
             "languages": [],
-            "path": "/nowhere",
+            "path": this.props.location.activity._id,
             "pricings": [],
             "state": "dandy",
             "tags": [],
@@ -685,14 +699,21 @@ class ItemView extends Component {
                 if (res.data.IsSuccess) {
                     const _self = this;
                     const _payload = {
-                        _id: _self.props.location.activity._id,
-                        state: 'pending'
+                        "connectionID": this.props.location.activity._id,
+                        "connectionType": "test",
+                        "integrationName": this.props.location.activity.name,
+                        "integrationConnections": this.props.location.activity.features,
+                        "image": this.props.location.activity.image,
+                        "integrationData": this.props.location.activity.data,
+                        "description": this.props.location.activity.description,
+                        "state": "pending",
+                        "enable": true
                     };
                     IntegrationsService.updateIntegration(_payload)
                         .then(_res => {
-                            if(_res.data.IsSuccess) {
+                            if (_res.data.IsSuccess) {
                                 toastr.success('Success', 'Queued for review successfully');
-                                this.props.dispatch(PreloadBody(false));
+                                _self.props.dispatch(PreloadBody(false));
                             } else {
                                 _self.props.dispatch(PreloadBody(false));
                                 toastr.error('Failed', 'Failed to add to review. Please try again later.');
@@ -799,7 +820,11 @@ class ItemView extends Component {
                                 <Link
                                     to={{
                                         pathname: this.props.location.activity.type === 'activity' ? '/user/activities/create' : '/user/integrations/create',
-                                        candidate: {...this.props.location.activity}
+                                        candidate: {...this.props.location.activity},
+                                        content: {
+                                            connections: [...this.state.connections],
+                                            elements: [...this.state.elements]
+                                        }
                                     }}>
                                     <Button className="sf-button sf-button-circle"><span className="sf-icon icon-sf_ico_edit"></span></Button>
                                 </Link>

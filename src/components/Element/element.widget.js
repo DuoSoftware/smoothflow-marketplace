@@ -15,50 +15,54 @@ class ElementWidget extends Component {
         }
     }
     componentDidMount() {
-        IntegrationsService.getElementContent(this.props.element)
-            .then(res=>{
-                debugger
-            })
-            .catch(eres=>{
-                const json_ = {
-                    "communication": {
-                        "url": "/api/users/create",
-                        "method": "POST",
-                        "qs": {},
-                        "body": {
-                            "name": "{{parameters.name}}",
-                            "email": "{{lower(parameters.email)}}"
-                        },
-                        "headers": {},
-                        "response": {
-                            "output": "{{body}}"
-                        }
-                    },
-                    "staticparms": [],
-                    "mapableparams": [
-                        {
-                            "name": "email",
-                            "type": "email",
-                            "label": "Email address",
-                            "required": true
-                        },
-                        {
-                            "name": "name",
-                            "type": "text",
-                            "label": "Name",
-                            "required": true
-                        }
-                    ],
-                    "interface": [
-                        {
-                            "name": "id",
-                            "type": "uinteger",
-                            "label": "User ID"
-                        }
-                    ]
-                };
-                this.renderElementSections(json_);
-            })
+        // IntegrationsService.getElementContent(this.props.element)
+        //     .then(res=>{
+        //         debugger
+        //     })
+        //     .catch(eres=>{
+        //         const json_ = {
+        //             "communication": {
+        //                 "url": "/api/users/create",
+        //                 "method": "POST",
+        //                 "qs": {},
+        //                 "body": {
+        //                     "name": "{{parameters.name}}",
+        //                     "email": "{{lower(parameters.email)}}"
+        //                 },
+        //                 "headers": {},
+        //                 "response": {
+        //                     "output": "{{body}}"
+        //                 }
+        //             },
+        //             "staticparms": [],
+        //             "mapableparams": [
+        //                 {
+        //                     "name": "email",
+        //                     "type": "email",
+        //                     "label": "Email address",
+        //                     "required": true
+        //                 },
+        //                 {
+        //                     "name": "name",
+        //                     "type": "text",
+        //                     "label": "Name",
+        //                     "required": true
+        //                 }
+        //             ],
+        //             "interface": [
+        //                 {
+        //                     "name": "id",
+        //                     "type": "uinteger",
+        //                     "label": "User ID"
+        //                 }
+        //             ]
+        //         };
+        //         this.renderElementSections(json_);
+        //     })
+        const code = {
+            mappableParameters: this.props.element.mappableParameters ? this.props.element.mappableParameters : []
+        };
+        this.renderElementSections(code);
     }
 
     toggleEdit = (e) => {
@@ -87,7 +91,7 @@ class ElementWidget extends Component {
             <div className="sf-connection-widget">
                 <div className="sf-icon-row">
                     <i className="sf-icon material-icons">view_module</i>
-                    <div className="sf-flex-1">{this.props.element.integrationDataName}</div>
+                    <div className="sf-flex-1">{this.props.element.name}</div>
                     {
                         this.state.showDetails
                             ?   <i className="sf-icon material-icons" onClick={(e)=>this.toggleEdit(e)}>check</i>

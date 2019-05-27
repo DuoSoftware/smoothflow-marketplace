@@ -12,35 +12,42 @@ class ConnectionWidget extends Component {
         super();
         this.state = {
             showDetails: false,
-            sections: []
+            sections: [],
+            content: null
         }
     }
     componentDidMount() {
-        IntegrationsService.getConnectionContent(this.props.con)
-            .then(res=>{
-                debugger
-            })
-            .catch(eres=>{
-                const json_ = {
-                    "connection": {
-                        "url": "https://www.example.com/api/whoami",
-                        "headers": {
-                            "x-api-key": ""
-                        }
-                    },
-                    "common": {
-                        "clientId": "",
-                        "clientSecret": ""
-                    },
-                    "parameters": [{
-                        "name": "clientId",
-                        "type": "text",
-                        "label": "Client ID",
-                        "advanced": true
-                    }]
-                };
-                this.renderConnectionSections(json_);
-            })
+        // IntegrationsService.getConnectionContent(this.props.con)
+        //     .then(res=>{
+        //         debugger
+        //     })
+        //     .catch(eres=>{
+        //         const json_ = {
+        //             "connection": {
+        //                 "url": "https://www.example.com/api/whoami",
+        //                 "headers": {
+        //                     "x-api-key": ""
+        //                 }
+        //             },
+        //             "common": {
+        //                 "clientId": "",
+        //                 "clientSecret": ""
+        //             },
+        //             "parameters": [{
+        //                 "name": "clientId",
+        //                 "type": "text",
+        //                 "label": "Client ID",
+        //                 "advanced": true
+        //             }]
+        //         };
+        //         this.renderConnectionSections(json_);
+        //     })
+        const code = {
+            api: this.props.connection.api ? this.props.connection.api : {},
+            common: this.props.connection.commonData ? this.props.connection.commonData : {},
+            params: this.props.connection.parameters ? this.props.connection.parameters : []
+        };
+        this.renderConnectionSections(code);
     }
 
     toggleEdit = (e) => {
@@ -55,7 +62,9 @@ class ConnectionWidget extends Component {
         for (const section in sections) {
             secs.push({
                 key: section,
-                code: sections[section]
+                code: sections[section],
+                id: this.props.connection.id,
+                appId: this.props.connection.appId
             })
         }
         this.setState(s=>({
@@ -69,7 +78,7 @@ class ConnectionWidget extends Component {
             <div className="sf-connection-widget">
                 <div className="sf-icon-row">
                     <i className="sf-icon material-icons">link</i>
-                    <div className="sf-flex-1">{this.props.connection.integrationConName}</div>
+                    <div className="sf-flex-1">{this.props.connection.name}</div>
                     {
                         this.state.showDetails
                             ?   <i className="sf-icon material-icons" onClick={(e)=>this.toggleEdit(e)}>check</i>
@@ -83,7 +92,7 @@ class ConnectionWidget extends Component {
                                 {
                                     this.state.sections.map(section=>
                                         <Tab simple={true} iconClassName={'icon-class-0'} linkClassName={'link-class-0'} title={section.key}>
-                                            <ConnectionSection key={KEY()} code={JSON.stringify(section.code, null, 4)}/>
+                                            <ConnectionSection key={KEY()} code={JSON.stringify(section.code, null, 4)} appid={section.appId} conid={section.id} section={section.key}/>
                                         </Tab>
                                     )
                                 }

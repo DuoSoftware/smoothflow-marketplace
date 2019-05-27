@@ -17,21 +17,22 @@ class Integrations extends Component {
         IntegrationsService.getAllIntegrations()
             .then(integs => {
                 if (integs.data.IsSuccess) {
-                    const dum = [{
-                        _id: '1',
-                        integrationName: 'Google Sheets',
-                        image: 'https://seeklogo.com/images/G/google-sheets-logo-70C2B2CA6A-seeklogo.com.png',
-                        description: 'Google Sheets is a spreadsheet program included as part of a free, web-based software office suite offered by Google within its Google Drive service',
-                        integrationData: [{
-                            integrationDataName: 'element1',
-                            integrationDataType: 'action',
-                            integrationDataLabel: 'Element one',
-                            integrationDataCon: 'Connection1',
-                            integrationDataAction: 'create',
-                            state: 'private'
-                        }],
-                        state: 'private'
-                    }];
+                    debugger
+                    // const dum = [{
+                    //     _id: '1',
+                    //     integrationName: 'Google Sheets',
+                    //     image: 'https://seeklogo.com/images/G/google-sheets-logo-70C2B2CA6A-seeklogo.com.png',
+                    //     description: 'Google Sheets is a spreadsheet program included as part of a free, web-based software office suite offered by Google within its Google Drive service',
+                    //     integrationData: [{
+                    //         integrationDataName: 'element1',
+                    //         integrationDataType: 'action',
+                    //         integrationDataLabel: 'Element one',
+                    //         integrationDataCon: 'Connection1',
+                    //         integrationDataAction: 'create',
+                    //         state: 'private'
+                    //     }],
+                    //     state: 'private'
+                    // }];
                     const integs_ = integs.data.Result.map((integ, index) => {
                     // const integs_ = dum.map((integ, index) => {
                         return {
@@ -39,15 +40,15 @@ class Integrations extends Component {
                             name: integ.integrationName,
                             image: integ.image,
                             description: integ.description,
-                            features:[],
+                            features:integ.integrationConnections,
                             tags: [{
                                 name: integ.integrationName
                             }],
-                            what_you_get:[],
+                            what_you_get: [],
                             pricings: [],
                             faq:[],
                             data: integ.integrationData,
-                            _id: integ._id,
+                            _id: integ.connectionID,
                             state: integ.state,
                             reviews: []
                         }
