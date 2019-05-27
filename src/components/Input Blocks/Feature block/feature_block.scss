@@ -7,6 +7,11 @@
   .sf-feature-entry {
     flex: 1;
     padding: $sf-padding-secondary;
+    .sf-custom-input {
+      &:not(:last-child) {
+        margin-bottom: $sf-padding-secondary;
+      }
+    }
   }
   .sf-feature-add {
     button {

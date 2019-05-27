@@ -31,7 +31,7 @@ class Tab extends Component {
     };
     render() {
         return (
-            <li className={`sf-tab ${this.props.isActive ? 'active' : ''}`}>
+            <li className={`sf-tab ${this.props.isActive ? 'active' : ''}${this.props.simple ? ' sf-tab-simple' : ''}`}>
                 <a onClick={(event) => {
                        event.preventDefault();
                         if (this.props.title === 'Review Reports') {

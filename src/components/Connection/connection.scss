@@ -1,0 +1,14 @@
+.npm__react-simple-code-editor__textarea {
+  background: #00000009!important;
+}
+
+.sf-editor-wrap {
+  position: relative;
+  >.sf-button {
+    z-index: 1;
+    margin-right: 10px;
+    position: absolute;
+    right: 0;
+    top: 10px;
+  }
+}

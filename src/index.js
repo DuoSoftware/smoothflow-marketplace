@@ -45,18 +45,17 @@ fetchSession().then(function (value) {
     axios.defaults.baseURL = URLs.base;
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + _t;
     axios.defaults.headers.common['companyInfo'] = _w + ':' + _p;
-
-    ReactDOM.render(
-        <Provider store={store}>
-            <App />
-        </Provider>
-        , document.getElementById('root'));
+    bootstrapApp();
 }, function (reason) {
+    bootstrapApp();
+});
+
+const bootstrapApp = () => {
     ReactDOM.render(
         <Provider store={store}>
             <App />
         </Provider>
         , document.getElementById('root'));
-});
+}
 // END - HTTP config ----------------------------------------------//
 registerServiceWorker();

@@ -24,9 +24,13 @@ import Usage from "./body/usage.container";
 import Billing from "./body/billing.container";
 import UIHelperReducer from "./_base/reducers/uihelper.reducer";
 import Wrap from "./_base/_wrap";
-import Amplify from 'aws-amplify'
+import Amplify, { PubSub } from 'aws-amplify'
+import { AWSIoTProvider } from '@aws-amplify/pubsub/lib/Providers';
 
-import jwt from 'jsonwebtoken';
+// Amplify.addPluggable(new AWSIoTProvider({
+//     aws_pubsub_region: 'us-east-2',
+//     aws_pubsub_endpoint: 'wss://a3p10iauyn1h5f-ats.iot.us-east-2.amazonaws.com/mqtt',
+// }));
 
 class App extends Component {
     constructor(props) {
@@ -69,6 +73,14 @@ class App extends Component {
             .catch(eres => {
                 debugger
             })
+
+        const ps = PubSub.subscribe('task').subscribe({
+            next: data => console.log('Message received', data),
+            error: error => {
+                console.error(error)
+            },
+            close: () => console.log('Done'),
+        });
     }
 
     render() {

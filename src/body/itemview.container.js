@@ -22,6 +22,8 @@ import Error from "../components/Error/error.widget";
 import ListI from "../components/List/list_iconed.widget";
 import Wrap from "../_base/_wrap";
 import {toastr} from 'react-redux-toastr';
+import {ConnectionWidget} from "../components/Connection/connection.widget";
+import {ElementWidget} from "../components/Element/element.widget";
 
 class ItemView extends Component {
     constructor(props) {
@@ -62,7 +64,9 @@ class ItemView extends Component {
                 is_val_api : false
             },
             active_guide: 'WYG',
-            activity_reviews: []
+            activity_reviews: [],
+            connections: [],
+            elements: []
         }
     }
 
@@ -91,12 +95,13 @@ class ItemView extends Component {
     is_eligible = false;
 
     componentDidMount() {
+        const _self = this;
         const candidate = this.props.location.activity;
-        if (candidate) {
+        if (candidate && candidate.path) {
             if (candidate.path.includes('botmediastorage') && candidate.variables.length) {
                 this.is_eligible = true;
             }
-            if(candidate.path.includes('botmediastorage')) {
+            if (candidate.path.includes('botmediastorage')) {
                 this.props.dispatch(PreloadBody(true));
                 MediaService.getMedia(candidate.path)
                     .then(file => {
@@ -108,6 +113,60 @@ class ItemView extends Component {
                     });
             }
         }
+
+        if (candidate) {
+            if (candidate.type === 'integration') {
+                IntegrationsService.getAllIntegrationConnections(this.props.location.activity._id)
+                    .then(res => {
+                        debugger
+                        if (res.data.status) {
+                            _self.setState(s=>({
+                                ...s,
+                                connections: res.data.data
+                            }))
+                        }
+                    })
+                    .catch(eres => {
+                        debugger
+                        const cons = [{
+                            integrationConName: 'Connection1',
+                            integrationConType: 'APIKey'
+                        },{
+                            integrationConName: 'Connection2',
+                            integrationConType: 'APIKey'
+                        }];
+                        this.setState(s=>({
+                            ...s,
+                            connections: cons
+                        }))
+                    });
+
+                IntegrationsService.getAllIntegrationElements(this.props.location.activity._id)
+                    .then(res => {
+                        debugger
+                        if (res.data.status) {
+                            _self.setState(s=>({
+                                ...s,
+                                elements: res.data.data
+                            }))
+                        }
+                    })
+                    .catch(eres => {
+                        const elems = [{
+                            integrationDataName: 'element1',
+                            integrationDataType: 'action',
+                            integrationDataLabel: 'Element one',
+                            integrationDataCon: 'Connection1',
+                            integrationDataAction: 'create',
+                            state: 'private'
+                        }];
+                        this.setState(s=>({
+                            ...s,
+                            elements: elems
+                        }))
+                    })
+            }
+        }
     }
 
     getFeatures(features) {
@@ -116,6 +175,16 @@ class ItemView extends Component {
         );
         return _features;
     }
+    // getElements(elements) {
+    //     const __elements = elements.map((elem) => {
+    //         return <div className="sf-icon-row">
+    //             <i className="sf-icon material-icons">view_module</i>
+    //             <div className="sf-flex-1">{elem.integrationDataName}</div>
+    //             <span className={`sf-activity-state sf-activity-${elem.state}`}>{ elem.state }</span>
+    //         </div>
+    //     });
+    //     return __elements;
+    // }
     getPricing(pricing) {
         const _pricing = pricing.map((price) =>
             <PriceBlock key={KEY()} name={ price.name } list={ price.pricing_fts } price={ price.price } billCycle={ price.bill_cycle } />
@@ -455,14 +524,20 @@ class ItemView extends Component {
 
     // Publish Activity
     init_publish = (e) => {
-        if (!this.props.location.activity.path.includes('botmediastorage')) {
-            // this.props.dispatch(InitPublishPRIVATE(true));
-            toastr.error('Not Eligible to Publish', 'Please make sure you have included your Activity Code before publishing');
-        } else if (this.props.location.activity.variables.length === 0) {
-            toastr.error('Not Eligible to Publish', 'Please make sure to define Variables in you Activity before publishing');
-        } else {
-            this.publishActivityPRIVATE(e);
+        debugger
+        if (this.props.location.activity.type === 'activity') {
+            if (!this.props.location.activity.path.includes('botmediastorage')) {
+                // this.props.dispatch(InitPublishPRIVATE(true));
+                toastr.error('Not Eligible to Publish', 'Please make sure you have included your Activity Code before publishing');
+            } else if (this.props.location.activity.variables.length === 0) {
+                toastr.error('Not Eligible to Publish', 'Please make sure to define Variables in you Activity before publishing');
+            } else {
+                this.publishActivityPRIVATE(e);
+            }
+        } else if (this.props.location.activity.type === 'integration') {
+            this.publishIntegrationPRIVATE(e);
         }
+
     };
     init_review = (e) => {
         const toastrConfirmOptions = {
@@ -539,7 +614,7 @@ class ItemView extends Component {
             "activities": []
         };
         // ActivitiesService.publishActivity(_publishFile, {"node": true, "golang": false}, function (status, res) {
-        ActivitiesService.publishActivity(_self.props.location.activity.path, function (res) {
+        ActivitiesService.publishActivity(_self.props.location.activity.path, null, function (res) {
             if (res.data) {
                 if (res.data.success) {
                     // _self.setState(state => ({
@@ -572,11 +647,13 @@ class ItemView extends Component {
                             toastr.error('Failed to Publish', 'Something went wrong. Please try again later.');
                             _self.props.dispatch(PreloadBody(false));
                         });
-                } else {
+                }
+                else {
                     if (res.data.message != '') {
                         toastr.error('Failed to Publish', res.data.message);
                         _self.props.dispatch(PreloadBody(false));
-                    } else {
+                    }
+                    else {
                         toastr.error('Failed to Publish', 'Something went wrong. Please try again later');
                         _self.props.dispatch(PreloadBody(false));
                     }
@@ -592,6 +669,69 @@ class ItemView extends Component {
                 }
             }
         });
+    };
+    publishIntegrationPRIVATE = (e) => {
+        debugger
+        e.preventDefault();
+        this.props.dispatch(PreloadBody(true));
+
+        const payload = {
+            "integration_name": this.props.location.activity.name,
+            "description": this.props.location.activity.description,
+            "faq":[],
+            "features": [],
+            "image": "(-_-)",
+            "languages": [],
+            "path": this.props.location.activity._id,
+            "pricings": [],
+            "state": "dandy",
+            "tags": [],
+            "tenant_name": this.props.user.sesuser.tenant.toString(),
+            "type": "staright",
+            "variables": [],
+            "what_you_get": [],
+            "release_notes": [],
+            "rawData" : {}
+        };
+
+        IntegrationsService.publishIntegration(payload)
+            .then(res => {
+                if (res.data.IsSuccess) {
+                    const _self = this;
+                    const _payload = {
+                        "connectionID": this.props.location.activity._id,
+                        "connectionType": "test",
+                        "integrationName": this.props.location.activity.name,
+                        "integrationConnections": this.props.location.activity.features,
+                        "image": this.props.location.activity.image,
+                        "integrationData": this.props.location.activity.data,
+                        "description": this.props.location.activity.description,
+                        "state": "pending",
+                        "enable": true
+                    };
+                    IntegrationsService.updateIntegration(_payload)
+                        .then(_res => {
+                            if (_res.data.IsSuccess) {
+                                toastr.success('Success', 'Queued for review successfully');
+                                _self.props.dispatch(PreloadBody(false));
+                            } else {
+                                _self.props.dispatch(PreloadBody(false));
+                                toastr.error('Failed', 'Failed to add to review. Please try again later.');
+                            }
+                        })
+                        .catch(errorres => {
+                            _self.props.dispatch(PreloadBody(false));
+                            toastr.error('Failed', 'Failed to add to review. Please try again later.');
+                        });
+                } else {
+                    toastr.error('Failed', 'Failed to add to review. Please try again later.');
+                    this.props.dispatch(PreloadBody(false));
+                }
+            })
+            .catch(eres => {
+                toastr.error('Failed', 'Failed to add to review. Please try again later.');
+                this.props.dispatch(PreloadBody(false));
+            })
     };
     addInfo = (e) => {
         switch (e.target.id) {
@@ -680,7 +820,11 @@ class ItemView extends Component {
                                 <Link
                                     to={{
                                         pathname: this.props.location.activity.type === 'activity' ? '/user/activities/create' : '/user/integrations/create',
-                                        candidate: {...this.props.location.activity}
+                                        candidate: {...this.props.location.activity},
+                                        content: {
+                                            connections: [...this.state.connections],
+                                            elements: [...this.state.elements]
+                                        }
                                     }}>
                                     <Button className="sf-button sf-button-circle"><span className="sf-icon icon-sf_ico_edit"></span></Button>
                                 </Link>
@@ -1085,79 +1229,130 @@ class ItemView extends Component {
                             {
                                 this.props.location.advanced
                                     ?   <div>
-                                            <Tabs>
-                                                <Tab iconClassName={'icon-class-0'} linkClassName={'link-class-0'} title={'Features'}>
-                                                    <div className="sf-p-ex sf-auto-fix">
-                                                        { this.getFeatures( this.props.location.activity.features) }
-                                                    </div>
-                                                </Tab>
-                                                <Tab iconClassName={'icon-class-1'} linkClassName={'link-class-1'} title={'What you get'}>
-                                                    <div className="sf-p-ex sf-auto-fix">
-                                                        <Carousel slides={ this.props.location.activity.what_you_get } />
-                                                    </div>
-                                                </Tab>
-                                                {/*<Tab iconClassName={'icon-class-0'} linkClassName={'link-class-0'} title={'Pricing'}>*/}
+                                        {
+                                            this.props.location.activity.type === 'activity'
+                                            ?   <Tabs>
+                                                    <Tab iconClassName={'icon-class-0'} linkClassName={'link-class-0'} title={'Features'}>
+                                                        <div className="sf-p-ex sf-auto-fix">
+                                                            { this.getFeatures( this.props.location.activity.features) }
+                                                        </div>
+                                                    </Tab>
+                                                    <Tab iconClassName={'icon-class-1'} linkClassName={'link-class-1'} title={'What you get'}>
+                                                        <div className="sf-p-ex sf-auto-fix">
+                                                            <Carousel slides={ this.props.location.activity.what_you_get } />
+                                                        </div>
+                                                    </Tab>
+                                                    {/*<Tab iconClassName={'icon-class-0'} linkClassName={'link-class-0'} title={'Pricing'}>*/}
                                                     {/*<div className="sf-p-ex sf-auto-fix">*/}
-                                                        {/*<div style={ {'display' : 'flex','justify-content' : 'center'}}>*/}
-                                                            {/*{ this.getPricing( this.props.location.activity.pricings ) }*/}
-                                                        {/*</div>*/}
+                                                    {/*<div style={ {'display' : 'flex','justify-content' : 'center'}}>*/}
+                                                    {/*{ this.getPricing( this.props.location.activity.pricings ) }*/}
                                                     {/*</div>*/}
-                                                {/*</Tab>*/}
-                                                <Tab iconClassName={'icon-class-1'} linkClassName={'link-class-1'} title={'FAQ'}>
-                                                    <div className="sf-p-ex sf-auto-fix">
-                                                        <Accordion atomic={true}>
-                                                            { this.getFAQ(this.props.location.activity.faq) }
-                                                        </Accordion>
-                                                    </div>
-                                                </Tab>
-                                                <Tab iconClassName={'icon-class-1'} linkClassName={'link-class-1'} title={'FAQ'}>
-                                                    <div className="sf-p-ex sf-auto-fix">
-                                                        <Accordion atomic={true}>
-                                                            { this.getFAQ(this.props.location.activity.faq) }
-                                                        </Accordion>
-                                                    </div>
-                                                </Tab>
-                                                <Tab iconClassName={'icon-class-1'} linkClassName={'link-class-1'} title={'Developer'}>
-                                                    <div className="sf-p-ex sf-auto-fix">
+                                                    {/*</div>*/}
+                                                    {/*</Tab>*/}
+                                                    <Tab iconClassName={'icon-class-1'} linkClassName={'link-class-1'} title={'FAQ'}>
+                                                        <div className="sf-p-ex sf-auto-fix">
+                                                            <Accordion atomic={true}>
+                                                                { this.getFAQ(this.props.location.activity.faq) }
+                                                            </Accordion>
+                                                        </div>
+                                                    </Tab>
+                                                    <Tab iconClassName={'icon-class-1'} linkClassName={'link-class-1'} title={'Developer'}>
+                                                        <div className="sf-p-ex sf-auto-fix">
 
-                                                    </div>
-                                                </Tab>
-                                                <Tab onClick={ (e) => this.getUserReviewsForActivity(e) } iconClassName={'icon-class-1'} linkClassName={'link-class-1'} title={'Reviews'}>
-                                                    <div className="sf-p-ex sf-auto-fix">
-                                                        {
-                                                            this.props.uihelper._preload_body_
-                                                            ?   <Preloader type={'BODY'} />
-                                                            :   this.props.location.activity.reviews.map(review => {
-                                                                    <div className="sf-block">
-                                                                        <h4>{ review.reviewer }</h4>
-                                                                        <p>{ review.comment }</p>
-                                                                    </div>
-                                                                })
-                                                        }
-                                                    </div>
-                                                </Tab>
-                                                <Tab onClick={ (e) => this.getActivityReviews(e) } iconClassName={'icon-class-1'} linkClassName={'link-class-1'} title={'Review Reports'} activityName={this.props.location.activity.activity_name}>
-                                                    <div className="sf-p-ex sf-auto-fix">
-                                                        {
-                                                            this.props.uihelper._preload_tab_
-                                                            ?   <Preloader type={'BODY'} />
-                                                            :   this.props.reviews.active_activity_reviews.map((comment, i) =>
-                                                                    <div className={`sf-comment-block${ ' sf-comment-' + comment.status.toLowerCase()}`}>
-                                                                        <div className="sf-comment-block-prefix">
-                                                                            <i className="material-icons">{ comment.status === 'PENDINGREVISION' ? 'warning' : 'assignment_turned_in' }</i>
+                                                        </div>
+                                                    </Tab>
+                                                    <Tab onClick={ (e) => this.getUserReviewsForActivity(e) } iconClassName={'icon-class-1'} linkClassName={'link-class-1'} title={'Reviews'}>
+                                                        <div className="sf-p-ex sf-auto-fix">
+                                                            {
+                                                                this.props.uihelper._preload_body_
+                                                                    ?   <Preloader type={'BODY'} />
+                                                                    :   this.props.location.activity.reviews.map(review => {
+                                                                        <div className="sf-block">
+                                                                            <h4>{ review.reviewer }</h4>
+                                                                            <p>{ review.comment }</p>
                                                                         </div>
-                                                                        <div className="sf-comment-block-body">
-                                                                            <h4><i className="material-icons">account_circle</i>{ comment.reviewer }</h4>
-                                                                            <div className="sf-comment-content" id={'sf_comment_' + i}>
-                                                                                <div dangerouslySetInnerHTML={{__html: comment.comment}}></div>
+                                                                    })
+                                                            }
+                                                        </div>
+                                                    </Tab>
+                                                    <Tab onClick={ (e) => this.getActivityReviews(e) } iconClassName={'icon-class-1'} linkClassName={'link-class-1'} title={'Review Reports'} activityName={this.props.location.activity.activity_name}>
+                                                        <div className="sf-p-ex sf-auto-fix">
+                                                            {
+                                                                this.props.uihelper._preload_tab_
+                                                                    ?   <Preloader type={'BODY'} />
+                                                                    :   this.props.reviews.active_activity_reviews.map((comment, i) =>
+                                                                        <div className={`sf-comment-block${ ' sf-comment-' + comment.status.toLowerCase()}`}>
+                                                                            <div className="sf-comment-block-prefix">
+                                                                                <i className="material-icons">{ comment.status === 'PENDINGREVISION' ? 'warning' : 'assignment_turned_in' }</i>
+                                                                            </div>
+                                                                            <div className="sf-comment-block-body">
+                                                                                <h4><i className="material-icons">account_circle</i>{ comment.reviewer }</h4>
+                                                                                <div className="sf-comment-content" id={'sf_comment_' + i}>
+                                                                                    <div dangerouslySetInnerHTML={{__html: comment.comment}}></div>
+                                                                                </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
+                                                                    )
+                                                            }
+                                                        </div>
+                                                    </Tab>
+                                                </Tabs>
+                                            :   <Tabs>
+                                                    <Tab iconClassName={'icon-class-0'} linkClassName={'link-class-0'} title={'Connections'}>
+                                                        <div className="sf-p-ex sf-auto-fix">
+                                                            {
+                                                                this.state.connections.map(con=>
+                                                                    <ConnectionWidget connection={con}></ConnectionWidget>
                                                                 )
-                                                        }
-                                                    </div>
-                                                </Tab>
-                                            </Tabs>
+                                                            }
+                                                        </div>
+                                                    </Tab>
+                                                    <Tab iconClassName={'icon-class-1'} linkClassName={'link-class-1'} title={'Elements'}>
+                                                        <div className="sf-p-ex sf-auto-fix">
+                                                            {
+                                                                this.state.elements.map(elem=>
+                                                                    <ElementWidget element={elem}></ElementWidget>
+                                                                )
+                                                            }
+                                                        </div>
+                                                    </Tab>
+                                                    <Tab onClick={ (e) => this.getUserReviewsForActivity(e) } iconClassName={'icon-class-1'} linkClassName={'link-class-1'} title={'Reviews'}>
+                                                        <div className="sf-p-ex sf-auto-fix">
+                                                            {
+                                                                this.props.uihelper._preload_body_
+                                                                    ?   <Preloader type={'BODY'} />
+                                                                    :   this.props.location.activity.reviews.map(review => {
+                                                                        <div className="sf-block">
+                                                                            <h4>{ review.reviewer }</h4>
+                                                                            <p>{ review.comment }</p>
+                                                                        </div>
+                                                                    })
+                                                            }
+                                                        </div>
+                                                    </Tab>
+                                                    <Tab onClick={ (e) => this.getActivityReviews(e) } iconClassName={'icon-class-1'} linkClassName={'link-class-1'} title={'Review Reports'} activityName={this.props.location.activity.activity_name}>
+                                                        <div className="sf-p-ex sf-auto-fix">
+                                                            {
+                                                                this.props.uihelper._preload_tab_
+                                                                    ?   <Preloader type={'BODY'} />
+                                                                    :   this.props.reviews.active_activity_reviews.map((comment, i) =>
+                                                                        <div className={`sf-comment-block${ ' sf-comment-' + comment.status.toLowerCase()}`}>
+                                                                            <div className="sf-comment-block-prefix">
+                                                                                <i className="material-icons">{ comment.status === 'PENDINGREVISION' ? 'warning' : 'assignment_turned_in' }</i>
+                                                                            </div>
+                                                                            <div className="sf-comment-block-body">
+                                                                                <h4><i className="material-icons">account_circle</i>{ comment.reviewer }</h4>
+                                                                                <div className="sf-comment-content" id={'sf_comment_' + i}>
+                                                                                    <div dangerouslySetInnerHTML={{__html: comment.comment}}></div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    )
+                                                            }
+                                                        </div>
+                                                    </Tab>
+                                                </Tabs>
+                                        }
                                         </div>
                                     :   null
                             }
