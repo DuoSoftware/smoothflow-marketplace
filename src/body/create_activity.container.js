@@ -452,6 +452,7 @@ class CreateNewActivity extends Component {
         }));
     };
     uploadBulkMedia = (callback) => {
+        const _self = this;
         if (this.state.newActivity.image === null && this.state.newActivity.what_you_get.length === 0) return callback(false);
         if (typeof this.state.newActivity.image === 'string') return callback(false);
 
@@ -475,10 +476,15 @@ class CreateNewActivity extends Component {
                     _m_counter ++;
                     let __mid = m.id;
                     // m.id !== 'main' ? __mid = m.id + _m_counter : null;
+                    if(mres.data === undefined){
+                        alert("Image not Selected");
+                        _self.props.dispatch(PreloadBody(false));
+                    }else{
                     _m_res.push({
                         id: __mid,
                         src: mres.data.url
                     });
+                }
                     if (_m_counter === _media.length) {
                         callback(_m_res);
                     }
@@ -488,6 +494,7 @@ class CreateNewActivity extends Component {
             callback(false);
         }
     };
+    
     loadTagsList = () => {
         this.props.dispatch(PreloadBody(true));
         ActivitiesService.getTagsList()
