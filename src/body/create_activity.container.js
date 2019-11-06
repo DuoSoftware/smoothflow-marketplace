@@ -200,6 +200,7 @@ class CreateNewActivity extends Component {
                         _selected_lang.node = false;
                     };
                     this.setState(prevState => ({
+                        ...prevState,
                         newActivity: {
                             ...prevState.newActivity,
                             languages: _lang
@@ -230,49 +231,152 @@ class CreateNewActivity extends Component {
             temp_tags: _temptags
         }));
     }
+
+    validateFAQ = (callback) =>{
+        const var_ = {
+            faqQuestion : document.getElementById('faqQuestion').value,
+            faqAnswer : document.getElementById('faqAnswer').value
+        };
+        for(var v in var_){
+            document.getElementById(v).classList.remove("sf-input-error");
+            if(var_[v] === '' || var_[v] === [])
+                return callback(false,v);
+        }
+        return callback(true, null);
+
+    }
+
     addFAQ = () => {
-        let _faqs = [...this.state.newActivity.faq];
-        const _faq = {
-            ...this.faq
-        };
-        _faqs.push(_faq);
-        this.setState(prevState => ({
-            newActivity: {
-                ...prevState.newActivity,
-                faq: _faqs
-            }
-        }));
-        this.fa = {
-            question: '',
-            answer: ''
-        };
-        document.getElementById('faqQuestion').value = "";
-        document.getElementById('faqAnswer').value = "";
-        document.getElementById('faqQuestion').focus();
+        this.validateFAQ( (val, id) => {
+            if(val) {       
+                let _faqs = [...this.state.newActivity.faq];
+
+                const _faq = {
+                    ...this.faq
+                };
+            _faqs.push(_faq);
+
+            this.setState(prevState => ({
+                newActivity: {
+                    ...prevState.newActivity,
+                    faq: _faqs
+                }
+            }));
+            this.fa = {
+                question: '',
+                answer: ''
+            };
+            document.getElementById('faqQuestion').value = "";
+            document.getElementById('faqAnswer').value = "";
+            document.getElementById('faqQuestion').focus();
+            } else {
+                document.getElementById(id).classList.add('sf-input-error');
+                document.getElementById(id).focus();
+            }    
+        })
     };
+
     createFeature(e) {
         e.target.id === 'featureTitle' ? this.feature.title = e.target.value : this.feature.description = e.target.value;
     };
-    addFeature = () => {
-        let _fts = [...this.state.newActivity.features];
-        const _ft = {
-            ...this.feature
-        };
-        _fts.push(_ft);
-        this.setState(prevState => ({
-            newActivity: {
-                ...prevState.newActivity,
-                features: _fts
+    
+    addVariable = () => {
+        this.validateVariable( (val, id) => {
+            if(val) {
+                let _vars = [...this.state.newActivity.variables];
+                const _var = {
+                    ...this.variable
+                };
+                _var.ValueList = this.state.temp_variable.temp_variable_vals;
+                _vars.push(_var);
+                this.setState(prevState => ({
+                    ...prevState,
+                    newActivity:{
+                        ...prevState.newActivity,
+                        variables: _vars
+                    }
+                }));
+                this.variable = {
+                    "Key": "",
+                    "DisplayName": "",
+                    "Value": "",
+                    "ValueList": [{
+                        "key": "Equal",
+                        "value": "=="
+                    }],
+                    "APIMethod": "",
+                    "Type": "",
+                    "Category": "",
+                    "DataType": "",
+                    "Group": "Default",
+                    "Priority": "",
+                    "advance": false,
+                    "control": "",
+                    "placeholder": ""
+                };
+                document.getElementById('varKey').value = "";
+                document.getElementById('varDisplayName').value = "";
+                document.getElementById('varValue').value = "";
+                document.getElementById('varGroup').value = "";
+                document.getElementById('varType').value = "";
+                document.getElementById('varCategory').value = "";
+                document.getElementById('varDataType').value = "";
+                document.getElementById('varPriority').value = "";
+                document.getElementById('varIsAdvanced').value = "";
+                document.getElementById('varKey').focus();
+            } else {
+                document.getElementById(id).classList.add('sf-input-error');
+                document.getElementById(id).focus();
             }
-        }));
-        this.feature = {
-            title: '',
-            description: ''
+        })
+    }; 
+    
+    validateFeature = (callback) => {
+        const var_ = {
+            featureTitle : document.getElementById('featureTitle').value,
+            featureDesc : document.getElementById('featureDesc').value
         };
-        document.getElementById('featureTitle').value = "";
-        document.getElementById('featureDesc').value = "";
-        document.getElementById('featureTitle').focus();
+
+        for (var v in var_) {
+            debugger;
+            document.getElementById(v).classList.remove("sf-input-error");
+            if (var_[v] === '' || var_[v] === '_')
+                return callback(false, v);
+        }
+        return callback(true, null);
     };
+
+    addFeature = () => {
+        this.validateFeature( (val, id) => {
+            if(val) {
+                let _fts = [...this.state.newActivity.features];
+                debugger;
+                const _ft = {
+                    ...this.feature
+                };
+                _fts.push(_ft);
+                
+                this.setState(prevState => ({
+                    newActivity: {
+                        ...prevState.newActivity,
+                        features: _fts
+                    }
+                }));
+                this.feature = {
+                    title: '',
+                    description: ''
+                };
+                document.getElementById('featureTitle').value = "";
+                document.getElementById('featureDesc').value = "";
+                document.getElementById('featureTitle').focus();
+
+            } else {
+                document.getElementById(id).classList.add('sf-input-error');
+                document.getElementById(id).focus();
+            }    
+        })
+    };
+    
     removeFeature(e, i) {
         let _fts = [...this.state.newActivity.features];
         _fts.splice(i, 1);
@@ -350,6 +454,7 @@ class CreateNewActivity extends Component {
             };
         }
     };
+
     removeMedia = (e, type, i) => {
         if (type === 'wyg') {
             let _wyg = [...this.state.newActivity.what_you_get];
@@ -451,8 +556,15 @@ class CreateNewActivity extends Component {
             }
         }));
     };
-    uploadBulkMedia = (callback) => {
+
+    refreshpage() {
         const _self = this;
+        alert("Image not Selected");
+        _self.props.dispatch(PreloadBody(false));
+    };
+
+    uploadBulkMedia = (callback) => {
+        const _this = this;
         if (this.state.newActivity.image === null && this.state.newActivity.what_you_get.length === 0) return callback(false);
         if (typeof this.state.newActivity.image === 'string') return callback(false);
 
@@ -460,6 +572,7 @@ class CreateNewActivity extends Component {
             id: 'main',
             file: this.state.newActivity.image
         }];
+        
         for (const [i, am] of this.state.newActivity.what_you_get.entries()) {
             if(typeof am.file != 'string') {
                 _media.push({
@@ -472,15 +585,16 @@ class CreateNewActivity extends Component {
         let _m_res = [];
         if(_media.length) {
             for(const m of _media) {
+                debugger;
                 MediaService.uploadMedia(m.file, function (mres) {
                     _m_counter ++;
                     let __mid = m.id;
                     // m.id !== 'main' ? __mid = m.id + _m_counter : null;
-                    if(mres.data === undefined){
-                        alert("Image not Selected");
-                        _self.props.dispatch(PreloadBody(false));
-                    }else{
-                    _m_res.push({
+                    if(mres.data != undefined){
+                        _this.refreshpage();
+                    } else {
+                        debugger;
+                        _m_res.push({
                         id: __mid,
                         src: mres.data.url
                     });
@@ -674,6 +788,8 @@ class CreateNewActivity extends Component {
         }
         return callback(true, null);
     };
+
+    
 
     addVariable = () => {
         this.validateVariable( (val, id) => {
@@ -1610,7 +1726,7 @@ class CreateNewActivity extends Component {
                                             <Input type="radio" name="publishLang" className="sf-radiobox" id="languageNode" label="Node JS" value="nodeJs" onChange={(event) => this.addInfo(event)} checked />
                                         </div>
                                         <div className="sf-input-block">
-                                            <Input type="radio" name="publishLang" className="sf-radiobox" id="languageGo" label="GO" value="GO" onChange={(event) => this.addInfo(event)} disabled />
+                                            <Input type="radio" name="publishLang" className="sf-radiobox" id="languageGo" label="GO" value="GO" onChange={(event) => this.addInfo(event)} />
                                         </div>
                                     </div>
                                 </div>
@@ -1641,8 +1757,46 @@ class CreateNewActivity extends Component {
                                                 </div>
                                             </div>
                                         </Wrap>
-                                    :   null
+
+                                    :   <Wrap>
+                                    <div className="sf-flex-1">
+                                        <div className="sf-flexbox-column">
+                                            <div className="sf-flex-1 sf-p-p">
+                                                <label> Code </label>
+                                                <div className="sf-p-p-h">
+                                                    <Input type="textarea" rows="10" id="publishGO"
+                                                           spellCheck="false"
+                                                           className="sf-custom-scroll sf-bg-s sf-txt-c-s"
+                                                           value={this.state.publish_content.golang.payload.GoCode}
+                                                           onChange={(event) => this.updatePublishContent(event)}/>
+                                                    {
+                                                        this.state.publish_content.golang.errors.length > 0 ?
+                                                            this.state.publish_content.golang.errors.map((error) =>
+                                                                <div className="sf-m-p-t" key={KEY()}>
+                                                                    <Error title={error.Title} body={error.Error}
+                                                                           remark={error.Reason}/>
+                                                                </div>)
+                                                            : this.state.publish_content.golang.noerrors ?
+                                                            <div className="sf-m-p-t">
+                                                                <ListI list={[{
+                                                                    icon: 'check_circle_thin',
+                                                                    text: 'No errors found'
+                                                                }]}/>
+                                                            </div>
+                                                            : null
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="sf-p-p-v">
+                                            <button type="button" className="sf-button sf-button-secondary"
+                                                    onClick={(event) => this.testGoCode(event)}>Test
+                                            </button>
+                                        </div>
+                                    </div>
+                                </Wrap>
                                 }
+
                             </div>
                         </form>
                 }
