@@ -1723,10 +1723,10 @@ class CreateNewActivity extends Component {
                                     <label> Language </label>
                                     <div className="sf-p-p-h">
                                         <div className="sf-input-block">
-                                            <Input type="radio" name="publishLang" className="sf-radiobox" id="languageNode" label="Node JS" value="nodeJs" onChange={(event) => this.addInfo(event)} checked />
+                                            <Input type="radio" name="publishLang" className="sf-radiobox" id="languageNode" label="Node JS" value="nodeJs" onChange={(event) => this.addInfo(event)} defaultChecked checked={this.state.temp_selected_langs.node} />
                                         </div>
                                         <div className="sf-input-block">
-                                            <Input type="radio" name="publishLang" className="sf-radiobox" id="languageGo" label="GO" value="GO" onChange={(event) => this.addInfo(event)} />
+                                            <Input type="radio" name="publishLang" className="sf-radiobox" id="languageGo" label="GO" value="GO" onChange={(event) => this.addInfo(event)} checked={this.state.temp_selected_langs.golang} />
                                         </div>
                                     </div>
                                 </div>
