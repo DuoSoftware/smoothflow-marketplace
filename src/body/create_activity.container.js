@@ -111,7 +111,7 @@ class CreateNewActivity extends Component {
                 "what_you_get": _m.what_you_get.length ? _m.what_you_get : [],
                 "pricings": _m.pricings.length ? _m.pricings : [],
                 "faq": _m.faq.length ? _m.faq : [],
-                "variableName": _m.variableName.length ? _m.variableName : [],
+                "variableName": _m.variableName ? _m.variableName : [],
                 "variables": _m.variables.length ? _m.variables : [],
                 "_id": _m._id
             };
@@ -647,12 +647,11 @@ class CreateNewActivity extends Component {
         let _m_res = [];
         if(_media.length) {
             for(const m of _media) {
-                ;
                 MediaService.uploadMedia(m.file, function (mres) {
                     _m_counter ++;
                     let __mid = m.id;
                     // m.id !== 'main' ? __mid = m.id + _m_counter : null;
-                    if(mres.data != undefined){
+                    if(mres.data === undefined){
                         _this.refreshpage();
                     } else {
                         ;
@@ -1856,7 +1855,6 @@ class CreateNewActivity extends Component {
                                                     </button>
                                                 </div>
                                             </div>
-
                                             <div className="sf-flex-1">
                                                             <div className="sf-flexbox-column">
                                                             <div className="sf-flex-1 sf-p-p">
@@ -1896,7 +1894,6 @@ class CreateNewActivity extends Component {
                                                             </div>
                                                             </div>
                                             </div>
-
                                         </Wrap>
                                 }
 
