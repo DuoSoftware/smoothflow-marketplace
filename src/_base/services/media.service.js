@@ -33,6 +33,23 @@ const MediaService = {
         // };
         // xhr.send(_formdata);
     },
+    golangMedia: (file, callback) =>{
+        
+        axios({
+            method: 'post',
+            url: "/PublishActivity/{activityName:string}/{sessionId:string}",
+            data: file
+        })
+            .then(function (response) {
+                callback(response);
+            })
+            .catch(function (response) {
+                callback(response);
+            });
+
+    },
+
+
     getMedia: (url) => {
         return axios({
             method: 'GET',
@@ -49,6 +66,11 @@ const MediaService = {
                 return erres
             })
     }
+
+
+
+
+
 };
 
 export { MediaService }
