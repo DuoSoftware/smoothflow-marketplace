@@ -37,7 +37,7 @@ const MediaService = {
         
         axios({
             method: 'post',
-            url: "/PublishActivity/{activityName:string}/{sessionId:string}",
+            url: URLs.processengine + URLs.publishActivity + file.ActivityName + '/12345',
             data: file
         })
             .then(function (response) {

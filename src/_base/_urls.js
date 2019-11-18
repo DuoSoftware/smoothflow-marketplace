@@ -2,6 +2,7 @@ const URLs_dev = {
     bot : 'https://3hngtt2wj6.execute-api.us-east-1.amazonaws.com/Dev/DBF/API/1.0.0.0/',
     botactivity : 'https://smoothbotactivitydev.plus.smoothflow.io/',
     processengine : 'https://devprocessengine.plus.smoothflow.io/',
+    publishActivity : 'PublishActivity/',
     user: {
         base_: 'https://ml9oskczql.execute-api.us-east-1.amazonaws.com/Dev/DBF/API/1.0.0.0/',
         me: 'me'
@@ -70,6 +71,7 @@ const URLs_prod = {
     bot : 'https://3hngtt2wj6.execute-api.us-east-1.amazonaws.com/Prod/DBF/API/1.0.0.0/',
     botactivity : 'https://smoothbotactivity.plus.smoothflow.io/',
     processengine : 'https://processengine.plus.smoothflow.io/',
+    publishActivity : '/PublishActivity/{activityName:string}/{sessionId:string}',
     user: {
         base_: 'https://ml9oskczql.execute-api.us-east-1.amazonaws.com/Prod/DBF/API/1.0.0.0/',
         me: 'me'

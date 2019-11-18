@@ -960,29 +960,52 @@ class CreateNewActivity extends Component {
             }
 
             if (_publishFile) {
-                // Upload activity to S3
-                MediaService.uploadMedia(_publishFile, function (mres) {
-                    // 
-                    _payload.activities[0].path = mres.data.url;
-                    ActivitiesService.saveNewActivity(_payload)
-                        .then((res) => {
-                            if(res.data.IsSuccess) {
-                                _self.props.location.candidate
-                                    ?   toastr.success('Activity update', 'Activity updated successfully')
-                                    :   toastr.success('New Activity', 'New activity created successfully')
-                                _self.setState({
-                                    success: true
-                                });
-                                _self.props.history.push('/user/activities');
-                            }
-                        })
-                        .catch((errorRes) => {
-                            toastr.error('New Activity', 'Failed to create New Activity');
-                            console.log(errorRes);
-                        });
-                }, function (erres) {
-                    toastr.error('Activity Submission', 'Failed to upload Activity file')
-                });
+                // Upload activity to S3  
+                if(_publishFile === _self.state.temp_selected_langs.node){
+                    MediaService.uploadMedia(_publishFile, function (mres) {
+                        _payload.activities[0].path = mres.data.url;
+                        ActivitiesService.saveNewActivity(_payload)
+                            .then((res) => {
+                                if(res.data.IsSuccess) {
+                                    _self.props.location.candidate
+                                        ?   toastr.success('Activity update', 'Activity updated successfully')
+                                        :   toastr.success('New Activity', 'New activity created successfully')
+                                    _self.setState({
+                                        success: true
+                                    });
+                                    _self.props.history.push('/user/activities');
+                                }
+                            })
+                            .catch((errorRes) => {
+                                toastr.error('New Activity', 'Failed to create New Activity');
+                                console.log(errorRes);
+                            });
+                    }, function (erres) {
+                        toastr.error('Activity Submission', 'Failed to upload Activity file')
+                    });
+                }else{
+                    MediaService.golangMedia(_publishFile, function (mres) {
+                        // _payload.activities[0].path = mres.data.url;
+                        ActivitiesService.saveNewActivity(_payload)
+                            .then((res) => {
+                                if(res.data.IsSuccess) {
+                                    _self.props.location.candidate
+                                        ?   toastr.success('Activity update', 'Activity updated successfully')
+                                        :   toastr.success('New Activity', 'New activity created successfully')
+                                    _self.setState({
+                                        success: true
+                                    });
+                                    _self.props.history.push('/user/activities');
+                                }
+                            })
+                            .catch((errorRes) => {
+                                toastr.error('New Activity', 'Failed to create New Activity');
+                                console.log(errorRes);
+                            });
+                    }, function (erres) {
+                        toastr.error('Activity Submission', 'Failed to upload Activity file')
+                    });
+                }
             } else {
                 ActivitiesService.saveNewActivity(_payload)
                     .then((res) => {
