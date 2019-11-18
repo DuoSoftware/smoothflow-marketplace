@@ -2,7 +2,7 @@ const URLs_dev = {
     bot : 'https://3hngtt2wj6.execute-api.us-east-1.amazonaws.com/Dev/DBF/API/1.0.0.0/',
     botactivity : 'https://smoothbotactivitydev.plus.smoothflow.io/',
     processengine : 'https://devprocessengine.plus.smoothflow.io/',
-    publishActivity : 'PublishActivity/',
+    publishActivity : 'processengine/PublishActivity/',
     user: {
         base_: 'https://ml9oskczql.execute-api.us-east-1.amazonaws.com/Dev/DBF/API/1.0.0.0/',
         me: 'me'
