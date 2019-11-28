@@ -643,13 +643,20 @@ class ItemView extends Component {
   init_publish = e => {
     debugger;
     if (this.props.location.activity.type === "activity") {
-      if (!this.props.location.activity.path.includes("botmediastorage")) {
-        // this.props.dispatch(InitPublishPRIVATE(true));
+      if (this.props.location.activity.languages[0].language != 'GO') {
+          if (!this.props.location.activity.path.includes("botmediastorage")) {
+              // this.props.dispatch(InitPublishPRIVATE(true));
+              toastr.error(
+                  "Not Eligible to Publish",
+                  "Please make sure you have included your Activity Code before publishing"
+              );
+          }
+      } else if (!this.props.location.activity.go_id) {
         toastr.error(
           "Not Eligible to Publish",
-          "Please make sure you have included your Activity Code before publishing"
+          "Please make sure to publish your Go code before publishing"
         );
-      } else if (this.props.location.activity.variables.length === 0) {
+      }else if (this.props.location.activity.variables.length === 0) {
         toastr.error(
           "Not Eligible to Publish",
           "Please make sure to define Variables in you Activity before publishing"
@@ -751,80 +758,98 @@ class ItemView extends Component {
     };
 
     let _payloadGo = {
-      ID : '',
-      ActivityName : '',
-      Description : ''
-    }
+      ID : this.props.location.activity._id,
+      ActivityName : this.props.location.activity.activity_name,
+      Description : this.props.location.activity.description,
+        GoCode: ''
+    };
     // ActivitiesService.publishActivity(_publishFile, {"node": true, "golang": false}, function (status, res) {
-    ActivitiesService.publishActivity(
-      _self.props.location.activity.languages[0].language == 'GO' ? _payloadGo :_self.props.location.activity.path,
-      _self.props.location.activity.languages[0].language,
-      function(res) {
-        if (res.data) {
-          if (res.data.success) {
-            // _self.setState(state => ({
-            //     ...state,
-            //     newActivity : {
-            //         ...state.newActivity,
-            //         activity_name : _self.props.location.activity. .activity_name,
-            //         insertOrUpdate : "update",
-            //         state: 'published'
-            //     }
-            // }));
-            const _activity = {
-              ..._self.props.location.activity,
-              activity_name: _self.props.location.activity.activity_name,
-              insertOrUpdate: "update",
-              state: "published"
-            };
-            _payload.activities.push(_activity);
-            // debugger
-            ActivitiesService.saveNewActivity(_payload)
-              .then(res => {
-                if (res.data.IsSuccess) {
-                  _self.props.dispatch(PreloadBody(false));
-                  _self.props.dispatch(InitPublishPRIVATE(false));
-                  toastr.success(
-                    "Activity Publishing Success",
-                    _self.state.newActivity.activity_name +
-                      " published successfully."
-                  );
-                  _self.props.history.push("/user/activities");
-                }
-              })
-              .catch(errorres => {
-                toastr.error(
-                  "Failed to Publish",
-                  "Something went wrong. Please try again later."
-                );
-                _self.props.dispatch(PreloadBody(false));
-              });
-          } else {
-            if (res.data.message != "") {
-              toastr.error("Failed to Publish", res.data.message);
-              _self.props.dispatch(PreloadBody(false));
-            } else {
-              toastr.error(
-                "Failed to Publish",
-                "Something went wrong. Please try again later"
-              );
-              _self.props.dispatch(PreloadBody(false));
-            }
-          }
-        } else {
-          if (res.response.status === 400) {
-            toastr.error("Meta data mismatch", res.response.data.message);
-            _self.props.dispatch(PreloadBody(false));
-          } else {
-            toastr.error(
-              "Failed to Publish",
-              "Something went wrong. Please try again later"
-            );
-            _self.props.dispatch(PreloadBody(false));
-          }
-        }
+
+      function exec() {
+          ActivitiesService.publishActivity(
+              _self.props.location.activity.languages[0].language == 'GO' ? _payloadGo :_self.props.location.activity.path,
+              _self.props.location.activity.languages[0].language,
+              function(res) {
+                  if (res.data) {
+                    debugger;
+                      if (res.data.Status) {
+                          // _self.setState(state => ({
+                          //     ...state,
+                          //     newActivity : {
+                          //         ...state.newActivity,
+                          //         activity_name : _self.props.location.activity. .activity_name,
+                          //         insertOrUpdate : "update",
+                          //         state: 'published'
+                          //     }
+                          // }));
+                          const _activity = {
+                              ..._self.props.location.activity,
+                              activity_name: _self.props.location.activity.activity_name,
+                              insertOrUpdate: "update",
+                              state: "published"
+                          };
+                          _payload.activities.push(_activity);
+                          // debugger
+                          ActivitiesService.saveNewActivity(_payload)
+                              .then(res => {
+                                  if (res.data.IsSuccess) {
+                                      _self.props.dispatch(PreloadBody(false));
+                                      _self.props.dispatch(InitPublishPRIVATE(false));
+                                      toastr.success(
+                                          "Activity Publishing Success",
+                                          _self.state.newActivity.activity_name +
+                                          " published successfully."
+                                      );
+                                      _self.props.history.push("/user/activities");
+                                  }
+                              })
+                              .catch(errorres => {
+                                  toastr.error(
+                                      "Failed to Publish",
+                                      "Something went wrong. Please try again later."
+                                  );
+                                  _self.props.dispatch(PreloadBody(false));
+                              });
+                      } else {
+                          if (res.data.message != "") {
+                              toastr.error("Failed to Publish", res.data.message);
+                              _self.props.dispatch(PreloadBody(false));
+                          } else {
+                              toastr.error(
+                                  "Failed to Publish",
+                                  "Something went wrong. Please try again later"
+                              );
+                              _self.props.dispatch(PreloadBody(false));
+                          }
+                      }
+                  } else {
+                      if (res.response.status === 400) {
+                          toastr.error("Meta data mismatch", res.response.data.message);
+                          _self.props.dispatch(PreloadBody(false));
+                      } else {
+                          toastr.error(
+                              "Failed to Publish",
+                              "Something went wrong. Please try again later"
+                          );
+                          _self.props.dispatch(PreloadBody(false));
+                      }
+                  }
+              }
+          );
       }
-    );
+      if (this.props.location.activity.languages[0].language == 'GO') {
+        MediaService.getGoCodeById(this.props.location.activity.go_id)
+            .then(goc => {
+              debugger;
+                _payloadGo.GoCode = goc.data.Result.goCode;
+                exec();
+            })
+            .catch(gocerr => {
+              debugger;
+            })
+      } else {
+          exec();
+      }
   };
   publishIntegrationPRIVATE = e => {
     debugger;

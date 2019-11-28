@@ -28,7 +28,7 @@ class CreateNewActivity extends Component {
                 "tenant_name": this.props.user.username,
                 "type": "chat",
                 "reviewed": false,
-                "state": "draft",
+                "state": "private",
                 "path": "1000",
                 "npm_module": "@smoothflow/activity",
                 "npm_version": "0.0.0",

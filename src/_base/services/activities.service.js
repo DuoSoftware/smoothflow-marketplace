@@ -18,7 +18,7 @@ const ActivitiesService = {
             axios({
                 method: 'POST',
                 baseURL: URLs.processengine,
-                url: URLs.activity.publishGoCode + '/' + file.ActivityName + '/' + file.ID,
+                url: URLs.publishActivity + file.ActivityName + '/' + file.ID,
                 data: file
             }).then(function (res) {
                 callback(res)

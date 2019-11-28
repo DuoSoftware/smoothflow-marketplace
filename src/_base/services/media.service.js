@@ -48,8 +48,12 @@ const MediaService = {
             });
 
     },
-
-
+    getGoCodeById: (id) => {
+        return axios({
+            method: 'GET',
+            url: URLs.activity.uploadGoCode +'/'+ id
+        });
+    },
     getMedia: (url) => {
         return axios({
             method: 'GET',
