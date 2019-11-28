@@ -14,7 +14,20 @@ const ActivitiesService = {
     },
     publishActivity: (file, lang, callback) => {
         const _scopes = localStorage.getItem('scopes');
-        // if(lang.node) {
+        if(lang === 'GO') {
+            axios({
+                method: 'POST',
+                baseURL: URLs.processengine,
+                url: URLs.activity.publishGoCode + '/' + file.ActivityName + '/' + file.ID,
+                data: file
+            }).then(function (res) {
+                callback(res)
+            }).catch(function (errorRes) {
+                callback(errorRes)
+            });
+
+        }
+        else if (lang.golang) {
             const _formdata = new FormData();
             Amplify.Auth.currentSession()
                 .then(res => {
@@ -50,20 +63,7 @@ const ActivitiesService = {
             // }).catch(function (errorRes) {
             //     callback(errorRes)
             // });
-
-        // }
-        // else if (lang.golang) {
-        //     axios({
-        //         method: 'POST',
-        //         baseURL: URLs.processengine,
-        //         url: URLs.activity.uploadGoCode + '/' + file.ActivityName + '/' + file.ID,
-        //         data: file
-        //     }).then(function (res) {
-        //         callback(res)
-        //     }).catch(function (errorRes) {
-        //         callback(errorRes)
-        //     });
-        // }
+        }
     },
     getTagsList: () => {
         return axios.get(URLs.activity.getTagsList)

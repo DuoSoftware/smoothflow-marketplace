@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Chips, { Chip } from 'react-chips';
-import { createHashHistory  } from 'history'
+import { createHashHistory } from 'history'
 import Input from '../components/Input/input.widget';
-import {ActivitiesService, KEY, MediaService, UIHelper} from '../_base/services';
+import { ActivitiesService, KEY, MediaService, UIHelper } from '../_base/services';
 import { Preloader, Button, PageHeader, Block } from '../components/common';
 import FeatureBlock from '../components/Input Blocks/Feature block/feature_block.widget';
 import Preview from '../components/Input Preview/create_activity.preview';
@@ -21,20 +21,20 @@ class CreateNewActivity extends Component {
         super(props);
         this.self = this;
         this.state = {
-            newActivity : {
+            newActivity: {
                 "insertOrUpdate": "insert",
                 "date": new Date(),
                 "activity_name": "",
                 "tenant_name": this.props.user.username,
                 "type": "chat",
                 "reviewed": false,
-                "state": "private",
+                "state": "draft",
                 "path": "1000",
                 "npm_module": "@smoothflow/activity",
                 "npm_version": "0.0.0",
                 "image": null,
                 "description": '',
-                "languages":[],
+                "languages": [],
                 "features": [],
                 "tags": [],
                 "what_you_get": [],
@@ -43,27 +43,27 @@ class CreateNewActivity extends Component {
                 "variableName": [],
                 "variables": []
             },
-            temp_prcing_fts : [],
-            temp_variable : {
+            temp_prcing_fts: [],
+            temp_variable: {
                 temp_variable_vals: [],
-                is_val_dropdown : false,
-                is_val_api : false
+                is_val_dropdown: false,
+                is_val_api: false
             },
-            temp_tags : [],
-            existing_tags : [],
-            temp_selected_langs : {
-                "node" : true,
-                "golang" : false
+            temp_tags: [],
+            existing_tags: [],
+            temp_selected_langs: {
+                "node": true,
+                "golang": false
             },
             publish_content: {
-                "golang" : {
-                    noerrors : false,
-                    errors : [],
-                    payload : {
+                "golang": {
+                    noerrors: false,
+                    errors: [],
+                    payload: {
                         ID: '',
                         Description: '',
                         ActivityName: 'dev_smoothflow_io_',
-                        GoCode : '//Package name that you desire goes down below.\n'+'package <your_package_here>\n'+'//For all the library imports define in following section. Aliases allowed.\n'+'import (\n'+'\t"processengine/context"\n'+'\t"processengine/logger"\n'+')\n'+'/*\tThis is the main entry point for your code\n'+'\tThis acts as the main function. Any other functions you need\n'+'\tcan be defined out of this Invoke() function scope.\n'+'\tAll inputs will come inside an interface map which is named\n'+'\tas FlowData. \n'+'\tThe output of activity is always returned with an interface map called flowResult.\n'+'\tAnd the status of executing the activity is stored returning ActivityContext object.\n'+'\tActivity Context has 2 main variables..\n'+'\tactivityResult.ActivityStatus -> Boolean variable to indicate if overall execution success or not. \n'+'\tactivityResult.Message -> String variable, if any msgs at the end of execution this should be set to it.\n'+'\tYou should use these two properties as you desire.\n'+'\t*/\n'+'func Invoke(FlowData map[string]interface{}) (flowResult map[string]interface{}, activityResult *context.ActivityContext) {\n'+'\t//creating new instance of context.ActivityContext\n'+'\tvar activityContext = new(context.ActivityContext)\n'+'\t//creating new instance of context.ActivityError\n'+'\tvar activityError context.ActivityError\n'+'\t//setting activityError proprty values\n'+'\tactivityError.Encrypt = false\n'+'\tactivityError.ErrorString = "exception"\n'+'\tactivityError.Forward = false\n'+'\tactivityError.SeverityLevel = context.Info\n'+'\t//User code goes here\n'+'\t//If process is a success use following\n'+'\tactivityContext.ActivityStatus = true\n'+'\tactivityContext.Message = "Your Success Message goes here"\n'+'\tactivityContext.ErrorState = activityError\n'+'\tlogger.Log_ACT(activityContext.Message, logger.Debug, FlowData["InSessionID"].(string))\n'+'\t//else\n'+'\tactivityContext.ActivityStatus = false\n'+'\tactivityContext.Message = "Your Error Message goes here"\n'+'\tactivityContext.ErrorState = activityError\n'+'\tlogger.Log_ACT(activityContext.Message, logger.Error, FlowData["InSessionID"].(string))\n'+'\t/* You can use logger.Log_ACT(...) to log anything you want at any place your code.\n'+'\t   logger.Log_ACT("logtext <interface>", loggerType, "SessionID <string>")\n'+'\t   * logtext can be anything you want to log. May be a string, bool or map.\n'+'\t   * logger type is the type of log..\n'+'\t   \t\tlogger.Information = Type for information log\n'+'\t\t\tlogger.Error       = Type for error logs\n'+'\t\t\tlogger.Debug       = Type for debug logs\n'+'\t\t\tlogger.Warning     = Type for warning logs\n'+'\t   * SessionID string is unique to each activity flow execution. You can fetch\n'+'\t   \t\tit from FlowData input map -> FlowData["InSessionID"].(string)\n'+'\t*/\n'+'\treturn FlowData, activityContext\n'+'}\n'+'//Your all other extra functions go here.'
+                        GoCode: '//Package name that you desire goes down below.\n' + 'package <your_package_here>\n' + '//For all the library imports define in following section. Aliases allowed.\n' + 'import (\n' + '\t"processengine/context"\n' + '\t"processengine/logger"\n' + ')\n' + '/*\tThis is the main entry point for your code\n' + '\tThis acts as the main function. Any other functions you need\n' + '\tcan be defined out of this Invoke() function scope.\n' + '\tAll inputs will come inside an interface map which is named\n' + '\tas FlowData. \n' + '\tThe output of activity is always returned with an interface map called flowResult.\n' + '\tAnd the status of executing the activity is stored returning ActivityContext object.\n' + '\tActivity Context has 2 main variables..\n' + '\tactivityResult.ActivityStatus -> Boolean variable to indicate if overall execution success or not. \n' + '\tactivityResult.Message -> String variable, if any msgs at the end of execution this should be set to it.\n' + '\tYou should use these two properties as you desire.\n' + '\t*/\n' + 'func Invoke(FlowData map[string]interface{}) (flowResult map[string]interface{}, activityResult *context.ActivityContext) {\n' + '\t//creating new instance of context.ActivityContext\n' + '\tvar activityContext = new(context.ActivityContext)\n' + '\t//creating new instance of context.ActivityError\n' + '\tvar activityError context.ActivityError\n' + '\t//setting activityError proprty values\n' + '\tactivityError.Encrypt = false\n' + '\tactivityError.ErrorString = "exception"\n' + '\tactivityError.Forward = false\n' + '\tactivityError.SeverityLevel = context.Info\n' + '\t//User code goes here\n' + '\t//If process is a success use following\n' + '\tactivityContext.ActivityStatus = true\n' + '\tactivityContext.Message = "Your Success Message goes here"\n' + '\tactivityContext.ErrorState = activityError\n' + '\tlogger.Log_ACT(activityContext.Message, logger.Debug, FlowData["InSessionID"].(string))\n' + '\t//else\n' + '\tactivityContext.ActivityStatus = false\n' + '\tactivityContext.Message = "Your Error Message goes here"\n' + '\tactivityContext.ErrorState = activityError\n' + '\tlogger.Log_ACT(activityContext.Message, logger.Error, FlowData["InSessionID"].(string))\n' + '\t/* You can use logger.Log_ACT(...) to log anything you want at any place your code.\n' + '\t   logger.Log_ACT("logtext <interface>", loggerType, "SessionID <string>")\n' + '\t   * logtext can be anything you want to log. May be a string, bool or map.\n' + '\t   * logger type is the type of log..\n' + '\t   \t\tlogger.Information = Type for information log\n' + '\t\t\tlogger.Error       = Type for error logs\n' + '\t\t\tlogger.Debug       = Type for debug logs\n' + '\t\t\tlogger.Warning     = Type for warning logs\n' + '\t   * SessionID string is unique to each activity flow execution. You can fetch\n' + '\t   \t\tit from FlowData input map -> FlowData["InSessionID"].(string)\n' + '\t*/\n' + '\treturn FlowData, activityContext\n' + '}\n' + '//Your all other extra functions go here.'
                     }
                 },
                 "node": {
@@ -71,7 +71,7 @@ class CreateNewActivity extends Component {
                     "info": []
                 }
             },
-            success : false,
+            success: false,
             active_guide: 'WYG'
         };
         document.addEventListener('keypress', (event) => {
@@ -84,10 +84,10 @@ class CreateNewActivity extends Component {
     }
     componentDidMount() {
         this.loadTagsList();
-        if(this.props.location.candidate) {
+        if (this.props.location.candidate) {
             const _m = this.props.location.candidate;
             const _tags = [];
-            for(let x of _m.tags) {
+            for (let x of _m.tags) {
                 // x['tag'] = x.name;
                 // delete x.name;
                 _tags.push(x.tag);
@@ -194,10 +194,10 @@ class CreateNewActivity extends Component {
             case "languageNode":
             case "languageGo":
                 const _lang = [];
-                let _selected_lang = {...this.state.temp_selected_langs};
+                let _selected_lang = { ...this.state.temp_selected_langs };
                 if (e.target.checked) {
-                    _lang.push({"language" : e.target.value});
-                    if(e.target.value === "nodeJs") {
+                    _lang.push({ "language": e.target.value });
+                    if (e.target.value === "nodeJs") {
                         _selected_lang.node = true;
                         _selected_lang.golang = false;
                     } else {
@@ -210,7 +210,7 @@ class CreateNewActivity extends Component {
                             ...prevState.newActivity,
                             languages: _lang
                         },
-                        temp_selected_langs : _selected_lang
+                        temp_selected_langs: _selected_lang
                     }));
                 }
                 break;
@@ -223,9 +223,9 @@ class CreateNewActivity extends Component {
     addTags = tags => {
         let _tags = [];
         let _temptags = [];
-        tags.map((tag)=>{
-            const _t = tag.replace('#','');
-            _tags.push({'tag':_t})
+        tags.map((tag) => {
+            const _t = tag.replace('#', '');
+            _tags.push({ 'tag': _t })
             _temptags.push(tag)
         });
         this.setState(prevState => ({
@@ -237,57 +237,57 @@ class CreateNewActivity extends Component {
         }));
     }
 
-    validateFAQ = (callback) =>{
+    validateFAQ = (callback) => {
         const var_ = {
-            faqQuestion : document.getElementById('faqQuestion').value,
-            faqAnswer : document.getElementById('faqAnswer').value
+            faqQuestion: document.getElementById('faqQuestion').value,
+            faqAnswer: document.getElementById('faqAnswer').value
         };
-        for(var v in var_){
+        for (var v in var_) {
             document.getElementById(v).classList.remove("sf-input-error");
-            if(var_[v] === '' || var_[v] === [])
-                return callback(false,v);
+            if (var_[v] === '' || var_[v] === [])
+                return callback(false, v);
         }
         return callback(true, null);
 
     }
 
     addFAQ = () => {
-        this.validateFAQ( (val, id) => {
-            if(val) {       
+        this.validateFAQ((val, id) => {
+            if (val) {
                 let _faqs = [...this.state.newActivity.faq];
 
                 const _faq = {
                     ...this.faq
                 };
-            _faqs.push(_faq);
+                _faqs.push(_faq);
 
-            this.setState(prevState => ({
-                newActivity: {
-                    ...prevState.newActivity,
-                    faq: _faqs
-                }
-            }));
-            this.faq = {
-                question: '',
-                answer: ''
-            };
-            document.getElementById('faqQuestion').value = "";
-            document.getElementById('faqAnswer').value = "";
-            document.getElementById('faqQuestion').focus();
+                this.setState(prevState => ({
+                    newActivity: {
+                        ...prevState.newActivity,
+                        faq: _faqs
+                    }
+                }));
+                this.faq = {
+                    question: '',
+                    answer: ''
+                };
+                document.getElementById('faqQuestion').value = "";
+                document.getElementById('faqAnswer').value = "";
+                document.getElementById('faqQuestion').focus();
             } else {
                 document.getElementById(id).classList.add('sf-input-error');
                 document.getElementById(id).focus();
-            }    
+            }
         })
     };
 
     createFeature(e) {
         e.target.id === 'featureTitle' ? this.feature.title = e.target.value : this.feature.description = e.target.value;
     };
-    
+
     addVariable = () => {
-        this.validateVariable( (val, id) => {
-            if(val) {
+        this.validateVariable((val, id) => {
+            if (val) {
                 let _vars = [...this.state.newActivity.variables];
                 const _var = {
                     ...this.variable
@@ -296,7 +296,7 @@ class CreateNewActivity extends Component {
                 _vars.push(_var);
                 this.setState(prevState => ({
                     ...prevState,
-                    newActivity:{
+                    newActivity: {
                         ...prevState.newActivity,
                         variables: _vars
                     }
@@ -334,12 +334,12 @@ class CreateNewActivity extends Component {
                 document.getElementById(id).focus();
             }
         })
-    }; 
-    
+    };
+
     validateFeature = (callback) => {
         const var_ = {
-            featureTitle : document.getElementById('featureTitle').value,
-            featureDesc : document.getElementById('featureDesc').value
+            featureTitle: document.getElementById('featureTitle').value,
+            featureDesc: document.getElementById('featureDesc').value
         };
 
         for (var v in var_) {
@@ -351,14 +351,14 @@ class CreateNewActivity extends Component {
     };
 
     addFeature = () => {
-        this.validateFeature( (val, id) => {
-            if(val) {
+        this.validateFeature((val, id) => {
+            if (val) {
                 let _fts = [...this.state.newActivity.features];
                 const _ft = {
                     ...this.feature
                 };
                 _fts.push(_ft);
-                
+
                 this.setState(prevState => ({
                     newActivity: {
                         ...prevState.newActivity,
@@ -376,10 +376,10 @@ class CreateNewActivity extends Component {
             } else {
                 document.getElementById(id).classList.add('sf-input-error');
                 document.getElementById(id).focus();
-            }    
+            }
         })
     };
-    
+
     removeFeature(e, i) {
         let _fts = [...this.state.newActivity.features];
         _fts.splice(i, 1);
@@ -398,7 +398,7 @@ class CreateNewActivity extends Component {
             let _wyg = [];
             _wyg = [...this.state.newActivity.what_you_get];
             reader.readAsDataURL(e.target.files[0]);
-            reader.onload = function(_e) {
+            reader.onload = function (_e) {
                 if (type === 'main') {
                     if (file.type.split('/')[0] !== 'image') {
                         alert("Invalid file format. Please make sure you are uploading an Image file");
@@ -432,8 +432,8 @@ class CreateNewActivity extends Component {
                         return;
                     } else {
                         const _info = [{
-                            "text" : file.name,
-                            "icon" : "check_circle_thin"
+                            "text": file.name,
+                            "icon": "check_circle_thin"
                         }, {
                             "text": file.type,
                             "icon": "check_circle_thin"
@@ -447,8 +447,8 @@ class CreateNewActivity extends Component {
                             publish_content: {
                                 ...prevState.publish_content,
                                 node: {
-                                    "file" : file,
-                                    "info" : _info
+                                    "file": file,
+                                    "info": _info
                                 }
                             }
                         }));
@@ -471,7 +471,7 @@ class CreateNewActivity extends Component {
         }
     };
     createPricing = (e) => {
-        switch(e.target.id) {
+        switch (e.target.id) {
             case "packageName":
                 this.package.name = e.target.value;
                 break;
@@ -561,23 +561,23 @@ class CreateNewActivity extends Component {
         }));
     };
 
-    
-    validateVariableName = (callback) =>{
+
+    validateVariableName = (callback) => {
         const _var = {
-            variableName : document.getElementById('variableName').value
+            variableName: document.getElementById('variableName').value
         };
 
-            document.getElementById("variableName").classList.remove("sf-input-error");
-            if (_var.variableName === '' || _var.variableName === '_')
-                return callback(false, "variableName");
+        document.getElementById("variableName").classList.remove("sf-input-error");
+        if (_var.variableName === '' || _var.variableName === '_')
+            return callback(false, "variableName");
 
         return callback(true, null);
     }
 
-    
+
     addVariableName = () => {
-        this.validateVariableName( (val, id) => {
-            if(val) {       
+        this.validateVariableName((val, id) => {
+            if (val) {
                 let _names = [...this.state.newActivity.variableName];
 
                 const _name = {
@@ -585,25 +585,25 @@ class CreateNewActivity extends Component {
                 };
                 _names.push(_name);
 
-            this.setState(prevState => ({
-                newActivity: {
-                    ...prevState.newActivity,
-                    variableName: _names
-                }
-            }));
-            this.na = {
-                name: ''
-            };
-            document.getElementById('variableName').value = "";
-            document.getElementById('variableName').focus();
+                this.setState(prevState => ({
+                    newActivity: {
+                        ...prevState.newActivity,
+                        variableName: _names
+                    }
+                }));
+                this.na = {
+                    name: ''
+                };
+                document.getElementById('variableName').value = "";
+                document.getElementById('variableName').focus();
             } else {
                 document.getElementById(id).classList.add('sf-input-error');
                 document.getElementById(id).focus();
-            }    
+            }
         })
     };
 
-    createName(e){
+    createName(e) {
         e.target === 'variableName';
         this.variableName.name = e.target.value;
     };
@@ -634,9 +634,9 @@ class CreateNewActivity extends Component {
             id: 'main',
             file: this.state.newActivity.image
         }];
-        
+
         for (const [i, am] of this.state.newActivity.what_you_get.entries()) {
-            if(typeof am.file != 'string') {
+            if (typeof am.file != 'string') {
                 _media.push({
                     id: am.file.name.split('.')[0] + i,
                     file: am.file
@@ -645,21 +645,21 @@ class CreateNewActivity extends Component {
         }
         let _m_counter = 0;
         let _m_res = [];
-        if(_media.length) {
-            for(const m of _media) {
+        if (_media.length) {
+            for (const m of _media) {
                 MediaService.uploadMedia(m.file, function (mres) {
-                    _m_counter ++;
+                    _m_counter++;
                     let __mid = m.id;
                     // m.id !== 'main' ? __mid = m.id + _m_counter : null;
-                    if(mres.data === undefined){
+                    if (mres.data === undefined) {
                         _this.refreshpage();
                     } else {
                         ;
                         _m_res.push({
-                        id: __mid,
-                        src: mres.data.url
-                    });
-                }
+                            id: __mid,
+                            src: mres.data.url
+                        });
+                    }
                     if (_m_counter === _media.length) {
                         callback(_m_res);
                     }
@@ -669,7 +669,7 @@ class CreateNewActivity extends Component {
             callback(false);
         }
     };
-    
+
     loadTagsList = () => {
         this.props.dispatch(PreloadBody(true));
         ActivitiesService.getTagsList()
@@ -686,8 +686,8 @@ class CreateNewActivity extends Component {
     };
     createVariable = (e, i) => {
         let _keyvals = [...this.state.temp_variable.temp_variable_vals];
-        const _keyval = {...this.var_key_val};
-        switch(e.target.id) {
+        const _keyval = { ...this.var_key_val };
+        switch (e.target.id) {
             case "varKey":
                 this.variable.Key = e.target.value;
                 break;
@@ -792,7 +792,7 @@ class CreateNewActivity extends Component {
 
             case "varControls":
                 this.variable.control = e.target.value;
-                if(e.target.value === 'Dropdown') {
+                if (e.target.value === 'Dropdown') {
                     this.setState(prevState => ({
                         ...prevState,
                         temp_variable: {
@@ -834,12 +834,12 @@ class CreateNewActivity extends Component {
 
     validateVariable = (callback) => {
         const var_ = {
-            varKey : document.getElementById('varKey').value,
-            varDisplayName : document.getElementById('varDisplayName').value,
+            varKey: document.getElementById('varKey').value,
+            varDisplayName: document.getElementById('varDisplayName').value,
             // varValue : document.getElementById('varValue').value,
-            varCategory : document.getElementById('varCategory').value,
-            varDataType : document.getElementById('varDataType').value,
-            varPriority : document.getElementById('varPriority').value
+            varCategory: document.getElementById('varCategory').value,
+            varDataType: document.getElementById('varDataType').value,
+            varPriority: document.getElementById('varPriority').value
         };
 
         for (var v in var_) {
@@ -850,11 +850,11 @@ class CreateNewActivity extends Component {
         return callback(true, null);
     };
 
-    
+
 
     addVariable = () => {
-        this.validateVariable( (val, id) => {
-            if(val) {
+        this.validateVariable((val, id) => {
+            if (val) {
                 let _vars = [...this.state.newActivity.variables];
                 const _var = {
                     ...this.variable
@@ -863,7 +863,7 @@ class CreateNewActivity extends Component {
                 _vars.push(_var);
                 this.setState(prevState => ({
                     ...prevState,
-                    newActivity:{
+                    newActivity: {
                         ...prevState.newActivity,
                         variables: _vars
                     }
@@ -930,11 +930,14 @@ class CreateNewActivity extends Component {
         if (this.state.temp_selected_langs.node) {
             _publishFile = this.state.publish_content.node.file;
         }
-        else if(this.state.temp_selected_langs.golang) {
-            _publishFile = this.state.publish_content.golang.payload;
-            _publishFile.ID = UIHelper.UUID();
-            _publishFile.ActivityName += this.state.newActivity.activity_name;
-            _publishFile.Description = this.state.newActivity.description;
+        else if (this.state.temp_selected_langs.golang) {
+            
+            _publishFile = {
+                goCode: '',
+                activityID: ''
+            };
+            _publishFile.goCode = this.state.publish_content.golang.payload.GoCode;
+
         }
 
         // Activity source validation
@@ -946,8 +949,8 @@ class CreateNewActivity extends Component {
         _payload.activities.push(this.state.newActivity);
 
         this.uploadBulkMedia(function (_mediaSRCs) {
-            if(_mediaSRCs) {
-                for(const _msrc of _mediaSRCs) {
+            if (_mediaSRCs) {
+                for (const _msrc of _mediaSRCs) {
                     if (_msrc.id === 'main') {
                         _payload.activities[0].image = _msrc.src;
                     }
@@ -961,20 +964,21 @@ class CreateNewActivity extends Component {
 
             if (_publishFile) {
                 // Upload activity to S3  
-                if(_publishFile === _self.state.temp_selected_langs.node){
+                if (_publishFile === _self.state.temp_selected_langs.node) {
                     MediaService.uploadMedia(_publishFile, function (mres) {
                         _payload.activities[0].path = mres.data.url;
                         ActivitiesService.saveNewActivity(_payload)
                             .then((res) => {
-                                if(res.data.IsSuccess) {
+                                if (res.data.IsSuccess) {
                                     _self.props.location.candidate
-                                        ?   toastr.success('Activity update', 'Activity updated successfully')
-                                        :   toastr.success('New Activity', 'New activity created successfully')
+                                        ? toastr.success('Activity update', 'Activity updated successfully')
+                                        : toastr.success('New Activity', 'New activity created successfully')
                                     _self.setState({
                                         success: true
                                     });
                                     _self.props.history.push('/user/activities');
                                 }
+
                             })
                             .catch((errorRes) => {
                                 toastr.error('New Activity', 'Failed to create New Activity');
@@ -983,36 +987,50 @@ class CreateNewActivity extends Component {
                     }, function (erres) {
                         toastr.error('Activity Submission', 'Failed to upload Activity file')
                     });
-                }else{
-                    MediaService.golangMedia(_publishFile, function (mres) {
-                        // _payload.activities[0].path = mres.data.url;
-                        ActivitiesService.saveNewActivity(_payload)
-                            .then((res) => {
-                                if(res.data.IsSuccess) {
-                                    _self.props.location.candidate
-                                        ?   toastr.success('Activity update', 'Activity updated successfully')
-                                        :   toastr.success('New Activity', 'New activity created successfully')
-                                    _self.setState({
-                                        success: true
+                } else {
+                    ActivitiesService.saveNewActivity(_payload)
+                        .then((res) => {
+                            if (res.data.IsSuccess) {
+                                _publishFile.activityID = res.data.Result._id;
+                                
+                                MediaService.golangMedia(_publishFile, function (mres) {
+                                    // _payload.activities[0].path = mres.data.url;
+
+                                    res.data.Result['go_id'] = mres.data.Result._id;
+                                    _payload.activities = [];
+                                    _payload.activities.push(res.data.Result);
+                                    ActivitiesService.saveNewActivity(_payload)
+                                    .then((resfinal) => {
+                                        if (resfinal.data.IsSuccess) {
+                                            _self.props.location.candidate
+                                            ? toastr.success('Activity update', 'Activity updated successfully')
+                                            : toastr.success('New Activity', 'New activity created successfully')
+                                            _self.setState({
+                                                success: true
+                                            });
+                                            _self.props.history.push('/user/activities');
+                                        }
+                                    }).catch((errorRes) => {
+                                        toastr.error('New Activity', 'Failed to create New Activity');
+                                        console.log(errorRes);
                                     });
-                                    _self.props.history.push('/user/activities');
-                                }
-                            })
-                            .catch((errorRes) => {
-                                toastr.error('New Activity', 'Failed to create New Activity');
-                                console.log(errorRes);
-                            });
-                    }, function (erres) {
-                        toastr.error('Activity Submission', 'Failed to upload Activity file')
-                    });
+                                }, function (erres) {
+                                    toastr.error('Activity Submission', 'Failed to upload Activity file')
+                                });
+                            }
+                        })
+                        .catch((errorRes) => {
+                            toastr.error('New Activity', 'Failed to create New Activity');
+                            console.log(errorRes);
+                        });
                 }
             } else {
                 ActivitiesService.saveNewActivity(_payload)
                     .then((res) => {
-                        if(res.data.IsSuccess) {
+                        if (res.data.IsSuccess) {
                             _self.props.location.candidate
-                                ?   toastr.success('Activity update', 'Activity updated successfully')
-                                :   toastr.success('New Activity', 'New activity created successfully')
+                                ? toastr.success('Activity update', 'Activity updated successfully')
+                                : toastr.success('New Activity', 'New activity created successfully')
                             _self.setState({
                                 success: true
                             });
@@ -1038,7 +1056,7 @@ class CreateNewActivity extends Component {
                 ...prevState,
                 publish_content: {
                     ...prevState.publish_content,
-                    golang : {
+                    golang: {
                         ...prevState.publish_content.golang,
                         payload: {
                             ...prevState.publish_content.golang.payload,
@@ -1059,10 +1077,10 @@ class CreateNewActivity extends Component {
                     ...prevState,
                     publish_content: {
                         ...prevState.publish_content,
-                        golang : {
+                        golang: {
                             ...prevState.publish_content.golang,
-                            noerrors : false,
-                            errors : [{
+                            noerrors: false,
+                            errors: [{
                                 Title: "Go Code Error",
                                 Error: "Check \"import\"",
                                 Reason: importfmtresult[0]
@@ -1073,16 +1091,16 @@ class CreateNewActivity extends Component {
                 return false;
             }
         }
-        if (IssetTempresult != null){
+        if (IssetTempresult != null) {
             if (IssetTempresult.length > 0) {
                 this.setState(prevState => ({
                     ...prevState,
                     publish_content: {
                         ...prevState.publish_content,
-                        golang : {
+                        golang: {
                             ...prevState.publish_content.golang,
-                            noerrors : false,
-                            errors : [{
+                            noerrors: false,
+                            errors: [{
                                 Title: "Go Code Error",
                                 Error: "Can't Use Go code template",
                                 Reason: '<your_package_here>'
@@ -1093,15 +1111,15 @@ class CreateNewActivity extends Component {
                 return false;
             }
         }
-        if(importfmtresult == null && IssetTempresult == null) {
+        if (importfmtresult == null && IssetTempresult == null) {
             this.setState(prevState => ({
                 ...prevState,
                 publish_content: {
                     ...prevState.publish_content,
-                    golang : {
+                    golang: {
                         ...prevState.publish_content.golang,
-                        noerrors : true,
-                        errors : []
+                        noerrors: true,
+                        errors: []
                     }
                 }
             }));
@@ -1164,26 +1182,26 @@ class CreateNewActivity extends Component {
         return (
             <div className="sf-route-content">
                 {
-                    this.props.uihelper._preload_body_ 
-                    ?   <Preloader type={'BODY'} />
-                    :   <form name="createActivityForm" id="createActivityForm" onSubmit={ (event) => {this.submitNewActivity(event)}}>
+                    this.props.uihelper._preload_body_
+                        ? <Preloader type={'BODY'} />
+                        : <form name="createActivityForm" id="createActivityForm" onSubmit={(event) => { this.submitNewActivity(event) }}>
                             <PageHeader title={'Create Activity'}>
                                 {
                                     this.props.location.candidate
-                                        ?   <Link to={{ pathname: '/activities/' + this.props.location.candidate.name , activity: {...this.props.location.candidate}, advanced: true }}><Button className="sf-button sf-button-clear">Cancel</Button></Link>
-                                        :   <Link to={'/user/activities'}><Button className="sf-button sf-button-clear">Cancel</Button></Link>
+                                        ? <Link to={{ pathname: '/activities/' + this.props.location.candidate.name, activity: { ...this.props.location.candidate }, advanced: true }}><Button className="sf-button sf-button-clear">Cancel</Button></Link>
+                                        : <Link to={'/user/activities'}><Button className="sf-button sf-button-clear">Cancel</Button></Link>
                                 }
-                                <Button type="button" className="sf-button sf-button-secondary" onClick={ (event) => {this.clearForm(event)}}>Clear</Button>
-                                <Button className="sf-button sf-button-primary sf-button-primary-p sf-button-caps" type="submit"> { this.props.location.candidate ? 'Update' : 'Save' }</Button>
+                                <Button type="button" className="sf-button sf-button-secondary" onClick={(event) => { this.clearForm(event) }}>Clear</Button>
+                                <Button className="sf-button sf-button-primary sf-button-primary-p sf-button-caps" type="submit"> {this.props.location.candidate ? 'Update' : 'Save'}</Button>
                             </PageHeader>
                             <div className="sf-input-group sf-flexbox-row">
                                 <div className="sf-flex-1">
                                     <h3 className="sf-heading-sub sf-heading-form">General</h3>
                                     <div className="sf-input-block">
-                                        <Input type="text" name="activity_name" id="activityName" placeholder="Name" value={this.state.newActivity.activity_name} onChange={ (event) => this.addInfo(event) } error={ {required : true} } required/>
+                                        <Input type="text" name="activity_name" id="activityName" placeholder="Name" value={this.state.newActivity.activity_name} onChange={(event) => this.addInfo(event)} error={{ required: true }} required />
                                     </div>
                                     <div className="sf-input-block">
-                                        <Input type="textarea" name="activity_desc" id="activityDescription" cols="30" rows="3" placeholder="Description" value={this.state.newActivity.description} onChange={ (event) => this.addInfo(event) } />
+                                        <Input type="textarea" name="activity_desc" id="activityDescription" cols="30" rows="3" placeholder="Description" value={this.state.newActivity.description} onChange={(event) => this.addInfo(event)} />
                                     </div>
                                     <div className="sf-input-block sf-chips">
                                         {/* <label>Tags</label> */}
@@ -1197,7 +1215,7 @@ class CreateNewActivity extends Component {
                                         />
                                     </div>
                                 </div>
-                                <div className="sf-p-p" style={ {width:'300px'}}>
+                                <div className="sf-p-p" style={{ width: '300px' }}>
                                     {/* <Preview view="create_general" /> */}
                                 </div>
                             </div>
@@ -1207,39 +1225,39 @@ class CreateNewActivity extends Component {
                                     <div className="sf-clearfix">
                                         {
                                             this.state.newActivity.features.length
-                                            ?   this.state.newActivity.features.map((feature, index) =>
-                                                    <div className="sf-card" style={ {'width' : '50%'} } key={KEY()}>
+                                                ? this.state.newActivity.features.map((feature, index) =>
+                                                    <div className="sf-card" style={{ 'width': '50%' }} key={KEY()}>
                                                         <div className="sf-card-content sf-card-bordered sf-card-centered-row">
                                                             <div className="sf-flex-1">
                                                                 <div className="sf-txtblock-text">
-                                                                    <div className="sf-txtblock-txt-title sf-text-semibold">{ feature.title }</div>
-                                                                    <div className="sf-txtblock-txt-text">{ feature.description }</div>
+                                                                    <div className="sf-txtblock-txt-title sf-text-semibold">{feature.title}</div>
+                                                                    <div className="sf-txtblock-txt-text">{feature.description}</div>
                                                                 </div>
                                                             </div>
                                                             <div className="sf-card-row-end">
-                                                                <button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" onClick={(event)=>this.removeFeature(event, index)}>x</button>
+                                                                <button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" onClick={(event) => this.removeFeature(event, index)}>x</button>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 )
-                                            :   null
+                                                : null
                                         }
                                     </div>
                                     <div className="sf-feature-block">
                                         <div className="sf-feature-entry">
                                             <div className="sf-input-block">
-                                                <input type="text" placeholder="Feature title" id="featureTitle" onChange={ (event) => this.createFeature(event) } />
+                                                <input type="text" placeholder="Feature title" id="featureTitle" onChange={(event) => this.createFeature(event)} />
                                             </div>
                                             <div className="sf-input-block">
-                                                <textarea placeholder="Feature description" id="featureDesc" cols="30" rows="2" onChange={ (event) => this.createFeature(event) } />
+                                                <textarea placeholder="Feature description" id="featureDesc" cols="30" rows="2" onChange={(event) => this.createFeature(event)} />
                                             </div>
                                         </div>
                                         <div className="sf-feature-add">
-                                            <button type="button" className="sf-button sf-button-primary sf-button-primary-light" onClick={ this.addFeature }>+</button>
+                                            <button type="button" className="sf-button sf-button-primary sf-button-primary-light" onClick={this.addFeature}>+</button>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="sf-p-p" style={ {width:'300px'}}></div>
+                                <div className="sf-p-p" style={{ width: '300px' }}></div>
                             </div>
                             <div className="sf-input-group sf-flexbox-row">
                                 <div className="sf-flex-1">
@@ -1249,36 +1267,36 @@ class CreateNewActivity extends Component {
                                         <div className="sf-clearfix">
                                             {
                                                 this.state.newActivity.image !== null
-                                                ?   <div className="sf-card" style={ {'width' : '50%'} }>
+                                                    ? <div className="sf-card" style={{ 'width': '50%' }}>
                                                         <div className="sf-card-content sf-card-bordered sf-card-centered-row">
                                                             <div className="sf-flex-1">
                                                                 <img src={this.state.newActivity.image} alt="" id="newActivityImage" style={{ height: '100px', width: 'auto' }} />
                                                             </div>
                                                         </div>
                                                     </div>
-                                                :   null
+                                                    : null
                                             }
                                         </div>
                                         <div className="sf-feature-block">
                                             <div className="sf-feature-entry">
-                                                <input type="file" onChange={(event) => this.addMedia(event, 'main')}/>
+                                                <input type="file" onChange={(event) => this.addMedia(event, 'main')} />
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="sf-p-p-h" style={{'position':'relative'}}>
+                                    <div className="sf-p-p-h" style={{ 'position': 'relative' }}>
                                         <div className="sf-flexbox-row">
-                                            <label>What you get</label> <i className="material-icons" style={{'fontSize':'19px', 'marginLeft': '5px', 'cursor': 'pointer'}} onClick={ (e) => this.initHelp(e, 'WYG') }>help</i>
+                                            <label>What you get</label> <i className="material-icons" style={{ 'fontSize': '19px', 'marginLeft': '5px', 'cursor': 'pointer' }} onClick={(e) => this.initHelp(e, 'WYG')}>help</i>
                                         </div>
                                         <div className="sf-clearfix">
                                             {
                                                 this.state.newActivity.what_you_get.map((wyg, index) =>
-                                                    <div className="sf-card" style={ {'width' : '50%'} } key={KEY()}>
+                                                    <div className="sf-card" style={{ 'width': '50%' }} key={KEY()}>
                                                         <div className="sf-card-content sf-card-bordered sf-card-centered-row">
                                                             <div className="sf-flex-1">
-                                                                <img src={wyg.content ? wyg.content : wyg.file} alt="" id="newActivityImage" style={{height: '100px', width: 'auto'}}/>
+                                                                <img src={wyg.content ? wyg.content : wyg.file} alt="" id="newActivityImage" style={{ height: '100px', width: 'auto' }} />
                                                             </div>
                                                             <div className="sf-card-row-end">
-                                                                <button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" onClick={(event)=>this.removeMedia(event, 'wyg', index)}>x</button>
+                                                                <button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" onClick={(event) => this.removeMedia(event, 'wyg', index)}>x</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1288,102 +1306,102 @@ class CreateNewActivity extends Component {
 
                                         <div className="sf-feature-block">
                                             <div className="sf-feature-entry">
-                                                <input type="file" onChange={(event) => this.addMedia(event, 'wyg')}/>
+                                                <input type="file" onChange={(event) => this.addMedia(event, 'wyg')} />
                                             </div>
                                         </div>
 
                                         {
                                             this.props.uihelper._init_help && this.state.active_guide === 'WYG'
-                                            ?   <Dialog type={'GUIDE'} title="publish">
+                                                ? <Dialog type={'GUIDE'} title="publish">
                                                     <div className="sf-dg-header">
                                                         <h3>What to do here?</h3>
-                                                        <i className="material-icons sf-dg-header-close" onClick={ this.closeHelp.bind() }>close</i>
+                                                        <i className="material-icons sf-dg-header-close" onClick={this.closeHelp.bind()}>close</i>
                                                     </div>
                                                     <div>
                                                         <Block><b>What you get</b> is where you can display actual screenshots, footages of your Activity. You can add multiple items here which will be displayed as a Carousel/Slider as shown below.</Block>
-                                                        <img src="images/what_you_get_sample.jpg" style={{'width':'100%'}}/>
+                                                        <img src="images/what_you_get_sample.jpg" style={{ 'width': '100%' }} />
                                                     </div>
                                                 </Dialog>
-                                            :   null
+                                                : null
                                         }
                                     </div>
                                 </div>
-                                <div className="sf-p-p" style={ {width:'300px'}}></div>
+                                <div className="sf-p-p" style={{ width: '300px' }}></div>
                             </div>
                             {/*<div className="sf-input-group sf-flexbox-row">*/}
-                                {/*<div className="sf-flex-1">*/}
-                                    {/*<h3 className="sf-heading-sub sf-heading-form">Pricing</h3>*/}
-                                    {/*<div className="sf-clearfix">*/}
-                                        {/*{*/}
-                                            {/*this.state.newActivity.pricings*/}
-                                            {/*?   this.state.newActivity.pricings.map((pack, index) =>*/}
-                                                    {/*<div className="sf-card" style={{ 'maxWidth': '200px' }} key={KEY()}>*/}
-                                                        {/*<div className="sf-card-content sf-card-bordered sf-card-centered-row">*/}
-                                                            {/*<div className="sf-flex-1">*/}
-                                                                {/*<div className="sf-txtblock-text">*/}
-                                                                    {/*<div className="sf-txtblock-txt-title sf-text-semibold">{pack.name}</div>*/}
-                                                                    {/*{*/}
-                                                                        {/*pack.pricing_fts.map((ft, index) =>*/}
-                                                                            {/*<div className="sf-txtblock-txt-text" key={KEY()}>{ft.text ? ft.text : ft}</div>*/}
-                                                                        {/*)*/}
-                                                                    {/*}*/}
-                                                                    {/*<div className="sf-txtblock-txt-title sf-text-semibold">{pack.price}</div>*/}
-                                                                {/*</div>*/}
-                                                            {/*</div>*/}
-                                                            {/*<div className="sf-card-row-end">*/}
-                                                                {/*<button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" onClick={(event) => this.removePricing(event, index)}>x</button>*/}
-                                                            {/*</div>*/}
-                                                        {/*</div>*/}
-                                                    {/*</div>*/}
-                                                {/*)*/}
-                                            {/*:   null*/}
-                                        {/*}*/}
-                                    {/*</div>*/}
-                                    {/*<div className="sf-feature-block">*/}
-                                        {/*<div className="sf-feature-entry">*/}
-                                            {/*<div className="sf-input-block sf-flexbox-row">*/}
-                                                {/*<input type="text" placeholder="Package name" id="packageName" onChange={(event) => this.createPricing(event)} />*/}
-                                                {/*<input type="number" placeholder="Price" id="packagePrice" onChange={(event) => this.createPricing(event)} />*/}
-                                                {/*<input type="text" placeholder="Bill Cycle" id="packageBillCycle" onChange={(event) => this.createPricing(event)} />*/}
-                                            {/*</div>*/}
-                                            {/*<div className="sf-input-block">*/}
-                                                {/*<label>Package features</label>*/}
-                                                {/*<div className="sf-clearfix">*/}
-                                                    {/*{*/}
-                                                        {/*this.state.temp_prcing_fts.map((pft, index) =>*/}
-                                                            {/*<div className="sf-card" key={KEY()}>*/}
-                                                                {/*<div className="sf-card-content sf-card-bordered sf-card-centered-row">*/}
-                                                                    {/*<div className="sf-flex-1" style={{'paddingRight': '15px'}}>*/}
-                                                                        {/*<div className="sf-txtblock-text">*/}
-                                                                            {/*<div className="sf-txtblock-txt-title">{pft}</div>*/}
-                                                                        {/*</div>*/}
-                                                                    {/*</div>*/}
-                                                                    {/*<div className="sf-card-row-end">*/}
-                                                                        {/*<button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" onClick={(event) => this.removePricingFeature(event, index)}>x</button>*/}
-                                                                    {/*</div>*/}
-                                                                {/*</div>*/}
-                                                            {/*</div>*/}
-                                                        {/*)*/}
-                                                    {/*}*/}
-                                                {/*</div>*/}
-                                                {/*<div className="sf-feature-block">*/}
-                                                    {/*<div className="sf-feature-entry">*/}
-                                                        {/*<div className="sf-input-block">*/}
-                                                            {/*<input type="text" placeholder="Feature" id="packageFeature" onChange={(event) => this.packageFeature = event.target.value} />*/}
-                                                        {/*</div>*/}
-                                                    {/*</div>*/}
-                                                    {/*<div className="sf-feature-add">*/}
-                                                        {/*<button type="button" id="addPackageFeature" className="sf-button sf-button-primary sf-button-primary-light" onClick={(event) => this.createPricing(event)}>+</button>*/}
-                                                    {/*</div>*/}
-                                                {/*</div>*/}
-                                            {/*</div>*/}
-                                        {/*</div>*/}
-                                        {/*<div className="sf-feature-add">*/}
-                                            {/*<button type="button" className="sf-button sf-button-primary sf-button-primary-light" onClick={this.addPricing}>+</button>*/}
-                                        {/*</div>*/}
-                                    {/*</div>*/}
-                                {/*</div>*/}
-                                {/*<div className="sf-p-p" style={ {width:'300px'}}></div>*/}
+                            {/*<div className="sf-flex-1">*/}
+                            {/*<h3 className="sf-heading-sub sf-heading-form">Pricing</h3>*/}
+                            {/*<div className="sf-clearfix">*/}
+                            {/*{*/}
+                            {/*this.state.newActivity.pricings*/}
+                            {/*?   this.state.newActivity.pricings.map((pack, index) =>*/}
+                            {/*<div className="sf-card" style={{ 'maxWidth': '200px' }} key={KEY()}>*/}
+                            {/*<div className="sf-card-content sf-card-bordered sf-card-centered-row">*/}
+                            {/*<div className="sf-flex-1">*/}
+                            {/*<div className="sf-txtblock-text">*/}
+                            {/*<div className="sf-txtblock-txt-title sf-text-semibold">{pack.name}</div>*/}
+                            {/*{*/}
+                            {/*pack.pricing_fts.map((ft, index) =>*/}
+                            {/*<div className="sf-txtblock-txt-text" key={KEY()}>{ft.text ? ft.text : ft}</div>*/}
+                            {/*)*/}
+                            {/*}*/}
+                            {/*<div className="sf-txtblock-txt-title sf-text-semibold">{pack.price}</div>*/}
+                            {/*</div>*/}
+                            {/*</div>*/}
+                            {/*<div className="sf-card-row-end">*/}
+                            {/*<button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" onClick={(event) => this.removePricing(event, index)}>x</button>*/}
+                            {/*</div>*/}
+                            {/*</div>*/}
+                            {/*</div>*/}
+                            {/*)*/}
+                            {/*:   null*/}
+                            {/*}*/}
+                            {/*</div>*/}
+                            {/*<div className="sf-feature-block">*/}
+                            {/*<div className="sf-feature-entry">*/}
+                            {/*<div className="sf-input-block sf-flexbox-row">*/}
+                            {/*<input type="text" placeholder="Package name" id="packageName" onChange={(event) => this.createPricing(event)} />*/}
+                            {/*<input type="number" placeholder="Price" id="packagePrice" onChange={(event) => this.createPricing(event)} />*/}
+                            {/*<input type="text" placeholder="Bill Cycle" id="packageBillCycle" onChange={(event) => this.createPricing(event)} />*/}
+                            {/*</div>*/}
+                            {/*<div className="sf-input-block">*/}
+                            {/*<label>Package features</label>*/}
+                            {/*<div className="sf-clearfix">*/}
+                            {/*{*/}
+                            {/*this.state.temp_prcing_fts.map((pft, index) =>*/}
+                            {/*<div className="sf-card" key={KEY()}>*/}
+                            {/*<div className="sf-card-content sf-card-bordered sf-card-centered-row">*/}
+                            {/*<div className="sf-flex-1" style={{'paddingRight': '15px'}}>*/}
+                            {/*<div className="sf-txtblock-text">*/}
+                            {/*<div className="sf-txtblock-txt-title">{pft}</div>*/}
+                            {/*</div>*/}
+                            {/*</div>*/}
+                            {/*<div className="sf-card-row-end">*/}
+                            {/*<button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" onClick={(event) => this.removePricingFeature(event, index)}>x</button>*/}
+                            {/*</div>*/}
+                            {/*</div>*/}
+                            {/*</div>*/}
+                            {/*)*/}
+                            {/*}*/}
+                            {/*</div>*/}
+                            {/*<div className="sf-feature-block">*/}
+                            {/*<div className="sf-feature-entry">*/}
+                            {/*<div className="sf-input-block">*/}
+                            {/*<input type="text" placeholder="Feature" id="packageFeature" onChange={(event) => this.packageFeature = event.target.value} />*/}
+                            {/*</div>*/}
+                            {/*</div>*/}
+                            {/*<div className="sf-feature-add">*/}
+                            {/*<button type="button" id="addPackageFeature" className="sf-button sf-button-primary sf-button-primary-light" onClick={(event) => this.createPricing(event)}>+</button>*/}
+                            {/*</div>*/}
+                            {/*</div>*/}
+                            {/*</div>*/}
+                            {/*</div>*/}
+                            {/*<div className="sf-feature-add">*/}
+                            {/*<button type="button" className="sf-button sf-button-primary sf-button-primary-light" onClick={this.addPricing}>+</button>*/}
+                            {/*</div>*/}
+                            {/*</div>*/}
+                            {/*</div>*/}
+                            {/*<div className="sf-p-p" style={ {width:'300px'}}></div>*/}
                             {/*</div>*/}
                             <div className="sf-input-group sf-flexbox-row">
                                 <div className="sf-flex-1">
@@ -1391,39 +1409,39 @@ class CreateNewActivity extends Component {
                                     <div className="sf-clearfix">
                                         {
                                             this.state.newActivity.faq
-                                            ?   this.state.newActivity.faq.map((faq, index) =>
-                                                    <div className="sf-card" style={ {'width' : '50%'} } key={KEY()}>
+                                                ? this.state.newActivity.faq.map((faq, index) =>
+                                                    <div className="sf-card" style={{ 'width': '50%' }} key={KEY()}>
                                                         <div className="sf-card-content sf-card-bordered sf-card-centered-row">
                                                             <div className="sf-flex-1">
                                                                 <div className="sf-txtblock-text">
-                                                                    <div className="sf-txtblock-txt-title sf-text-semibold" style={{marginBottom: '5px'}}>{ faq.question }</div>
-                                                                    <div className="sf-txtblock-txt-text">{ faq.answer }</div>
+                                                                    <div className="sf-txtblock-txt-title sf-text-semibold" style={{ marginBottom: '5px' }}>{faq.question}</div>
+                                                                    <div className="sf-txtblock-txt-text">{faq.answer}</div>
                                                                 </div>
                                                             </div>
                                                             <div className="sf-card-row-end">
-                                                                <button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" onClick={(event)=>this.removeFAQ(event, index)}>x</button>
+                                                                <button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" onClick={(event) => this.removeFAQ(event, index)}>x</button>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 )
-                                            :   null
+                                                : null
                                         }
                                     </div>
                                     <div className="sf-feature-block">
                                         <div className="sf-feature-entry">
                                             <div className="sf-input-block">
-                                                <input type="text" placeholder="Question" id="faqQuestion" onChange={ (event) => this.createFAQ(event) } />
+                                                <input type="text" placeholder="Question" id="faqQuestion" onChange={(event) => this.createFAQ(event)} />
                                             </div>
                                             <div className="sf-input-block">
-                                                <textarea placeholder="Answer" id="faqAnswer" cols="30" rows="2" onChange={ (event) => this.createFAQ(event) } />
+                                                <textarea placeholder="Answer" id="faqAnswer" cols="30" rows="2" onChange={(event) => this.createFAQ(event)} />
                                             </div>
                                         </div>
                                         <div className="sf-feature-add">
-                                            <button type="button" className="sf-button sf-button-primary sf-button-primary-light" onClick={ this.addFAQ }>+</button>
+                                            <button type="button" className="sf-button sf-button-primary sf-button-primary-light" onClick={this.addFAQ}>+</button>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="sf-p-p" style={{width:'300px'}}></div>
+                                <div className="sf-p-p" style={{ width: '300px' }}></div>
                             </div>
                             <div className="sf-hr"></div>
                             <div className="sf-input-group sf-flexbox-row">
@@ -1432,7 +1450,7 @@ class CreateNewActivity extends Component {
                                     <div className="sf-clearfix">
                                         {
                                             this.state.newActivity.variables
-                                            ?   this.state.newActivity.variables.map((variable, index) =>
+                                                ? this.state.newActivity.variables.map((variable, index) =>
                                                     <div className="sf-card" key={KEY()}>
                                                         <div className="sf-card-content sf-card-bordered sf-card-centered-row sf-variables-wrap">
                                                             <div className="sf-flexbox-column">
@@ -1446,13 +1464,13 @@ class CreateNewActivity extends Component {
                                                                 </div>
                                                                 {
                                                                     variable.ValueList.length == 0
-                                                                    ?   <div className="sf-txtblock-text">
+                                                                        ? <div className="sf-txtblock-text">
                                                                             <span className="sf-text-semibold">Value : </span>
                                                                             <span>{variable.Key}</span>
                                                                         </div>
-                                                                    :   <div className="sf-txtblock-text">
+                                                                        : <div className="sf-txtblock-text">
                                                                             <div className="sf-text-semibold">ValueList</div>
-                                                                            <div style={{paddingLeft: '10px'}}>
+                                                                            <div style={{ paddingLeft: '10px' }}>
                                                                                 {
                                                                                     variable.ValueList.map((val) =>
                                                                                         <Wrap key={KEY()}>
@@ -1473,8 +1491,8 @@ class CreateNewActivity extends Component {
                                                                         </div>
                                                                 }
                                                                 {/*<div className="sf-txtblock-text">*/}
-                                                                    {/*<span className="sf-text-semibold">Type : </span>*/}
-                                                                    {/*<span>{variable.Type}</span>*/}
+                                                                {/*<span className="sf-text-semibold">Type : </span>*/}
+                                                                {/*<span>{variable.Type}</span>*/}
                                                                 {/*</div>*/}
                                                                 <div className="sf-txtblock-text">
                                                                     <span className="sf-text-semibold">Category : </span>
@@ -1494,40 +1512,40 @@ class CreateNewActivity extends Component {
                                                                 </div>
                                                                 {
                                                                     variable.advance
-                                                                    ?   <div className="sf-txtblock-text">
+                                                                        ? <div className="sf-txtblock-text">
                                                                             <span className="sf-text-semibold">Advance : </span>
                                                                             <span>{variable.advance}</span>
                                                                         </div>
-                                                                    :   null
+                                                                        : null
                                                                 }
                                                                 {/*<div className="sf-txtblock-text">*/}
-                                                                    {/*<span className="sf-text-semibold">Control : </span>*/}
-                                                                    {/*<span>{variable.control}</span>*/}
+                                                                {/*<span className="sf-text-semibold">Control : </span>*/}
+                                                                {/*<span>{variable.control}</span>*/}
                                                                 {/*</div>*/}
                                                             </div>
                                                             <div className="sf-card-row-end">
-                                                                <button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" onClick={(event)=>this.removeVariable(event, index)}>x</button>
+                                                                <button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" onClick={(event) => this.removeVariable(event, index)}>x</button>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 )
-                                            :   null
+                                                : null
                                         }
                                     </div>
                                     <div className="sf-feature-block">
                                         <div className="sf-feature-entry">
                                             <div className="sf-flexbox-row">
                                                 <div className="sf-flex-1 sf-guide-holder">
-                                                    <div className="sf-input-block sf-flexbox-row" style={{marginBottom: '10px'}}>
-                                                        <Input type="checkbox" id="varIsAdvanced" value={this.state.newActivity.advance} onChange={(event) => this.createVariable(event)}/>
-                                                        <span>Advance</span> <i className="material-icons sf-icon-guide" onClick={ (e) => this.initHelp(e, 'VAR:ADVANCE') }>help</i>
+                                                    <div className="sf-input-block sf-flexbox-row" style={{ marginBottom: '10px' }}>
+                                                        <Input type="checkbox" id="varIsAdvanced" value={this.state.newActivity.advance} onChange={(event) => this.createVariable(event)} />
+                                                        <span>Advance</span> <i className="material-icons sf-icon-guide" onClick={(e) => this.initHelp(e, 'VAR:ADVANCE')}>help</i>
                                                     </div>
                                                     {
                                                         this.props.uihelper._init_help && this.state.active_guide === 'VAR:ADVANCE'
-                                                            ?   <Dialog type={'GUIDE'} title="publish">
+                                                            ? <Dialog type={'GUIDE'} title="publish">
                                                                 <div className="sf-dg-header">
                                                                     <h3>What to do here?</h3>
-                                                                    <i className="material-icons sf-dg-header-close" onClick={ this.closeHelp.bind() }>close</i>
+                                                                    <i className="material-icons sf-dg-header-close" onClick={this.closeHelp.bind()}>close</i>
                                                                 </div>
                                                                 <div>
                                                                     <Block>This implies whether the Variable is an <b>Advanced</b> variable or a <b>Basic</b> variable.
@@ -1535,7 +1553,7 @@ class CreateNewActivity extends Component {
                                                                     </Block>
                                                                 </div>
                                                             </Dialog>
-                                                            :   null
+                                                            : null
                                                     }
                                                 </div>
                                                 <div className="sf-spacer-p"></div>
@@ -1543,45 +1561,45 @@ class CreateNewActivity extends Component {
                                             </div>
                                             <div className="sf-input-block sf-flexbox-row">
                                                 <div className="sf-custom-input sf-flex-1">
-                                                    <label className="sf-flexbox-row">Key <i className="material-icons sf-icon-guide" onClick={ (e) => this.initHelp(e, 'VAR:KEY') }>help</i></label>
-                                                    <input type="text" id="varKey" onChange={ (event) => this.createVariable(event) } />
+                                                    <label className="sf-flexbox-row">Key <i className="material-icons sf-icon-guide" onClick={(e) => this.initHelp(e, 'VAR:KEY')}>help</i></label>
+                                                    <input type="text" id="varKey" onChange={(event) => this.createVariable(event)} />
                                                     {
                                                         this.props.uihelper._init_help && this.state.active_guide === 'VAR:KEY'
-                                                        ?   <Dialog type={'GUIDE'} title="publish">
+                                                            ? <Dialog type={'GUIDE'} title="publish">
                                                                 <div className="sf-dg-header">
                                                                     <h3>What to do here?</h3>
-                                                                    <i className="material-icons sf-dg-header-close" onClick={ this.closeHelp.bind() }>close</i>
+                                                                    <i className="material-icons sf-dg-header-close" onClick={this.closeHelp.bind()}>close</i>
                                                                 </div>
                                                                 <div>
                                                                     <Block>Variable Key</Block>
                                                                 </div>
                                                             </Dialog>
-                                                        :   null
+                                                            : null
                                                     }
                                                 </div>
                                                 <div className="sf-spacer-p"></div>
                                                 <div className="sf-custom-input sf-flex-1">
-                                                    <label className="sf-flexbox-row">Display Name <i className="material-icons sf-icon-guide" onClick={ (e) => this.initHelp(e, 'VAR:DISPLAY_NAME') }>help</i></label>
-                                                    <input type="text" id="varDisplayName" onChange={ (event) => this.createVariable(event) } />
+                                                    <label className="sf-flexbox-row">Display Name <i className="material-icons sf-icon-guide" onClick={(e) => this.initHelp(e, 'VAR:DISPLAY_NAME')}>help</i></label>
+                                                    <input type="text" id="varDisplayName" onChange={(event) => this.createVariable(event)} />
                                                     {
                                                         this.props.uihelper._init_help && this.state.active_guide === 'VAR:DISPLAY_NAME'
-                                                            ?   <Dialog type={'GUIDE'} title="publish">
+                                                            ? <Dialog type={'GUIDE'} title="publish">
                                                                 <div className="sf-dg-header">
                                                                     <h3>What to do here?</h3>
-                                                                    <i className="material-icons sf-dg-header-close" onClick={ this.closeHelp.bind() }>close</i>
+                                                                    <i className="material-icons sf-dg-header-close" onClick={this.closeHelp.bind()}>close</i>
                                                                 </div>
                                                                 <div>
                                                                     <Block>Display name of the Variable</Block>
                                                                 </div>
                                                             </Dialog>
-                                                            :   null
+                                                            : null
                                                     }
                                                 </div>
                                             </div>
                                             <div className="sf-input-block sf-flexbox-row">
                                                 <div className="sf-flex-1 sf-custom-input sf-custom-select">
-                                                    <label className="sf-flexbox-row">Control <i className="material-icons sf-icon-guide" onClick={ (e) => this.initHelp(e, 'VAR:CONTROL') }>help</i></label>
-                                                    <select name="varPriority" id="varControls" defaultValue={'_'} onChange={(event) => this.createVariable(event)} value={ !this.state.temp_variable.is_val_dropdown && !this.state.temp_variable.is_val_api ? 'Textbox' : this.state.newActivity.control }>
+                                                    <label className="sf-flexbox-row">Control <i className="material-icons sf-icon-guide" onClick={(e) => this.initHelp(e, 'VAR:CONTROL')}>help</i></label>
+                                                    <select name="varPriority" id="varControls" defaultValue={'_'} onChange={(event) => this.createVariable(event)} value={!this.state.temp_variable.is_val_dropdown && !this.state.temp_variable.is_val_api ? 'Textbox' : this.state.newActivity.control}>
                                                         {/*<option value="_" disabled>Control</option>*/}
                                                         <option value="Textbox">Textbox</option>
                                                         <option value="Dropdown">Dropdown</option>
@@ -1589,116 +1607,116 @@ class CreateNewActivity extends Component {
                                                     </select>
                                                     {
                                                         this.props.uihelper._init_help && this.state.active_guide === 'VAR:CONTROL'
-                                                            ?   <Dialog type={'GUIDE'} title="publish">
+                                                            ? <Dialog type={'GUIDE'} title="publish">
                                                                 <div className="sf-dg-header">
                                                                     <h3>What to do here?</h3>
-                                                                    <i className="material-icons sf-dg-header-close" onClick={ this.closeHelp.bind() }>close</i>
+                                                                    <i className="material-icons sf-dg-header-close" onClick={this.closeHelp.bind()}>close</i>
                                                                 </div>
                                                                 <div>
                                                                     <Block>This implies the behaviour of the variable when it is in use. If <b>Textbox</b> is selected, a text field will be displayed as the input component. <b>Dropdown</b> will display as a dropdown with multiple choices.</Block>
                                                                 </div>
                                                             </Dialog>
-                                                            :   null
+                                                            : null
                                                     }
                                                 </div>
                                                 <div className="sf-spacer-p"></div>
                                                 <div className="sf-custom-input sf-flex-1">
-                                                    <label className="sf-flexbox-row">{ this.state.temp_variable.is_val_api ? 'API Method' : 'Value' } <i className="material-icons sf-icon-guide" onClick={ (e) => this.initHelp(e, 'VAR:API_METHOD') }>help</i></label>
-                                                    <input className="sf-flex-1" type="text" id="varValue" disabled={ this.state.temp_variable.is_val_dropdown && !this.state.temp_variable.is_val_api } onChange={ (event) => this.createVariable(event) } />
+                                                    <label className="sf-flexbox-row">{this.state.temp_variable.is_val_api ? 'API Method' : 'Value'} <i className="material-icons sf-icon-guide" onClick={(e) => this.initHelp(e, 'VAR:API_METHOD')}>help</i></label>
+                                                    <input className="sf-flex-1" type="text" id="varValue" disabled={this.state.temp_variable.is_val_dropdown && !this.state.temp_variable.is_val_api} onChange={(event) => this.createVariable(event)} />
                                                     {
                                                         this.props.uihelper._init_help && this.state.active_guide === 'VAR:API_METHOD'
-                                                            ?   <Dialog type={'GUIDE'} title="publish">
+                                                            ? <Dialog type={'GUIDE'} title="publish">
                                                                 <div className="sf-dg-header">
                                                                     <h3>What to do here?</h3>
-                                                                    <i className="material-icons sf-dg-header-close" onClick={ this.closeHelp.bind() }>close</i>
+                                                                    <i className="material-icons sf-dg-header-close" onClick={this.closeHelp.bind()}>close</i>
                                                                 </div>
                                                                 <div>
                                                                     <Block>{
                                                                         this.state.temp_variable.is_val_api
-                                                                            ?   <span>Add the URL for the API here.</span>
-                                                                            :   <span><b>Textbox</b> value to access text input.</span>
+                                                                            ? <span>Add the URL for the API here.</span>
+                                                                            : <span><b>Textbox</b> value to access text input.</span>
                                                                     }</Block>
                                                                 </div>
                                                             </Dialog>
-                                                            :   null
+                                                            : null
                                                     }
                                                 </div>
                                             </div>
                                             {
                                                 this.state.temp_variable.is_val_dropdown && !this.state.temp_variable.is_val_api
-                                                    ?   <div className="sf-input-block sf-flexbox-row" style={{alignItems: 'flex-end', margin: '20px 0'}}>
-                                                            <div className="sf-flex-1">
-                                                                <div className="sf-fill-width">
-                                                                    <label className="sf-flexbox-row">Value List <i className="material-icons sf-icon-guide" onClick={ (e) => this.initHelp(e, 'VAR:VALUE_LIST') }>help</i></label>
-                                                                    <div className="sf-clearfix">
-                                                                        {
-                                                                            this.state.temp_variable.temp_variable_vals.map((keyval, index) =>
-                                                                                <div className="sf-card" key={KEY()}>
-                                                                                    <div className="sf-card-content sf-card-bordered sf-card-centered-row">
-                                                                                        <div className="sf-flex-1" style={{'paddingRight': '15px'}}>
-                                                                                            <div className="sf-txtblock-text">
-                                                                                                <div className="sf-txtblock-txt-title"><span className="sf-text-semibold">Key : </span>{keyval.key}</div>
-                                                                                                <div className="sf-txtblock-txt-title"><span className="sf-text-semibold">Value : </span>{keyval.value}</div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div className="sf-card-row-end">
-                                                                                            <button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" id="removeVarKeyVal" onClick={(event) => this.createVariable(event, index)}>x</button>
+                                                    ? <div className="sf-input-block sf-flexbox-row" style={{ alignItems: 'flex-end', margin: '20px 0' }}>
+                                                        <div className="sf-flex-1">
+                                                            <div className="sf-fill-width">
+                                                                <label className="sf-flexbox-row">Value List <i className="material-icons sf-icon-guide" onClick={(e) => this.initHelp(e, 'VAR:VALUE_LIST')}>help</i></label>
+                                                                <div className="sf-clearfix">
+                                                                    {
+                                                                        this.state.temp_variable.temp_variable_vals.map((keyval, index) =>
+                                                                            <div className="sf-card" key={KEY()}>
+                                                                                <div className="sf-card-content sf-card-bordered sf-card-centered-row">
+                                                                                    <div className="sf-flex-1" style={{ 'paddingRight': '15px' }}>
+                                                                                        <div className="sf-txtblock-text">
+                                                                                            <div className="sf-txtblock-txt-title"><span className="sf-text-semibold">Key : </span>{keyval.key}</div>
+                                                                                            <div className="sf-txtblock-txt-title"><span className="sf-text-semibold">Value : </span>{keyval.value}</div>
                                                                                         </div>
                                                                                     </div>
+                                                                                    <div className="sf-card-row-end">
+                                                                                        <button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" id="removeVarKeyVal" onClick={(event) => this.createVariable(event, index)}>x</button>
+                                                                                    </div>
                                                                                 </div>
-                                                                            )
-                                                                        }
-                                                                    </div>
-                                                                    {
-                                                                        this.props.uihelper._init_help && this.state.active_guide === 'VAR:VALUE_LIST'
-                                                                            ?   <Dialog type={'GUIDE'} title="publish">
-                                                                                <div className="sf-dg-header">
-                                                                                    <h3>What to do here?</h3>
-                                                                                    <i className="material-icons sf-dg-header-close" onClick={ this.closeHelp.bind() }>close</i>
-                                                                                </div>
-                                                                                <div>
-                                                                                    <Block>You can add the values here that come under the type(Dropdown) you selected in Control section.</Block>
-                                                                                </div>
-                                                                            </Dialog>
-                                                                            :   null
-                                                                    }
-                                                                    <div className="sf-feature-block">
-                                                                        <div className="sf-feature-entry">
-                                                                            <div className="sf-input-block sf-flexbox-row">
-                                                                                <input type="text" placeholder="Key" id="varValListKey" onChange={(event) => this.var_key_val.key = event.target.value} />
-                                                                                <input type="text" placeholder="Value" id="varValListValue" onChange={(event) => this.var_key_val.value = event.target.value} />
                                                                             </div>
+                                                                        )
+                                                                    }
+                                                                </div>
+                                                                {
+                                                                    this.props.uihelper._init_help && this.state.active_guide === 'VAR:VALUE_LIST'
+                                                                        ? <Dialog type={'GUIDE'} title="publish">
+                                                                            <div className="sf-dg-header">
+                                                                                <h3>What to do here?</h3>
+                                                                                <i className="material-icons sf-dg-header-close" onClick={this.closeHelp.bind()}>close</i>
+                                                                            </div>
+                                                                            <div>
+                                                                                <Block>You can add the values here that come under the type(Dropdown) you selected in Control section.</Block>
+                                                                            </div>
+                                                                        </Dialog>
+                                                                        : null
+                                                                }
+                                                                <div className="sf-feature-block">
+                                                                    <div className="sf-feature-entry">
+                                                                        <div className="sf-input-block sf-flexbox-row">
+                                                                            <input type="text" placeholder="Key" id="varValListKey" onChange={(event) => this.var_key_val.key = event.target.value} />
+                                                                            <input type="text" placeholder="Value" id="varValListValue" onChange={(event) => this.var_key_val.value = event.target.value} />
                                                                         </div>
-                                                                        <div className="sf-feature-add">
-                                                                            <button type="button" id="addVarKeyVal" className="sf-button sf-button-primary sf-button-primary-light" onClick={(event) => this.createVariable(event)}>+</button>
-                                                                        </div>
+                                                                    </div>
+                                                                    <div className="sf-feature-add">
+                                                                        <button type="button" id="addVarKeyVal" className="sf-button sf-button-primary sf-button-primary-light" onClick={(event) => this.createVariable(event)}>+</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    :   null
+                                                    </div>
+                                                    : null
                                             }
                                             <div className="sf-flexbox-row">
                                                 <div className="sf-custom-input sf-flex-1">
-                                                    <label className="sf-flexbox-row">Default <i className="material-icons sf-icon-guide" onClick={ (e) => this.initHelp(e, 'VAR:DEFAULT') }>help</i></label>
-                                                    <input className="sf-flex-1" type="text" placeholder="Group" value="Default" id="varGroup" onChange={ (event) => this.createVariable(event) } style={ {marginBottom: '10px'} }/>
+                                                    <label className="sf-flexbox-row">Default <i className="material-icons sf-icon-guide" onClick={(e) => this.initHelp(e, 'VAR:DEFAULT')}>help</i></label>
+                                                    <input className="sf-flex-1" type="text" placeholder="Group" value="Default" id="varGroup" onChange={(event) => this.createVariable(event)} style={{ marginBottom: '10px' }} />
                                                     {
                                                         this.props.uihelper._init_help && this.state.active_guide === 'VAR:DEFAULT'
-                                                        ?   <Dialog type={'GUIDE'} title="publish">
+                                                            ? <Dialog type={'GUIDE'} title="publish">
                                                                 <div className="sf-dg-header">
                                                                     <h3>What to do here?</h3>
-                                                                    <i className="material-icons sf-dg-header-close" onClick={ this.closeHelp.bind() }>close</i>
+                                                                    <i className="material-icons sf-dg-header-close" onClick={this.closeHelp.bind()}>close</i>
                                                                 </div>
                                                                 <div>
                                                                     <Block>This implies whether the Variable is an <b>Advanced</b> variable or a <b>Basic</b> variable.</Block>
                                                                 </div>
                                                             </Dialog>
-                                                        :   null
+                                                            : null
                                                     }
                                                 </div>
                                                 <div className="sf-spacer-p"></div>
                                                 <div className="sf-input-block sf-flex-1 sf-custom-input sf-custom-select">
-                                                    <label className="sf-flexbox-row">Type <i className="material-icons sf-icon-guide" onClick={ (e) => this.initHelp(e, 'VAR:TYPE') }>help</i></label>
+                                                    <label className="sf-flexbox-row">Type <i className="material-icons sf-icon-guide" onClick={(e) => this.initHelp(e, 'VAR:TYPE')}>help</i></label>
                                                     <select name="varType" id="varType" value={!this.state.temp_variable.is_val_dropdown ? 'hardcoded' : ''} onChange={(event) => this.createVariable(event)}>
                                                         {/*<option value="_" disabled>Type</option>*/}
                                                         <option value="dynamic">Dynamic</option>
@@ -1706,22 +1724,22 @@ class CreateNewActivity extends Component {
                                                     </select>
                                                     {
                                                         this.props.uihelper._init_help && this.state.active_guide === 'VAR:TYPE'
-                                                            ?   <Dialog type={'GUIDE'} title="publish">
-                                                                    <div className="sf-dg-header">
-                                                                        <h3>What to do here?</h3>
-                                                                        <i className="material-icons sf-dg-header-close" onClick={ this.closeHelp.bind() }>close</i>
-                                                                    </div>
-                                                                    <div>
-                                                                        <Block>This implies whether the value is hardcoded or not. This will be vary depending on the <b>Control</b> type you select.</Block>
-                                                                    </div>
-                                                                </Dialog>
-                                                            :   null
+                                                            ? <Dialog type={'GUIDE'} title="publish">
+                                                                <div className="sf-dg-header">
+                                                                    <h3>What to do here?</h3>
+                                                                    <i className="material-icons sf-dg-header-close" onClick={this.closeHelp.bind()}>close</i>
+                                                                </div>
+                                                                <div>
+                                                                    <Block>This implies whether the value is hardcoded or not. This will be vary depending on the <b>Control</b> type you select.</Block>
+                                                                </div>
+                                                            </Dialog>
+                                                            : null
                                                     }
                                                 </div>
                                             </div>
                                             <div className="sf-flexbox-row">
                                                 <div className="sf-input-block sf-flex-1 sf-custom-input sf-custom-select">
-                                                    <label className="sf-flexbox-row">Category <i className="material-icons sf-icon-guide" onClick={ (e) => this.initHelp(e, 'VAR:CATEGORY') }>help</i></label>
+                                                    <label className="sf-flexbox-row">Category <i className="material-icons sf-icon-guide" onClick={(e) => this.initHelp(e, 'VAR:CATEGORY')}>help</i></label>
                                                     <select name="varCategory" id="varCategory" defaultValue={'_'} onChange={(event) => this.createVariable(event)}>
                                                         {/*<option value="_" disabled>Category</option>*/}
                                                         <option value="InArgument">In Argument</option>
@@ -1729,21 +1747,21 @@ class CreateNewActivity extends Component {
                                                     </select>
                                                     {
                                                         this.props.uihelper._init_help && this.state.active_guide === 'VAR:CATEGORY'
-                                                            ?   <Dialog type={'GUIDE'} title="publish">
+                                                            ? <Dialog type={'GUIDE'} title="publish">
                                                                 <div className="sf-dg-header">
                                                                     <h3>What to do here?</h3>
-                                                                    <i className="material-icons sf-dg-header-close" onClick={ this.closeHelp.bind() }>close</i>
+                                                                    <i className="material-icons sf-dg-header-close" onClick={this.closeHelp.bind()}>close</i>
                                                                 </div>
                                                                 <div>
                                                                     <Block>This implies whether the variable works as an IN argument or an OUT argument.</Block>
                                                                 </div>
                                                             </Dialog>
-                                                            :   null
+                                                            : null
                                                     }
                                                 </div>
                                                 <div className="sf-spacer-p"></div>
                                                 <div className="sf-input-block sf-flex-1 sf-custom-input sf-custom-select">
-                                                    <label className="sf-flexbox-row">Data type <i className="material-icons sf-icon-guide" onClick={ (e) => this.initHelp(e, 'VAR:DATA_TYPE') }>help</i></label>
+                                                    <label className="sf-flexbox-row">Data type <i className="material-icons sf-icon-guide" onClick={(e) => this.initHelp(e, 'VAR:DATA_TYPE')}>help</i></label>
                                                     <select name="varDataTYpe" id="varDataType" defaultValue={'_'} onChange={(event) => this.createVariable(event)}>
                                                         {/*<option value="_" disabled>Data Type</option>*/}
                                                         <option value="string">String</option>
@@ -1751,22 +1769,22 @@ class CreateNewActivity extends Component {
                                                     </select>
                                                     {
                                                         this.props.uihelper._init_help && this.state.active_guide === 'VAR:DATA_TYPE'
-                                                            ?   <Dialog type={'GUIDE'} title="publish">
+                                                            ? <Dialog type={'GUIDE'} title="publish">
                                                                 <div className="sf-dg-header">
                                                                     <h3>What to do here?</h3>
-                                                                    <i className="material-icons sf-dg-header-close" onClick={ this.closeHelp.bind() }>close</i>
+                                                                    <i className="material-icons sf-dg-header-close" onClick={this.closeHelp.bind()}>close</i>
                                                                 </div>
                                                                 <div>
                                                                     <Block>Data type of the variable.</Block>
                                                                 </div>
                                                             </Dialog>
-                                                            :   null
+                                                            : null
                                                     }
                                                 </div>
                                             </div>
                                             <div className="sf-flexbox-row">
                                                 <div className="sf-input-block sf-flex-1 sf-custom-input sf-custom-select">
-                                                    <label className="sf-flexbox-row">Priority <i className="material-icons sf-icon-guide" onClick={ (e) => this.initHelp(e, 'VAR:PRIORITY') }>help</i></label>
+                                                    <label className="sf-flexbox-row">Priority <i className="material-icons sf-icon-guide" onClick={(e) => this.initHelp(e, 'VAR:PRIORITY')}>help</i></label>
                                                     <select name="varPriority" id="varPriority" defaultValue={'_'} onChange={(event) => this.createVariable(event)}>
                                                         {/*<option value="_" disabled>Priority</option>*/}
                                                         <option value="Mandatory">Mandatory</option>
@@ -1774,16 +1792,16 @@ class CreateNewActivity extends Component {
                                                     </select>
                                                     {
                                                         this.props.uihelper._init_help && this.state.active_guide === 'VAR:PRIORITY'
-                                                            ?   <Dialog type={'GUIDE'} title="publish">
+                                                            ? <Dialog type={'GUIDE'} title="publish">
                                                                 <div className="sf-dg-header">
                                                                     <h3>What to do here?</h3>
-                                                                    <i className="material-icons sf-dg-header-close" onClick={ this.closeHelp.bind() }>close</i>
+                                                                    <i className="material-icons sf-dg-header-close" onClick={this.closeHelp.bind()}>close</i>
                                                                 </div>
                                                                 <div>
                                                                     <Block>Whether the variable is mandatory or not.</Block>
                                                                 </div>
                                                             </Dialog>
-                                                            :   null
+                                                            : null
                                                     }
                                                 </div>
                                                 <div className="sf-spacer-p"></div>
@@ -1792,18 +1810,18 @@ class CreateNewActivity extends Component {
 
                                             <div className="sf-flexbox-row">
                                                 <div className="sf-flex-1"></div>
-                                                <button type="button" className="sf-button sf-button-primary sf-button-primary-p" onClick={ this.addVariable }>ADD</button>
+                                                <button type="button" className="sf-button sf-button-primary sf-button-primary-p" onClick={this.addVariable}>ADD</button>
                                             </div>
                                         </div>
                                         {/*<div className="sf-feature-add">*/}
-                                            {/*<button type="button" className="sf-button sf-button-primary sf-button-primary-light" onClick={ this.addVariable }>+</button>*/}
+                                        {/*<button type="button" className="sf-button sf-button-primary sf-button-primary-light" onClick={ this.addVariable }>+</button>*/}
                                         {/*</div>*/}
                                     </div>
                                 </div>
                             </div>
                             <div className="sf-hr"></div>
                             <div className="sf-flexbox-row">
-                                <div className="sf-p-p-h" style={{'width':'150px'}}>
+                                <div className="sf-p-p-h" style={{ 'width': '150px' }}>
                                     <label> Language </label>
                                     <div className="sf-p-p-h">
                                         <div className="sf-input-block">
@@ -1816,33 +1834,33 @@ class CreateNewActivity extends Component {
                                 </div>
                                 {
                                     this.state.temp_selected_langs.node
-                                    ?   <Wrap>
+                                        ? <Wrap>
                                             <div className="sf-flex-1 sf-flexbox-column">
                                                 <div className="sf-flex-1 sf-p-p sf-flexbox-column">
                                                     <label> File </label>
-                                                    <div className="sf-card sf-card-block sf-flexbox-column sf-flex-1" style={{padding: '15px 0px'}}>
+                                                    <div className="sf-card sf-card-block sf-flexbox-column sf-flex-1" style={{ padding: '15px 0px' }}>
                                                         <div className="sf-card-content sf-card-bordered sf-flex-1 sf-flexbox-column">
                                                             <div className="sf-flex-1">
                                                                 {
                                                                     this.state.publish_content.node.file
-                                                                        ?   <div className="sf-card">
+                                                                        ? <div className="sf-card">
                                                                             <div className="sf-card-content sf-card-bordered sf-card-centered-row">
                                                                                 <div className="sf-flex-1">
-                                                                                    <ListI list={ this.state.publish_content.node.info }/>
+                                                                                    <ListI list={this.state.publish_content.node.info} />
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                        :   null
+                                                                        : null
                                                                 }
                                                             </div>
-                                                            <input type="file" id="publishNode" onChange={ (event) => this.updatePublishContent(event)}/>
+                                                            <input type="file" id="publishNode" onChange={(event) => this.updatePublishContent(event)} />
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </Wrap>
 
-                                    :   <Wrap>
+                                        : <Wrap>
                                             <div className="sf-flex-1">
                                                 <div className="sf-flexbox-column">
                                                     <div className="sf-flex-1 sf-p-p">
@@ -1852,70 +1870,70 @@ class CreateNewActivity extends Component {
                                                                 spellCheck="false"
                                                                 className="sf-custom-scroll sf-bg-s sf-txt-c-s"
                                                                 value={this.state.publish_content.golang.payload.GoCode}
-                                                                onChange={(event) => this.updatePublishContent(event)}/>
+                                                                onChange={(event) => this.updatePublishContent(event)} />
                                                             {
                                                                 this.state.publish_content.golang.errors.length > 0 ?
                                                                     this.state.publish_content.golang.errors.map((error) =>
                                                                         <div className="sf-m-p-t" key={KEY()}>
                                                                             <Error title={error.Title} body={error.Error}
-                                                                                remark={error.Reason}/>
+                                                                                remark={error.Reason} />
                                                                         </div>)
                                                                     : this.state.publish_content.golang.noerrors ?
-                                                                    <div className="sf-m-p-t">
-                                                                        <ListI list={[{
-                                                                            icon: 'check_circle_thin',
-                                                                            text: 'No errors found'
-                                                                        }]}/>
-                                                                    </div>
-                                                                    : null
+                                                                        <div className="sf-m-p-t">
+                                                                            <ListI list={[{
+                                                                                icon: 'check_circle_thin',
+                                                                                text: 'No errors found'
+                                                                            }]} />
+                                                                        </div>
+                                                                        : null
                                                             }
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div className="sf-p-p-v">
                                                     <button type="button" className="sf-button sf-button-secondary"
-                                                            onClick={(event) => this.testGoCode(event)}>Test
+                                                        onClick={(event) => this.testGoCode(event)}>Test
                                                     </button>
                                                 </div>
                                             </div>
                                             <div className="sf-flex-1">
-                                                            <div className="sf-flexbox-column">
-                                                            <div className="sf-flex-1 sf-p-p">
-                                                            <label> Variables </label>
-                                                            <div className="sf-p-p-h">
-                                                                <div className="sf-clearfix">
-                                                                    {
-                                                                        this.state.newActivity.variableName
-                                                                        ?   this.state.newActivity.variableName.map((variableName, index) =>
-                                                                                <div className="sf-card" style={ {'width' : '50%'} } key={KEY()}>
-                                                                                    <div className="sf-card-content sf-card-bordered sf-card-centered-row">
-                                                                                        <div className="sf-flex-1">
-                                                                                            <div className="sf-txtblock-text">
-                                                                                                <div className="sf-txtblock-txt-text">{ variableName.name }</div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div className="sf-card-row-end">
-                                                                                            <button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" onClick={(event)=>this.removeName(event, index)}>x</button>
+                                                <div className="sf-flexbox-column">
+                                                    <div className="sf-flex-1 sf-p-p">
+                                                        <label> Variables </label>
+                                                        <div className="sf-p-p-h">
+                                                            <div className="sf-clearfix">
+                                                                {
+                                                                    this.state.newActivity.variableName
+                                                                        ? this.state.newActivity.variableName.map((variableName, index) =>
+                                                                            <div className="sf-card" style={{ 'width': '50%' }} key={KEY()}>
+                                                                                <div className="sf-card-content sf-card-bordered sf-card-centered-row">
+                                                                                    <div className="sf-flex-1">
+                                                                                        <div className="sf-txtblock-text">
+                                                                                            <div className="sf-txtblock-txt-text">{variableName.name}</div>
                                                                                         </div>
                                                                                     </div>
+                                                                                    <div className="sf-card-row-end">
+                                                                                        <button type="button" className="sf-button sf-button-primary-light sf-button-primary sf-button-circle" onClick={(event) => this.removeName(event, index)}>x</button>
+                                                                                    </div>
                                                                                 </div>
-                                                                            )
-                                                                        :   null
-                                                                    }
-                                                                </div>
-                                                                <div className="sf-feature-block">
-                                                                    <div className="sf-feature-entry">
-                                                                        <div className="sf-input-block">
-                                                                            <input type="text" placeholder="Name" id="variableName" onChange={ (event) => this.createName(event) } />
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="sf-feature-add">
-                                                                        <button type="button" className="sf-button sf-button-primary sf-button-primary-light" onClick={ this.addVariableName}>+</button>
+                                                                            </div>
+                                                                        )
+                                                                        : null
+                                                                }
+                                                            </div>
+                                                            <div className="sf-feature-block">
+                                                                <div className="sf-feature-entry">
+                                                                    <div className="sf-input-block">
+                                                                        <input type="text" placeholder="Name" id="variableName" onChange={(event) => this.createName(event)} />
                                                                     </div>
                                                                 </div>
+                                                                <div className="sf-feature-add">
+                                                                    <button type="button" className="sf-button sf-button-primary sf-button-primary-light" onClick={this.addVariableName}>+</button>
+                                                                </div>
                                                             </div>
-                                                            </div>
-                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </Wrap>
                                 }
@@ -1934,4 +1952,4 @@ const mapStateToProps = state => ({
     user: state.user
 });
 
-export default connect(mapStateToProps) (CreateNewActivity);
+export default connect(mapStateToProps)(CreateNewActivity);

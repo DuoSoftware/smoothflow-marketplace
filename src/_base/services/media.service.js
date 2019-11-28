@@ -37,7 +37,7 @@ const MediaService = {
         
         axios({
             method: 'post',
-            url: URLs.processengine + URLs.publishActivity + file.ActivityName + '/12345',
+            url: URLs.activity.uploadGoCode ,
             data: file
         })
             .then(function (response) {

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './textblock.scss';
 
 class TextblockI extends Component {
+    debugger;
     render() {
         return (
             <div className="sf-txtblock sf-txtblock-iconed">

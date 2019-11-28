@@ -4,6 +4,7 @@ import Slider from "react-slick";
 import {KEY} from "../../_base/services";
 
 class Carousel extends Component {
+    debugger;
     settings = {
         dots: true,
         infinite: false,

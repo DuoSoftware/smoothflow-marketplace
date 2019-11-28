@@ -28,7 +28,8 @@ const URLs_dev = {
         saveNewActivity : 'TenantActivitiesService',
         deleteActivity : 'TenantActivitiesService',
         publishNewActivity : 'activity/publish',
-        uploadGoCode : 'processengine/PublishActivity',
+        uploadGoCode : 'https://wxhvc3rim3.execute-api.us-east-1.amazonaws.com/Dev/gocodes',
+        publishGoCode: '',
         publishPath : 'activity/remote/publish',
         getTagsList : 'TenantActivitiesService/tag/list',
         review: {
