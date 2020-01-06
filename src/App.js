@@ -75,7 +75,7 @@ class App extends Component {
             })
 
         const ps = PubSub.subscribe('task').subscribe({
-            next: data => console.log('Message received', data),
+            next: data => console.log('Message received!', data),
             error: error => {
                 console.error(error)
             },
