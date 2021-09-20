@@ -116,6 +116,6 @@
     "extends": "react-app"
   },
   "devDependencies": {
-    "prismjs": "^1.15.0"
+    "prismjs": "^1.25.0"
   }
 }
