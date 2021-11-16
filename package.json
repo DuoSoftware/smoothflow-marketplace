@@ -7,7 +7,7 @@
     "autoprefixer": "7.1.6",
     "aws-amplify": "^1.1.26",
     "aws-iot-device-sdk": "^2.2.1",
-    "aws-sdk": "^2.384.0",
+    "aws-sdk": "^2.814.0",
     "axios": "^0.18.0",
     "axios-jsonp": "^1.0.2",
     "babel-core": "6.26.0",
